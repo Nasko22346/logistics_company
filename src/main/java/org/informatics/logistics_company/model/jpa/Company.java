@@ -1,10 +1,9 @@
 package org.informatics.logistics_company.model.jpa;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Data;
+
+import java.util.List;
 
 @Entity
 @Table(name = "companies")
@@ -29,4 +28,7 @@ public class Company {
 
     @Column(name = "company_description")
     private String companyDescription;
+
+    @OneToMany(mappedBy = "company")
+    private List<Office> offices;
 }

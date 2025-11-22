@@ -24,7 +24,9 @@ public class Office {
     @ManyToOne
     private Company company;
 
+    @ManyToOne
+    private OpenTime openTime;
+
     // Todo implement One to One relation for Location
-    // Todo implement Many to One relation for OpenTime
 }
 
