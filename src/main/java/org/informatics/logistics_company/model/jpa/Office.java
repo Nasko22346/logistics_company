@@ -11,10 +11,6 @@ public class Office {
     @Column(name = "office_id")
     private Long officeId;
 
-    // To be removed according to the Location implementation
-//    @Column(name = "office_address")
-//    private String officeAddress;
-
     @Column(name = "office_phone")
     private String officePhone;
 

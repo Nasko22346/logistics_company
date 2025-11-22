@@ -10,15 +10,15 @@ import java.sql.Time;
 @Data
 public class OpenTime {
     @Id
-    @Column(name = "worktime_id")
-    private Long worktimeId;
+    @Column(name = "work_time_id")
+    private Long workTimeId;
 
-    @Column(name = "worktime_day_of_week")
-    private Integer worktimeDayOfWeek;
+    @Column(name = "work_time_day_of_week")
+    private Integer workTimeDayOfWeek;
 
-    @Column(name = "worktime_start")
-    private Time worktimeStart;
+    @Column(name = "work_time_start")
+    private Time workTimeStart;
 
-    @Column(name = "worktime_end")
-    private Time worktimeEnd;
+    @Column(name = "work_time_end")
+    private Time workTimeEnd;
 }
