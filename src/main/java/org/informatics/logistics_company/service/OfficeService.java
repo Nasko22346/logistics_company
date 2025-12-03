@@ -26,6 +26,24 @@ public class OfficeService {
         return toResponse(saved);
     }
 
+    public OfficeResponse getById(Long id, OfficeRequest request) {
+        Office office = officeRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Office with id " + id + " not found"));
+
+        office.setOfficeEmail(request.officeEmail());
+        office.setOfficePhone(request.officeEmail());
+
+        Office updated = officeRepository.save(office);
+        return toResponse(updated);
+    }
+
+    public void delete(Long id) {
+        if (!officeRepository.existsById(id)) {
+            throw new RuntimeException("Office with id " + id + "not found");
+        }
+        officeRepository.deleteById(id);
+    }
+
     private OfficeResponse toResponse(Office office) {
         // TODO: See here how to fetch and return location, company & opentime
 
