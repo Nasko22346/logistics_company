@@ -26,12 +26,18 @@ public class OfficeService {
         return toResponse(saved);
     }
 
-    public OfficeResponse getById(Long id, OfficeRequest request) {
+    public OfficeResponse getById(Long id) {
+        Office office = officeRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Office with id " + id + " not found"));
+        return toResponse(office);
+    }
+
+    public OfficeResponse update(Long id, OfficeRequest request) {
         Office office = officeRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Office with id " + id + " not found"));
 
+        office.setOfficePhone(request.officePhone());
         office.setOfficeEmail(request.officeEmail());
-        office.setOfficePhone(request.officeEmail());
 
         Office updated = officeRepository.save(office);
         return toResponse(updated);

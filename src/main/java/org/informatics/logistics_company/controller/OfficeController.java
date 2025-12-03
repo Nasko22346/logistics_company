@@ -36,6 +36,18 @@ public class OfficeController {
 
     @GetMapping("/{id}")
     public OfficeResponse getById(@PathVariable Long id) {
-        return officeService.getById(id)
+        return officeService.getById(id);
+    }
+
+    @PutMapping("/{id}")
+    public OfficeResponse update(@PathVariable Long id,
+                                 @Valid @RequestBody OfficeRequest request){
+        return officeService.update(id, request);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        officeService.delete(id);
+        return ResponseEntity.noContent().build();
     }
 }
