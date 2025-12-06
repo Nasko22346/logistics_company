@@ -55,6 +55,11 @@ public class ParcelService {
      * @return the id of the deleted records
      */
     public long deleteParcel(Long id) {
+        if (!parcelRepository.existsById(id)) {
+            //TODO: Implement custom exceptions
+            throw new RuntimeException("Parcel not found");
+        }
+
         return parcelRepository.deleteByIdentificationNumber(id);
     }
 
