@@ -28,7 +28,7 @@ public class OfficeController {
     @PostMapping("/post")
     public ResponseEntity<OfficeResponse> create(@Valid @RequestBody OfficeRequest request) {
         OfficeResponse created = officeService.create(request);
-        //Location header → /api/v1/office/{id}
+        //Location header -> /api/v1/office/{id}
         return ResponseEntity
                 .created(URI.create("/api/v1/office/" + created.officeId()))
                 .body(created);
@@ -36,6 +36,7 @@ public class OfficeController {
 
     @GetMapping("/{id}")
     public OfficeResponse getById(@PathVariable Long id) {
+        System.out.println("Get for id " + id );
         return officeService.getById(id);
     }
 

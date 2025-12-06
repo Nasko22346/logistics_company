@@ -10,5 +10,5 @@ public record OfficeResponse (
          String officeEmail,
          Company company,
          OpenTime openTime,
-         Location location
+         Location location // maybe, this should not fetch the entire location object, same fot the other. Only IDs need to be fetched.
 ){ }
