@@ -1,7 +1,7 @@
 package org.informatics.logistics_company.service;
 
-import org.informatics.logistics_company.dto.company.CompanyRequest;
-import org.informatics.logistics_company.dto.company.CompanyResponse;
+import org.informatics.logistics_company.rr.company.CompanyRequest;
+import org.informatics.logistics_company.rr.company.CompanyResponse;
 import org.informatics.logistics_company.model.jpa.Company;
 import org.informatics.logistics_company.model.jpa.Office;
 import org.informatics.logistics_company.repository.CompanyRepository;

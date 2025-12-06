@@ -1,7 +1,7 @@
 package org.informatics.logistics_company.service;
 
-import org.informatics.logistics_company.dto.office.OfficeRequest;
-import org.informatics.logistics_company.dto.office.OfficeResponse;
+import org.informatics.logistics_company.rr.office.OfficeRequest;
+import org.informatics.logistics_company.rr.office.OfficeResponse;
 import org.informatics.logistics_company.model.jpa.Office;
 import org.informatics.logistics_company.repository.OfficeRepository;
 import org.springframework.stereotype.Service;

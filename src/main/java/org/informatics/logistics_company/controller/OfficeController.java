@@ -2,8 +2,8 @@ package org.informatics.logistics_company.controller;
 
 
 import jakarta.validation.Valid;
-import org.informatics.logistics_company.dto.office.OfficeRequest;
-import org.informatics.logistics_company.dto.office.OfficeResponse;
+import org.informatics.logistics_company.rr.office.OfficeRequest;
+import org.informatics.logistics_company.rr.office.OfficeResponse;
 import org.informatics.logistics_company.service.OfficeService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

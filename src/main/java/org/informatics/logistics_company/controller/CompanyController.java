@@ -1,8 +1,8 @@
 package org.informatics.logistics_company.controller;
 
 import jakarta.validation.Valid;
-import org.informatics.logistics_company.dto.company.CompanyRequest;
-import org.informatics.logistics_company.dto.company.CompanyResponse;
+import org.informatics.logistics_company.rr.company.CompanyRequest;
+import org.informatics.logistics_company.rr.company.CompanyResponse;
 import org.informatics.logistics_company.service.CompanyService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

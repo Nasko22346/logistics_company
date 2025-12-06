@@ -1,4 +1,4 @@
-package org.informatics.logistics_company.dto.office;
+package org.informatics.logistics_company.rr.office;
 
 import org.informatics.logistics_company.model.jpa.Company;
 import org.informatics.logistics_company.model.jpa.Location;

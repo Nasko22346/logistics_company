@@ -1,4 +1,4 @@
-package org.informatics.logistics_company.dto.office;
+package org.informatics.logistics_company.rr.office;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
