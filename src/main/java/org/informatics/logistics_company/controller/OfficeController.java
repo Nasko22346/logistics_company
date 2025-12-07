@@ -2,14 +2,13 @@ package org.informatics.logistics_company.controller;
 
 
 import jakarta.validation.Valid;
-import org.informatics.logistics_company.rr.office.OfficeRequest;
-import org.informatics.logistics_company.rr.office.OfficeResponse;
+import org.informatics.logistics_company.dto.office.OfficeRequest;
+import org.informatics.logistics_company.dto.office.OfficeResponse;
 import org.informatics.logistics_company.service.OfficeService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -19,10 +18,9 @@ public class OfficeController {
 
     public OfficeController(OfficeService officeService) { this.officeService = officeService; }
 
-    //TODO: Revisit implementation on returning all offices
     @GetMapping("load")
-    public List<?> loadOffices() {
-        return new ArrayList<>();
+    public List<OfficeResponse> loadOffices() {
+        return officeService.loadData();
     }
 
     @PostMapping("/post")

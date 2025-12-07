@@ -1,4 +1,4 @@
-package org.informatics.logistics_company.rr.company;
+package org.informatics.logistics_company.dto.company;
 
 import java.util.List;
 
