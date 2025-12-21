@@ -19,6 +19,13 @@ public class CompanyService {
         this.companyRepository = companyRepository;
     }
 
+    public List<CompanyResponse> loadData() {
+        return companyRepository.findAll()
+                .stream()
+                .map(this::toResponse)
+                .toList();
+    }
+
     public CompanyResponse create(CompanyRequest request) {
         Company entity = new Company();
         entity.setCompanyName(request.companyName());

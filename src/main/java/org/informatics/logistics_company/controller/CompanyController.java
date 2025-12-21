@@ -21,16 +21,15 @@ public class CompanyController {
         this.companyService = companyService;
     }
 
-    //TODO: Revisit implementation
     @GetMapping("/load")
-    public List<?> loadCompanies() {
-        return new ArrayList<>();
+    public List<CompanyResponse> loadCompanies() {
+        return companyService.loadData();
     }
 
     @PostMapping("/post")
     public ResponseEntity<CompanyResponse> create(@Valid @RequestBody CompanyRequest request) {
         CompanyResponse created = companyService.create(request);
-        // Location header → /api/v1/companies/{id}
+        // Location header -> /api/v1/companies/{id}
         return ResponseEntity
                 .created(URI.create("/api/v1/companies/" + created.companyId()))
                 .body(created);

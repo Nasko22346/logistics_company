@@ -10,6 +10,7 @@ import org.informatics.logistics_company.model.enums.Position;
 public class Staff {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "staff_id")
     private Long staffId;
 
@@ -21,5 +22,7 @@ public class Staff {
     @Column(name = "position")
     private Position position;
 
-    //staff_data_id?? What is it for?
+    @OneToOne
+    @JoinColumn(name = "staff_data_id")
+    private UserInfo staffUserInfo;
 }

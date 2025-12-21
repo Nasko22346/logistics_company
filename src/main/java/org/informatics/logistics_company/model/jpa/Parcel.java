@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 public class Parcel {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "parcel_id")
     private Long id;
 

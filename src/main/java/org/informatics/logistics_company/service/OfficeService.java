@@ -4,15 +4,46 @@ import org.informatics.logistics_company.dto.office.OfficeRequest;
 import org.informatics.logistics_company.dto.office.OfficeResponse;
 import org.informatics.logistics_company.model.jpa.Office;
 import org.informatics.logistics_company.repository.OfficeRepository;
+import org.informatics.logistics_company.repository.CompanyRepository;
 import org.springframework.stereotype.Service;
+import java.util.List;
 
 @Service
 public class OfficeService {
 
     private final OfficeRepository officeRepository;
+    private final CompanyRepository companyRepository;
 
-    public OfficeService(OfficeRepository officeRepository){
+    public OfficeService(OfficeRepository officeRepository, CompanyRepository companyRepository){
         this.officeRepository = officeRepository;
+        this.companyRepository = companyRepository;
+    }
+
+    public List<OfficeResponse> loadData() {
+        // TODO : MOVE commented code to a helper package or something similar.
+//        if (officeRepository.count() == 0) {
+//            Company company = companyRepository.findAll()
+//                    .stream()
+//                    .findFirst()
+//                    .orElseThrow(() -> new RuntimeException("No companies found to attach offices to"));
+//
+//            Office o1 = new Office();
+//            o1.setOfficePhone("0888123456");
+//            o1.setOfficeEmail("sofia.office@test.com");
+//            o1.setCompany(company);
+//
+//            Office o2 = new Office();
+//            o2.setOfficePhone("0888765432");
+//            o2.setOfficeEmail("varna.office@test.com");
+//            o2.setCompany(company);
+//
+//            officeRepository.saveAll(List.of(o1, o2));
+//        }
+
+        return officeRepository.findAll()
+                .stream()
+                .map(this::toResponse)
+                .toList();
     }
 
     public OfficeResponse create(OfficeRequest request) {
@@ -57,7 +88,7 @@ public class OfficeService {
                 office.getOfficeId(),
                 office.getOfficePhone(),
                 office.getOfficeEmail(),
-                office.getCompany(),
+                office.getCompany() != null ? office.getCompany().getCompanyId() : null,
                 office.getOpenTime(),
                 office.getLocation()
         );
