@@ -10,6 +10,7 @@ import java.sql.Time;
 @Data
 public class OpenTime {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "work_time_id")
     private Long workTimeId;
 

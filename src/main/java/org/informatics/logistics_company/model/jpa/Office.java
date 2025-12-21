@@ -8,6 +8,7 @@ import lombok.Data;
 @Data
 public class Office {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "office_id")
     private Long officeId;
 

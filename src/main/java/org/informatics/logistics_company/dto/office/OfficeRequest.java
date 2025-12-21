@@ -3,6 +3,7 @@ package org.informatics.logistics_company.dto.office;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import jakarta.validation.constraints.Email;
+import org.informatics.logistics_company.dto.templates.ObjectRequest;
 
 public record OfficeRequest (
 
@@ -11,5 +12,4 @@ public record OfficeRequest (
 
         @Email @Size(max = 120)
         String officeEmail
-)
-{ }
+) implements ObjectRequest { }
