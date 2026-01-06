@@ -13,6 +13,12 @@
 <!-- Navigation Bar -->
 <nav class="navbar">
     <a href="/" class="navbar-brand">Papa Express</a>
+    <li class="nav-item">
+        <a th:href="@{/api/v1/parcels/create}" class="nav-link">
+            <i class="fas fa-plus-circle nav-icon"></i>
+            <span class="tooltip">Create Parcel</span>
+        </a>
+    </li>
 </nav>
     <h1>All Parcels</h1>
 

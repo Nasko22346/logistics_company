@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Parcel - Papa Express</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <a href="/" class="navbar-brand">Papa Express</a>
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a th:href="@{/api/v1/parcels/all}" class="nav-link">
+                    <i class="fas fa-box nav-icon"></i>
+                    <span class="tooltip">Parcels</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="form-container">
+            <h1>Create New Parcel</h1>
+
+            <!-- Global Error Message -->
+            <div th:if="${error}" class="error-alert">
+                <i class="fas fa-exclamation-circle"></i>
+                <span th:text="${error}"></span>
+            </div>
+
+            <!-- Parcel Creation Form -->
+            <form th:action="@{/api/v1/parcels/create}" th:object="${parcelRequest}" method="post">
+
+                <!-- Weight Field -->
+                <div class="form-group" th:classappend="${#fields.hasErrors('weight') ? 'has-error' : ''}">
+                    <label for="weight">Weight (kg) <span style="color: red;">*</span></label>
+                    <input type="number"
+                           id="weight"
+                           th:field="*{weight}"
+                           placeholder="Enter weight in kilograms"
+                           step="0.01"
+                           min="0"
+                           required>
+                    <div class="error-message" th:if="${#fields.hasErrors('weight')}" th:errors="*{weight}"></div>
+                </div>
+
+                <!-- Sender ID Field -->
+                <div class="form-group" th:classappend="${#fields.hasErrors('senderId') ? 'has-error' : ''}">
+                    <label for="senderId">Sender ID <span style="color: red;">*</span></label>
+                    <input type="number"
+                           id="senderId"
+                           th:field="*{senderId}"
+                           placeholder="Enter sender ID"
+                           min="1"
+                           required>
+                    <div class="error-message" th:if="${#fields.hasErrors('senderId')}" th:errors="*{senderId}"></div>
+                </div>
+
+                <!-- Receiver ID Field -->
+                <div class="form-group" th:classappend="${#fields.hasErrors('receiverId') ? 'has-error' : ''}">
+                    <label for="receiverId">Receiver ID <span style="color: red;">*</span></label>
+                    <input type="number"
+                           id="receiverId"
+                           th:field="*{receiverId}"
+                           placeholder="Enter receiver ID"
+                           min="1"
+                           required>
+                    <div class="error-message" th:if="${#fields.hasErrors('receiverId')}" th:errors="*{receiverId}"></div>
+                </div>
+
+                <!-- Registered By Staff ID Field -->
+                <div class="form-group" th:classappend="${#fields.hasErrors('registeredByStaffId') ? 'has-error' : ''}">
+                    <label for="registeredByStaffId">Registered By Staff ID <span style="color: red;">*</span></label>
+                    <input type="number"
+                           id="registeredByStaffId"
+                           th:field="*{registeredByStaffId}"
+                           placeholder="Enter staff ID"
+                           min="1"
+                           required>
+                    <div class="error-message" th:if="${#fields.hasErrors('registeredByStaffId')}" th:errors="*{registeredByStaffId}"></div>
+                </div>
+
+                <!-- Sent Location ID Field -->
+                <div class="form-group" th:classappend="${#fields.hasErrors('sentLocationId') ? 'has-error' : ''}">
+                    <label for="sentLocationId">Sent Location ID <span style="color: red;">*</span></label>
+                    <input type="number"
+                           id="sentLocationId"
+                           th:field="*{sentLocationId}"
+                           placeholder="Enter sent location ID"
+                           min="1"
+                           required>
+                    <div class="error-message" th:if="${#fields.hasErrors('sentLocationId')}" th:errors="*{sentLocationId}"></div>
+                </div>
+
+                <!-- Received Location ID Field -->
+                <div class="form-group" th:classappend="${#fields.hasErrors('receivedLocationId') ? 'has-error' : ''}">
+                    <label for="receivedLocationId">Received Location ID <span style="color: red;">*</span></label>
+                    <input type="number"
+                           id="receivedLocationId"
+                           th:field="*{receivedLocationId}"
+                           placeholder="Enter received location ID"
+                           min="1"
+                           required>
+                    <div class="error-message" th:if="${#fields.hasErrors('receivedLocationId')}" th:errors="*{receivedLocationId}"></div>
+                </div>
+
+                <!-- Deliver to Address Checkbox -->
+                <div class="form-group checkbox">
+                    <input type="checkbox"
+                           id="deliverToAddress"
+                           th:field="*{deliverToAddress}">
+                    <label for="deliverToAddress">Deliver to Address</label>
+                </div>
+
+                <!-- Form Buttons -->
+                <div class="form-buttons">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-check"></i> Create Parcel
+                    </button>
+                    <a href="/" class="btn btn-secondary">
+                        <i class="fas fa-times"></i> Cancel
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
