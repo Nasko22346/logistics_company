@@ -43,11 +43,11 @@ public class Parcel {
 
     @ManyToOne
     @JoinColumn(name = "sender_user_id")
-    private UserInfo senderUser;
+    private UserDetails senderUser;
 
     @ManyToOne
     @JoinColumn(name = "receiver_user_id")
-    private UserInfo receiverUser;
+    private UserDetails receiverUser;
 
     //package_manager_id??? - what is it for?
 

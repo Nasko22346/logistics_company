@@ -24,5 +24,5 @@ public class Staff {
 
     @OneToOne
     @JoinColumn(name = "staff_data_id")
-    private UserInfo staffUserInfo;
+    private UserDetails staffUserDetails;
 }
