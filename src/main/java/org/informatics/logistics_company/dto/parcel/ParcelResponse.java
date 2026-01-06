@@ -25,7 +25,10 @@ public class ParcelResponse {
         this.status = parcel.getParcelStatus().name();
         this.sentDate = parcel.getSentDate() != null ? parcel.getSentDate().toLocalDate() : null;
         this.receivedDate = parcel.getReceivedDate() != null ? parcel.getReceivedDate().toLocalDate() : null;
-        this.senderName = parcel.getSenderUser() != null ? parcel.getSenderUser().getLastName() + " " + parcel.getSenderUser().getLastName() : null;
-        this.receiverName = parcel.getReceiverUser() != null ? parcel.getReceiverUser().getLastName() + " " + parcel.getSenderUser().getLastName() : null;
+        this.senderName = parcel.getSenderUser() != null ? parcel.getSenderUser().getFirstName() + " " + parcel.getSenderUser().getLastName() : null;
+        this.receiverName = parcel.getReceiverUser() != null ? parcel.getReceiverUser().getFirstName() + " " + parcel.getReceiverUser().getLastName() : null;
+        this.registeredByStaffName = parcel.getStaff() != null && parcel.getStaff().getStaffUserInfo() != null ?
+            parcel.getStaff().getStaffUserInfo().getFirstName() + " " +
+            parcel.getStaff().getStaffUserInfo().getLastName() : null;
     }
 }
