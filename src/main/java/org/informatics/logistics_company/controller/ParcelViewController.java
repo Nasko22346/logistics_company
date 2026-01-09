@@ -55,4 +55,10 @@ public class ParcelViewController {
             return "create_parcel";
         }
     }
+
+    @GetMapping("/{parcelId}")
+    public String getParcelDetails(@PathVariable Long parcelId, Model model) {
+        model.addAttribute("parcel", parcelService.fetchParcelByID(parcelId));
+        return "parcel_details";
+    }
 }

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>All Parcels - Papa Express</title>
+    <title>Parcel Details - Papa Express</title>
     <link rel="stylesheet" th:href="@{/css/parcels.css}">
     <link rel="stylesheet" th:href="@{/css/style.css}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -13,52 +13,75 @@
 <!-- Navigation Bar -->
 <nav class="navbar">
     <a href="/" class="navbar-brand">Papa Express</a>
-    <li class="nav-item">
-        <a th:href="@{/api/v1/parcels/create}" class="nav-link">
-            <i class="fas fa-plus-circle nav-icon"></i>
-            <span class="tooltip">Create Parcel</span>
-        </a>
-    </li>
+    <ul class="navbar-nav">
+        <li class="nav-item">
+            <a th:href="@{/api/v1/parcels/all}" class="nav-link">
+                <i class="fas fa-box nav-icon"></i>
+                <span class="tooltip">All Parcels</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a th:href="@{/api/v1/parcels/create}" class="nav-link">
+                <i class="fas fa-plus-circle nav-icon"></i>
+                <span class="tooltip">Create Parcel</span>
+            </a>
+        </li>
+    </ul>
 </nav>
-    <h1>All Parcels</h1>
 
-    <div th:if="${#lists.isEmpty(parcels)}" class="empty-message">
-        <p>No parcels found in the system.</p>
-    </div>
+<h1>Parcel Details</h1>
 
-    <table th:unless="${#lists.isEmpty(parcels)}">
-        <thead>
+<div class="parcel-details">
+    <table>
+        <tbody>
             <tr>
                 <th>ID</th>
-                <th>Weight (kg)</th>
-                <th>Price (BGN)</th>
-                <th>Status</th>
-                <th>Sent Date</th>
-                <th>Received Date</th>
-                <th>Sender</th>
-                <th>Receiver</th>
-                <th>Registered By</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr th:each="parcel : ${parcels}"
-                th:onclick="'window.location.href=\'/api/v1/parcels/' + ${parcel.id} + '\''"
-                class="clickable-row">
                 <td th:text="${parcel.id}">1</td>
+            </tr>
+            <tr>
+                <th>Weight (kg)</th>
                 <td th:text="${#numbers.formatDecimal(parcel.weight, 1, 2)}">1.50</td>
+            </tr>
+            <tr>
+                <th>Price (BGN)</th>
                 <td th:text="${#numbers.formatDecimal(parcel.price, 1, 2)}">15.00</td>
+            </tr>
+            <tr>
+                <th>Status</th>
                 <td>
                     <span th:text="${parcel.status}"
                           th:class="'status-badge status-' + ${parcel.status}"
                           class="status-badge">PENDING</span>
                 </td>
+            </tr>
+            <tr>
+                <th>Sent Date</th>
                 <td th:text="${parcel.sentDate != null ? #temporals.format(parcel.sentDate, 'dd/MM/yyyy') : 'N/A'}">15/01/2024</td>
+            </tr>
+            <tr>
+                <th>Received Date</th>
                 <td th:text="${parcel.receivedDate != null ? #temporals.format(parcel.receivedDate, 'dd/MM/yyyy') : 'N/A'}">16/01/2024</td>
+            </tr>
+            <tr>
+                <th>Sender</th>
                 <td th:text="${parcel.senderName ?: 'Unknown'}">John Doe</td>
+            </tr>
+            <tr>
+                <th>Receiver</th>
                 <td th:text="${parcel.receiverName ?: 'Unknown'}">Jane Smith</td>
+            </tr>
+            <tr>
+                <th>Registered By</th>
                 <td th:text="${parcel.registeredByStaffName ?: 'N/A'}">Staff Member</td>
             </tr>
         </tbody>
     </table>
+</div>
+
+<div class="back-link">
+    <a th:href="@{/api/v1/parcels/all}" class="btn btn-secondary">
+        <i class="fas fa-arrow-left"></i> Back to All Parcels
+    </a>
+</div>
 </body>
 </html>

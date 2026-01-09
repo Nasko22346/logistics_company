@@ -68,3 +68,31 @@ tr:hover {
     padding: 40px;
     color: #666;
 }
+
+.clickable-row {
+    cursor: pointer;
+}
+
+.clickable-row:hover {
+    background-color: #e8f5e9;
+}
+
+.parcel-details {
+    max-width: 600px;
+    margin: 20px auto;
+}
+
+.parcel-details table {
+    width: 100%;
+}
+
+.parcel-details th {
+    width: 40%;
+    background-color: #f5f5f5;
+    color: #333;
+}
+
+.back-link {
+    text-align: center;
+    margin-top: 20px;
+}
