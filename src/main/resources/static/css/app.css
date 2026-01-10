@@ -317,3 +317,37 @@ a{ color: inherit; }
     font-size: 18px;
     line-height: 1.6;
 }
+
+/* =========================
+   Responsive tables (mobile)
+   Works when <td data-label="..."> is present
+========================= */
+@media (max-width: 800px) {
+    .table, .table thead, .table tbody, .table th, .table td, .table tr {
+        display: block;
+    }
+
+    .table thead {
+        display: none;
+    }
+
+    .table tr {
+        margin-bottom: 12px;
+        border: 1px solid #e5e7eb;
+        border-radius: var(--radius);
+        padding: 12px 14px;
+        background: var(--card);
+    }
+
+    .table td {
+        border: none;
+        padding: 8px 0;
+    }
+
+    .table td::before {
+        content: attr(data-label) ": ";
+        font-weight: bold;
+        color: #374151;
+    }
+}
+
