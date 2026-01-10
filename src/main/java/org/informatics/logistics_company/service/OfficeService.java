@@ -24,7 +24,7 @@ public class OfficeService {
     public List<OfficeResponse> loadData() {
         // TODO : MOVE commented code to a helper package or something similar.
 //        if (officeRepository.count() == 0) {
-//            Company company = companyRepository.findAll()
+//            Company companyId = companyRepository.findAll()
 //                    .stream()
 //                    .findFirst()
 //                    .orElseThrow(() -> new RuntimeException("No companies found to attach offices to"));
@@ -32,12 +32,12 @@ public class OfficeService {
 //            Office o1 = new Office();
 //            o1.setOfficePhone("0888123456");
 //            o1.setOfficeEmail("sofia.office@test.com");
-//            o1.setCompany(company);
+//            o1.setCompany(companyId);
 //
 //            Office o2 = new Office();
 //            o2.setOfficePhone("0888765432");
 //            o2.setOfficeEmail("varna.office@test.com");
-//            o2.setCompany(company);
+//            o2.setCompany(companyId);
 //
 //            officeRepository.saveAll(List.of(o1, o2));
 //        }
@@ -53,9 +53,9 @@ public class OfficeService {
         entity.setOfficePhone(request.officePhone());
         entity.setOfficeEmail(request.officeEmail());
 
-        if (request.company() != null) {
-            Company company = companyRepository.findById(request.company())
-                    .orElseThrow(() -> new RuntimeException("Company with id " + request.company() + " not found"));
+        if (request.companyId() != null) {
+            Company company = companyRepository.findById(request.companyId())
+                    .orElseThrow(() -> new RuntimeException("Company with id " + request.companyId() + " not found"));
             entity.setCompany(company);
         } else {
             throw new RuntimeException("companyId is required");
@@ -78,9 +78,9 @@ public class OfficeService {
         office.setOfficePhone(request.officePhone());
         office.setOfficeEmail(request.officeEmail());
 
-        if (request.company() != null) {
-            Company company = companyRepository.findById(request.company())
-                    .orElseThrow(() -> new RuntimeException("Company with id " + request.company() + " not found"));
+        if (request.companyId() != null) {
+            Company company = companyRepository.findById(request.companyId())
+                    .orElseThrow(() -> new RuntimeException("Company with id " + request.companyId() + " not found"));
             office.setCompany(company);
         }
 

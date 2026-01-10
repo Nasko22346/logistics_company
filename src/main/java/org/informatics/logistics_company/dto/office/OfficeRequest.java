@@ -13,5 +13,5 @@ public record OfficeRequest (
         @Email @Size(max = 120)
         String officeEmail,
 
-        Long company
+        Long companyId
 ) implements ObjectRequest { }

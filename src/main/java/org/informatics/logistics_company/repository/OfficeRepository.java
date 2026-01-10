@@ -9,6 +9,8 @@ import java.util.List;
 
 @Repository
 public interface OfficeRepository extends JpaRepository<Office, Long> {
-    @EntityGraph(attributePaths = "company")
+
+    @Override
+    @EntityGraph(attributePaths = {"company", "openTime", "location"})
     List<Office> findAll();
 }

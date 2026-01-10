@@ -2,6 +2,7 @@ package org.informatics.logistics_company.model.jpa;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.util.List;
 
@@ -31,5 +32,6 @@ public class Company {
     private String companyDescription;
 
     @OneToMany(mappedBy = "company")
+    @JsonIgnore
     private List<Office> offices;
 }

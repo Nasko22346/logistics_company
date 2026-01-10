@@ -46,7 +46,7 @@ public class OfficePageController {
                 office.officeId(),
                 office.officePhone(),
                 office.officeEmail(),
-                office.company()
+                office.companyId()
         ));
         model.addAttribute("companies", companyRepository.findAll());
         return "office-form";
