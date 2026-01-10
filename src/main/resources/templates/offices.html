@@ -58,6 +58,7 @@
         <th>Phone</th>
         <th>Email</th>
         <th>Company</th>
+        <th>Actions</th>
       </tr>
       </thead>
       <tbody>
@@ -66,8 +67,19 @@
         <td th:text="${o.officePhone}">0888...</td>
         <td th:text="${o.officeEmail}">office@mail.com</td>
         <td>
-          <span th:if="${o.company != null}" th:text="${o.company.companyName}">Company</span>
+          <span th:if="${o.company != null}" th:text="${o.companyName ?: 'No company'}">Company</span>
           <span class="muted" th:if="${o.company == null}">No company</span>
+        </td>
+        <td data-label="Actions">
+          <a class="btn btn-primary" th:href="@{/admin/offices/{id}/edit(id=${o.officeId})}">Edit</a>
+
+          <form th:action="@{/admin/offices/{id}/delete(id=${o.officeId})}" method="post" style="display:inline;">
+
+            <button type="submit" class="btn btn-primary"
+                    onclick="return confirm('Delete this office?')">
+              Delete
+            </button>
+          </form>
         </td>
       </tr>
       </tbody>

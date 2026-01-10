@@ -9,6 +9,7 @@ public record OfficeResponse (
         String officePhone,
         String officeEmail,
         Long company,
+        String companyName,
         OpenTime openTime,
         Location location// maybe, this should not fetch the entire location object, same fot the other. Only IDs (Long) need to be fetched.
 ) implements ObjectResponse { }

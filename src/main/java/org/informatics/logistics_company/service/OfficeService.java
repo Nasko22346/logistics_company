@@ -7,6 +7,8 @@ import org.informatics.logistics_company.repository.OfficeRepository;
 import org.informatics.logistics_company.repository.CompanyRepository;
 import org.springframework.stereotype.Service;
 import java.util.List;
+import org.informatics.logistics_company.model.jpa.Company;
+
 
 @Service
 public class OfficeService {
@@ -51,7 +53,13 @@ public class OfficeService {
         entity.setOfficePhone(request.officePhone());
         entity.setOfficeEmail(request.officeEmail());
 
-        // TODO: Determine during the creation of the company how to add relations to location, company & opentime.
+        if (request.company() != null) {
+            Company company = companyRepository.findById(request.company())
+                    .orElseThrow(() -> new RuntimeException("Company with id " + request.company() + " not found"));
+            entity.setCompany(company);
+        } else {
+            throw new RuntimeException("companyId is required");
+        }
 
         Office saved = officeRepository.save(entity);
         return toResponse(saved);
@@ -70,9 +78,16 @@ public class OfficeService {
         office.setOfficePhone(request.officePhone());
         office.setOfficeEmail(request.officeEmail());
 
+        if (request.company() != null) {
+            Company company = companyRepository.findById(request.company())
+                    .orElseThrow(() -> new RuntimeException("Company with id " + request.company() + " not found"));
+            office.setCompany(company);
+        }
+
         Office updated = officeRepository.save(office);
         return toResponse(updated);
     }
+
 
     public void delete(Long id) {
         if (!officeRepository.existsById(id)) {
@@ -82,13 +97,15 @@ public class OfficeService {
     }
 
     private OfficeResponse toResponse(Office office) {
-        // TODO: See here how to fetch and return location, company & opentime
+        Long companyId = office.getCompany() != null ? office.getCompany().getCompanyId() : null;
+        String companyName = office.getCompany() != null ? office.getCompany().getCompanyName() : null;
 
         return new OfficeResponse(
                 office.getOfficeId(),
                 office.getOfficePhone(),
                 office.getOfficeEmail(),
-                office.getCompany() != null ? office.getCompany().getCompanyId() : null,
+                companyId,
+                companyName,
                 office.getOpenTime(),
                 office.getLocation()
         );
