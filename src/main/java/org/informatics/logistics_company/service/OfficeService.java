@@ -110,4 +110,19 @@ public class OfficeService {
                 office.getLocation()
         );
     }
+
+    public OfficeResponse toResponsePublic(Office office) {
+        Long companyId = office.getCompany() != null ? office.getCompany().getCompanyId() : null;
+        String companyName = office.getCompany() != null ? office.getCompany().getCompanyName() : null;
+
+        return new OfficeResponse(
+                office.getOfficeId(),
+                office.getOfficePhone(),
+                office.getOfficeEmail(),
+                companyId,
+                companyName,
+                office.getOpenTime(),
+                office.getLocation()
+        );
+    }
 }

@@ -13,4 +13,7 @@ public interface OfficeRepository extends JpaRepository<Office, Long> {
     @Override
     @EntityGraph(attributePaths = {"company", "openTime", "location"})
     List<Office> findAll();
+
+    @EntityGraph(attributePaths = {"company", "openTime", "location"})
+    List<Office> findAllByCompany_CompanyId(Long companyId);
 }

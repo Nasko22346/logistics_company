@@ -64,7 +64,12 @@
         <td th:text="${c.companyEik}">123</td>
         <td th:text="${c.phoneNumber ?: '-'}">-</td>
         <td th:text="${c.email ?: '-'}">-</td>
-        <td th:text="${#lists.size(c.officeIds)}">0</td>
+        <td>
+          <a class="link"
+             th:href="@{/admin/offices(companyId=${c.companyId})}"
+             th:text="${#lists.size(c.officeIds)}">0</a>
+        </td>
+
 
         <td>
           <a class="btn btn-primary" th:href="@{/admin/companies/{id}/edit(id=${c.companyId})}">Edit</a>

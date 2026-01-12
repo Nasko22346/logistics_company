@@ -39,6 +39,11 @@
   <h1 class="page-title">Offices</h1>
   <div class="muted" style="margin-bottom: 16px;">Списък на всички офиси</div>
 
+  <div th:if="${companyId != null}" class="muted" style="margin-bottom: 12px;">
+    Filter: <b th:text="${companyName != null ? companyName : ('Company #' + companyId)}"></b>
+    <a class="link" th:href="@{/admin/offices}" style="margin-left:10px;">Clear</a>
+  </div>
+
   <div class="card">
     <div style="display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom:12px;">
       <div>

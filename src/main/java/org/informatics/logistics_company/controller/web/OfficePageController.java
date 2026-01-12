@@ -3,6 +3,7 @@ package org.informatics.logistics_company.controller.web;
 import org.informatics.logistics_company.dto.office.OfficeForm;
 import org.informatics.logistics_company.dto.office.OfficeRequest;
 import org.informatics.logistics_company.repository.CompanyRepository;
+import org.informatics.logistics_company.repository.OfficeRepository;
 import org.informatics.logistics_company.service.OfficeService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,15 +15,34 @@ public class OfficePageController {
 
     private final OfficeService officeService;
     private final CompanyRepository companyRepository;
+    private final OfficeRepository officeRepository;
 
-    public OfficePageController(OfficeService officeService, CompanyRepository companyRepository) {
+    public OfficePageController(OfficeService officeService, CompanyRepository companyRepository, OfficeRepository officeRepository) {
         this.officeService = officeService;
         this.companyRepository = companyRepository;
+        this.officeRepository = officeRepository;
     }
 
     @GetMapping("/offices")
-    public String list(Model model) {
-        model.addAttribute("offices", officeService.loadData());
+    public String list(@RequestParam(required = false) Long companyId, Model model) {
+
+        if (companyId != null) {
+            var offices = officeRepository.findAllByCompany_CompanyId(companyId)
+                    .stream()
+                    .map(officeService::toResponsePublic)
+                    .toList();
+
+            model.addAttribute("offices", offices);
+            model.addAttribute("companyId", companyId);
+
+            var company = companyRepository.findById(companyId).orElse(null);
+            model.addAttribute("companyName", company != null ? company.getCompanyName() : null);
+        } else {
+            model.addAttribute("offices", officeService.loadData()); // вече е DTO
+            model.addAttribute("companyId", null);
+            model.addAttribute("companyName", null);
+        }
+
         return "offices";
     }
 

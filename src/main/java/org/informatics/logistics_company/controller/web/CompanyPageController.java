@@ -1,5 +1,7 @@
 package org.informatics.logistics_company.controller.web;
 
+import jakarta.validation.Valid;
+import org.springframework.validation.BindingResult;
 import org.informatics.logistics_company.dto.company.CompanyForm;
 import org.informatics.logistics_company.dto.company.CompanyRequest;
 import org.informatics.logistics_company.service.CompanyService;
@@ -30,7 +32,11 @@ public class CompanyPageController {
     }
 
     @PostMapping("/companies")
-    public String create(@ModelAttribute("form") CompanyForm form) {
+    public String create(@ModelAttribute("form") CompanyForm form, BindingResult br) {
+        if (br.hasErrors()) {
+            return "company-form";
+        }
+
         companyService.create(new CompanyRequest(
                 form.getCompanyName(),
                 form.getPhoneNumber(),
@@ -56,7 +62,12 @@ public class CompanyPageController {
     }
 
     @PostMapping("/companies/{id}")
-    public String update(@PathVariable Long id, @ModelAttribute("form") CompanyForm form) {
+    public String update(@PathVariable Long id, @Valid @ModelAttribute("form") CompanyForm form, BindingResult br) {
+        if (br.hasErrors()) {
+            form.setId(id);
+            return "company-form";
+        }
+
         companyService.update(id, new CompanyRequest(
                 form.getCompanyName(),
                 form.getPhoneNumber(),
