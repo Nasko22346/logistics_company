@@ -20,8 +20,9 @@ public class CompanyPageController {
     }
 
     @GetMapping("/companies")
-    public String list(Model model) {
-        model.addAttribute("companies", companyService.loadData());
+    public String list(@RequestParam(required = false) String q, Model model) {
+        model.addAttribute("companies", companyService.search(q));
+        model.addAttribute("q", q);
         return "companies";
     }
 

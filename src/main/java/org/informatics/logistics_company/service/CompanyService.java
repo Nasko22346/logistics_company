@@ -90,5 +90,19 @@ public class CompanyService {
         );
     }
 
+    public List<CompanyResponse> search(String q) {
+        if (q == null || q.isBlank()) {
+            return loadData();
+        }
+
+        return companyRepository
+                .findByCompanyNameContainingIgnoreCaseOrCompanyEikContainingIgnoreCaseOrEmailContainingIgnoreCaseOrPhoneNumberContainingIgnoreCase(
+                        q, q, q, q
+                )
+                .stream()
+                .map(this::toResponse)
+                .toList();
+    }
+
     //TODO: Consult further for more business logic
 }

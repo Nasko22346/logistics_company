@@ -44,6 +44,15 @@
       Няма компании.
     </div>
 
+    <form th:action="@{/admin/companies}" method="get" class="searchbar">
+      <input type="text" name="q" placeholder="Search company (name, EIK, email, phone)..."
+             th:value="${q}">
+      <button type="submit" class="btn btn-primary">Search</button>
+
+      <a th:href="@{/admin/companies}" class="btn btn-secondary"
+         th:if="${q != null and !#strings.isEmpty(q)}">Clear</a>
+    </form>
+
     <table class="table" th:unless="${#lists.isEmpty(companies)}">
       <thead>
       <tr>

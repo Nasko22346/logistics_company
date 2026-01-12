@@ -18,4 +18,8 @@ public interface CompanyRepository extends JpaRepository<Company, Long> {
     @Override
     @EntityGraph(attributePaths = {"offices"})
     Optional<Company> findById(Long id);
+
+    List<Company> findByCompanyNameContainingIgnoreCaseOrCompanyEikContainingIgnoreCaseOrEmailContainingIgnoreCaseOrPhoneNumberContainingIgnoreCase(
+            String name, String eik, String email, String phone
+    );
 }
