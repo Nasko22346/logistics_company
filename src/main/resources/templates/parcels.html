@@ -12,18 +12,7 @@
 <body>
 
 <!-- Navigation Bar -->
-<nav class="navbar">
-    <a href="/admin" class="navbar-brand">Papa Express</a>
-
-    <ul class="navbar-nav">
-        <li class="nav-item">
-            <a th:href="@{/api/v1/parcels/create}" class="nav-link">
-                <i class="fas fa-plus-circle nav-icon"></i>
-                <span class="tooltip">Create Parcel</span>
-            </a>
-        </li>
-    </ul>
-</nav>
+<div th:replace="~{fragments/admin-navbar :: navbar('parcels')}"></div>
 
 <div class="container">
     <h1 class="page-title">All Parcels</h1>
