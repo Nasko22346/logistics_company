@@ -56,6 +56,8 @@
         <th>Phone</th>
         <th>Email</th>
         <th>Company</th>
+        <th>Open Time</th>
+        <th>Location</th>
         <th>Actions</th>
       </tr>
       </thead>
@@ -67,6 +69,21 @@
         <td>
           <span th:if="${o.companyId != null}" th:text="${o.companyName ?: 'No company'}">Company</span>
           <span class="muted" th:if="${o.companyId == null}">No company</span>
+        </td>
+        <!-- OpenTime -->
+        <td>
+          <span th:if="${o.openTime != null}"
+            th:text="${'ID: ' + o.openTime.workTimeId}">ID: 1</span>
+          <span class="muted" th:if="${o.openTime == null}">None</span>
+        </td>
+
+        <!-- Location -->
+        <td>
+          <span th:if="${o.location != null}"
+                th:text="${o.location.locationCountry + ', ' + o.location.province + ', ' + o.location.locationRegion}">
+            BG, Sofia, Center
+          </span>
+          <span class="muted" th:if="${o.location == null}">None</span>
         </td>
         <td data-label="Actions">
           <a class="btn btn-primary" th:href="@{/admin/offices/{id}/edit(id=${o.officeId})}">Edit</a>

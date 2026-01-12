@@ -47,6 +47,28 @@
                 </select>
             </div>
 
+            <div class="form-group">
+                <label for="openTimeId">Open Time</label>
+                <select id="openTimeId" th:field="*{openTimeId}">
+                    <option value="">(None)</option>
+                    <option th:each="ot : ${openTimes}"
+                            th:value="${ot.id}"
+                    th:text="${ot.toString()}">
+                    </option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="locationId">Location</label>
+                <select id="locationId" th:field="*{locationId}">
+                    <option value="">(None)</option>
+                    <option th:each="l : ${locations}"
+                            th:value="${l.locationId}"
+                            th:text="${l.locationCountry + ' / ' + l.province + ' / ' + l.locationRegion}">
+                    </option>
+                </select>
+            </div>
+
             <div class="form-buttons">
                 <button type="submit" class="btn btn-primary">Save</button>
                 <a th:href="@{/admin/offices}" class="btn btn-secondary">Cancel</a>
