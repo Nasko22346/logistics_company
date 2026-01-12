@@ -24,22 +24,18 @@ public class OfficePageController {
     }
 
     @GetMapping("/offices")
-    public String list(@RequestParam(required = false) Long companyId, Model model) {
+    public String list(@RequestParam(required = false) Long companyId,
+                       @RequestParam(required = false) String q,
+                       Model model) {
+
+        model.addAttribute("offices", officeService.search(q, companyId));
+        model.addAttribute("companyId", companyId);
+        model.addAttribute("q", q);
 
         if (companyId != null) {
-            var offices = officeRepository.findAllByCompany_CompanyId(companyId)
-                    .stream()
-                    .map(officeService::toResponsePublic)
-                    .toList();
-
-            model.addAttribute("offices", offices);
-            model.addAttribute("companyId", companyId);
-
             var company = companyRepository.findById(companyId).orElse(null);
             model.addAttribute("companyName", company != null ? company.getCompanyName() : null);
         } else {
-            model.addAttribute("offices", officeService.loadData()); // вече е DTO
-            model.addAttribute("companyId", null);
             model.addAttribute("companyName", null);
         }
 

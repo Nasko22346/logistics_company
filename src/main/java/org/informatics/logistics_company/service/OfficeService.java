@@ -125,4 +125,37 @@ public class OfficeService {
                 office.getLocation()
         );
     }
+
+    public List<OfficeResponse> search(String q, Long companyId) {
+        if ((q == null || q.isBlank()) && companyId == null) {
+            return loadData();
+        }
+
+        if (q == null) q = "";
+        q = q.trim();
+
+        List<Office> offices;
+
+        if (companyId != null) {
+            if (q.isBlank()) {
+                offices = officeRepository.findAllByCompany_CompanyId(companyId);
+            } else {
+                offices = officeRepository
+                        .findByCompany_CompanyIdAndOfficePhoneContainingIgnoreCaseOrCompany_CompanyIdAndOfficeEmailContainingIgnoreCaseOrCompany_CompanyIdAndCompany_CompanyNameContainingIgnoreCase(
+                                companyId, q,
+                                companyId, q,
+                                companyId, q
+                        );
+            }
+        } else {
+            if (q.isBlank()) {
+                offices = officeRepository.findAll();
+            } else {
+                offices = officeRepository
+                        .findByOfficePhoneContainingIgnoreCaseOrOfficeEmailContainingIgnoreCaseOrCompany_CompanyNameContainingIgnoreCase(q, q, q);
+            }
+        }
+
+        return offices.stream().map(this::toResponsePublic).toList();
+    }
 }

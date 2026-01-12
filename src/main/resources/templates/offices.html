@@ -60,6 +60,18 @@
       Няма офиси.
     </div>
 
+    <form th:action="@{/admin/offices}" method="get" class="searchbar">
+      <input type="hidden" name="companyId" th:value="${companyId}" th:if="${companyId != null}"/>
+
+      <input type="text" name="q" placeholder="Search office (phone, email, company)..."
+             th:value="${q}">
+      <button type="submit" class="btn btn-primary">Search</button>
+
+      <a class="btn btn-secondary"
+         th:href="${companyId != null} ? @{/admin/offices(companyId=${companyId})} : @{/admin/offices}"
+         th:if="${q != null and !#strings.isEmpty(q)}">Clear</a>
+    </form>
+
     <table class="table" th:unless="${#lists.isEmpty(offices)}">
       <thead>
       <tr>

@@ -57,6 +57,20 @@ a{ color: inherit; }
 /* =========================
    Navbar (твоя style.css, но централизиран)
 ========================= */
+
+.searchbar {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin: 12px;
+}
+.searchbar input[type="text"] {
+  flex: 1;
+  padding: 10px 12px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+}
+
 .navbar{
     background: var(--nav);
     padding: 0;
