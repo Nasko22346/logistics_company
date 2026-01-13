@@ -2,6 +2,7 @@ package org.informatics.logistics_company.service;
 
 import org.informatics.logistics_company.dto.office.OfficeRequest;
 import org.informatics.logistics_company.dto.office.OfficeResponse;
+import org.informatics.logistics_company.exception.OfficeValidationException;
 import org.informatics.logistics_company.model.jpa.Office;
 import org.informatics.logistics_company.repository.LocationRepository;
 import org.informatics.logistics_company.repository.OfficeRepository;
@@ -62,13 +63,11 @@ public class OfficeService {
         entity.setOfficePhone(request.officePhone());
         entity.setOfficeEmail(request.officeEmail());
 
-        // company - задължително (nullable=false)
         if (request.companyId() == null) throw new RuntimeException("companyId is required");
         Company company = companyRepository.findById(request.companyId())
                 .orElseThrow(() -> new RuntimeException("Company with id " + request.companyId() + " not found"));
         entity.setCompany(company);
 
-        // openTime - optional
         if (request.openTimeId() != null) {
             var ot = openTimeRepository.findById(request.openTimeId())
                     .orElseThrow(() -> new RuntimeException("OpenTime with id " + request.openTimeId() + " not found"));
@@ -77,8 +76,10 @@ public class OfficeService {
             entity.setOpenTime(null);
         }
 
-        // location - optional
         if (request.locationId() != null) {
+            if (officeRepository.existsByLocation_LocationId(request.locationId())) {
+                throw new OfficeValidationException("Тази локация вече е заета от друг офис.");
+            }
             var loc = locationRepository.findById(request.locationId())
                     .orElseThrow(() -> new RuntimeException("Location with id " + request.locationId() + " not found"));
             entity.setLocation(loc);
@@ -102,13 +103,11 @@ public class OfficeService {
         office.setOfficePhone(request.officePhone());
         office.setOfficeEmail(request.officeEmail());
 
-        // company
         if (request.companyId() == null) throw new RuntimeException("companyId is required");
         Company company = companyRepository.findById(request.companyId())
                 .orElseThrow(() -> new RuntimeException("Company with id " + request.companyId() + " not found"));
         office.setCompany(company);
 
-        // openTime optional
         if (request.openTimeId() != null) {
             var ot = openTimeRepository.findById(request.openTimeId())
                     .orElseThrow(() -> new RuntimeException("OpenTime with id " + request.openTimeId() + " not found"));
@@ -117,8 +116,10 @@ public class OfficeService {
             office.setOpenTime(null);
         }
 
-        // location optional
         if (request.locationId() != null) {
+            if (officeRepository.existsByLocation_LocationIdAndOfficeIdNot(request.locationId(), id)) {
+                throw new OfficeValidationException("Тази локация вече е заета от друг офис.");
+            }
             var loc = locationRepository.findById(request.locationId())
                     .orElseThrow(() -> new RuntimeException("Location with id " + request.locationId() + " not found"));
             office.setLocation(loc);

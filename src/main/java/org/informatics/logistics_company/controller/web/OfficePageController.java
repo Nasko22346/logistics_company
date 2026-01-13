@@ -2,6 +2,7 @@ package org.informatics.logistics_company.controller.web;
 
 import org.informatics.logistics_company.dto.office.OfficeForm;
 import org.informatics.logistics_company.dto.office.OfficeRequest;
+import org.informatics.logistics_company.exception.OfficeValidationException;
 import org.informatics.logistics_company.repository.CompanyRepository;
 import org.informatics.logistics_company.repository.LocationRepository;
 import org.informatics.logistics_company.repository.OfficeRepository;
@@ -63,9 +64,23 @@ public class OfficePageController {
     }
 
     @PostMapping("/offices")
-    public String create(@ModelAttribute("form") OfficeForm form) {
-        officeService.create(new OfficeRequest(form.getOfficePhone(), form.getOfficeEmail(), form.getCompanyId(), form.getOpenTimeId(), form.getLocationId()));
-        return "redirect:/admin/offices";
+    public String create(@ModelAttribute("form") OfficeForm form, Model model) {
+        try {
+            officeService.create(new OfficeRequest(
+                    form.getOfficePhone(),
+                    form.getOfficeEmail(),
+                    form.getCompanyId(),
+                    form.getOpenTimeId(),   // ако вече го имаш
+                    form.getLocationId()    // ако вече го имаш
+            ));
+            return "redirect:/admin/offices";
+        } catch (OfficeValidationException ex) {
+            model.addAttribute("errorMessage", ex.getMessage());
+            model.addAttribute("companies", companyRepository.findAll());
+            model.addAttribute("openTimes", openTimeRepository.findAll());
+            model.addAttribute("locations", locationRepository.findAll());
+            return "office-form";
+        }
     }
 
     @GetMapping("/offices/{id}/edit")
@@ -92,9 +107,23 @@ public class OfficePageController {
     }
 
     @PostMapping("/offices/{id}")
-    public String update(@PathVariable Long id, @ModelAttribute("form") OfficeForm form) {
-        officeService.update(id, new OfficeRequest(form.getOfficePhone(), form.getOfficeEmail(), form.getCompanyId(), form.getOpenTimeId(), form.getLocationId()));
-        return "redirect:/admin/offices";
+    public String update(@PathVariable Long id, @ModelAttribute("form") OfficeForm form, Model model) {
+        try {
+            officeService.update(id, new OfficeRequest(
+                    form.getOfficePhone(),
+                    form.getOfficeEmail(),
+                    form.getCompanyId(),
+                    form.getOpenTimeId(),
+                    form.getLocationId()
+            ));
+            return "redirect:/admin/offices";
+        } catch (OfficeValidationException ex) {
+            model.addAttribute("errorMessage", ex.getMessage());
+            model.addAttribute("companies", companyRepository.findAll());
+            model.addAttribute("openTimes", openTimeRepository.findAll());
+            model.addAttribute("locations", locationRepository.findAll());
+            return "office-form";
+        }
     }
 
     @PostMapping("/offices/{id}/delete")

@@ -14,6 +14,10 @@ public interface OfficeRepository extends JpaRepository<Office, Long> {
     @EntityGraph(attributePaths = {"company", "openTime", "location"})
     List<Office> findAll();
 
+    boolean existsByLocation_LocationId(Long locationId);
+
+    boolean existsByLocation_LocationIdAndOfficeIdNot(Long locationId, Long officeId);
+
     @EntityGraph(attributePaths = {"company", "openTime", "location"})
     List<Office> findAllByCompany_CompanyId(Long companyId);
 

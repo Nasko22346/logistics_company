@@ -26,6 +26,8 @@
               th:object="${form}"
               method="post">
 
+            <div th:replace="~{fragments/validation :: messages}"></div>
+
             <div class="form-group">
                 <label for="officePhone">Phone</label>
                 <input id="officePhone" type="text" th:field="*{officePhone}" required>

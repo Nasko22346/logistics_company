@@ -125,6 +125,13 @@ a{ color: inherit; }
     font-size: 12px;
 }
 
+.alert-danger {
+    border: 2px solid #E14848;
+    border-radius: 6px;
+    padding: 4px;
+    margin: 4px;
+}
+
 /* Tooltip (по желание; можеш да го активираш) */
 .tooltip{
     visibility:hidden;
