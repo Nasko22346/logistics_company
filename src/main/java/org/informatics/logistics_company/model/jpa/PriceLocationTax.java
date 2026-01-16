@@ -15,6 +15,10 @@ public class PriceLocationTax {
     @Column(name = "price_location_tax_id")
     private Long id;
 
-    @Column(name = "price_location_tax")
+    @Column(name = "price_location_tax", nullable = false)
     private BigDecimal locationTax;
+
+    @OneToOne(optional = false, fetch = FetchType.LAZY)
+    @JoinColumn(name = "location_id", nullable = false, unique = true)
+    private Location location;
 }

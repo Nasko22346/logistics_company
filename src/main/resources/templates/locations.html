@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="bg" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Locations</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" th:href="@{/css/app.css}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+<div th:replace="~{fragments/admin-navbar :: navbar('locations')}"></div>
+
+<div class="container">
+  <h1 class="page-title">Locations</h1>
+  <div class="muted" style="margin-bottom: 16px;">Списък на всички локации</div>
+
+  <div class="card">
+    <div style="display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap: wrap; margin-bottom:12px;">
+      <!-- Search -->
+      <form th:action="@{/admin/locations}" method="get" style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+        <input type="text" name="q" placeholder="Search..." th:value="${q}"
+               style="padding:10px; border:1px solid #ddd; border-radius:8px; min-width:240px;">
+        <button type="submit" class="btn btn-primary">
+          <i class="fas fa-magnifying-glass"></i> Search
+        </button>
+        <a class="btn btn-secondary" th:href="@{/admin/locations}">Clear</a>
+      </form>
+
+      <a class="btn btn-primary" th:href="@{/admin/locations/new}">
+        <i class="fas fa-plus"></i> Add Location
+      </a>
+    </div>
+
+    <div th:if="${#lists.isEmpty(locations)}" class="empty-message">
+      Няма локации.
+    </div>
+
+    <table class="table" th:unless="${#lists.isEmpty(locations)}">
+      <thead>
+      <tr>
+        <th>ID</th>
+        <th>Country</th>
+        <th>Province</th>
+        <th>Region</th>
+        <th>Description</th>
+        <th>Actions</th>
+      </tr>
+      </thead>
+
+      <tbody>
+      <tr th:each="l : ${locations}">
+        <td th:text="${l.locationId}">1</td>
+        <td th:text="${l.locationCountry}">Bulgaria</td>
+        <td th:text="${l.province ?: '-'}">Sofia</td>
+        <td th:text="${l.locationRegion ?: '-'}">Sofia-city</td>
+        <td th:text="${l.locationDescription ?: '-'}">...</td>
+        <td>
+          <a class="btn btn-primary" th:href="@{/admin/locations/{id}/edit(id=${l.locationId})}">Edit</a>
+          <form th:action="@{/admin/locations/{id}/delete(id=${l.locationId})}" method="post" style="display:inline;">
+            <button type="submit" class="btn btn-primary"
+                    onclick="return confirm('Delete this location?')">
+              Delete
+            </button>
+          </form>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+</body>
+</html>

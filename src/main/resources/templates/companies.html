@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="bg" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Companies</title>
+
+  <link rel="stylesheet" th:href="@{/css/app.css}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+<div th:replace="~{fragments/admin-navbar :: navbar('companies')}"></div>
+
+<div class="container">
+  <h1 class="page-title">Companies</h1>
+  <div class="muted" style="margin-bottom: 16px;">Списък на всички компании</div>
+
+  <div class="card">
+    <div style="display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom:12px;">
+      <div class="muted" th:text="'Total: ' + ${#lists.size(companies)}">Total: 0</div>
+      <div>
+        <a class="btn btn-primary" th:href="@{/admin/companies/new}">Add Company</a>
+      </div>
+    </div>
+
+    <div th:if="${#lists.isEmpty(companies)}" class="empty-message">
+      Няма компании.
+    </div>
+
+    <form th:action="@{/admin/companies}" method="get" class="searchbar">
+      <input type="text" name="q" placeholder="Search company (name, EIK, email, phone)..."
+             th:value="${q}">
+      <button type="submit" class="btn btn-primary">Search</button>
+
+      <a th:href="@{/admin/companies}" class="btn btn-secondary"
+         th:if="${q != null and !#strings.isEmpty(q)}">Clear</a>
+    </form>
+
+    <table class="table" th:unless="${#lists.isEmpty(companies)}">
+      <thead>
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>EIK</th>
+        <th>Phone</th>
+        <th>Email</th>
+        <th>Offices</th>
+        <th>Actions</th>
+      </tr>
+      </thead>
+
+      <tbody>
+      <tr th:each="c : ${companies}">
+        <td th:text="${c.companyId}">1</td>
+        <td th:text="${c.companyName}">Company</td>
+        <td th:text="${c.companyEik}">123</td>
+        <td th:text="${c.phoneNumber ?: '-'}">-</td>
+        <td th:text="${c.email ?: '-'}">-</td>
+        <td>
+          <a class="link"
+             th:href="@{/admin/offices(companyId=${c.companyId})}"
+             th:text="${#lists.size(c.officeIds)}">0</a>
+        </td>
+
+
+        <td>
+          <a class="btn btn-primary" th:href="@{/admin/companies/{id}/edit(id=${c.companyId})}">Edit</a>
+
+          <form th:action="@{/admin/companies/{id}/delete(id=${c.companyId})}"
+                method="post"
+                style="display:inline;">
+            <button type="submit" class="btn btn-primary"
+                    onclick="return confirm('Delete this company?')">
+              Delete
+            </button>
+          </form>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+</body>
+</html>
