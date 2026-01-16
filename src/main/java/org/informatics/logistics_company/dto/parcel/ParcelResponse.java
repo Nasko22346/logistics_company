@@ -14,8 +14,11 @@ public class ParcelResponse {
     private String status;
     private LocalDate sentDate;
     private LocalDate receivedDate;
+    private Long senderId;
     private String senderName;
+    private Long receiverId;
     private String receiverName;
+    private Long registeredByStaffId;
     private String registeredByStaffName;
 
     public ParcelResponse(Parcel parcel) {
@@ -25,8 +28,11 @@ public class ParcelResponse {
         this.status = parcel.getParcelStatus().name();
         this.sentDate = parcel.getSentDate() != null ? parcel.getSentDate().toLocalDate() : null;
         this.receivedDate = parcel.getReceivedDate() != null ? parcel.getReceivedDate().toLocalDate() : null;
+        this.senderId = parcel.getSenderUser() != null ? parcel.getSenderUser().getId() : null;
         this.senderName = parcel.getSenderUser() != null ? parcel.getSenderUser().getFirstName() + " " + parcel.getSenderUser().getLastName() : null;
+        this.receiverId = parcel.getReceiverUser() != null ? parcel.getReceiverUser().getId() : null;
         this.receiverName = parcel.getReceiverUser() != null ? parcel.getReceiverUser().getFirstName() + " " + parcel.getReceiverUser().getLastName() : null;
+        this.registeredByStaffId = parcel.getStaff() != null ? parcel.getStaff().getStaffId() : null;
         this.registeredByStaffName = parcel.getStaff() != null && parcel.getStaff().getStaffUserInfo() != null ?
             parcel.getStaff().getStaffUserInfo().getFirstName() + " " +
             parcel.getStaff().getStaffUserInfo().getLastName() : null;
