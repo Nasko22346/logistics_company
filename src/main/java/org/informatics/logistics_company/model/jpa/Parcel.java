@@ -49,7 +49,7 @@ public class Parcel {
     @JoinColumn(name = "receiver_user_id")
     private UserDetails receiverUser;
 
-    //package_manager_id??? - what is it for?
+    //TODO: Tracking number. Return it to the user when creating a parcel, so that it can be traced later.
 
     @ManyToOne
     @JoinColumn(name = "price_location_tax_id")

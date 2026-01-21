@@ -3,14 +3,18 @@ package org.informatics.logistics_company.service;
 import org.informatics.logistics_company.dto.office.OfficeRequest;
 import org.informatics.logistics_company.dto.office.OfficeResponse;
 import org.informatics.logistics_company.exception.OfficeValidationException;
+import org.informatics.logistics_company.model.jpa.Company;
+import org.informatics.logistics_company.model.jpa.Location;
 import org.informatics.logistics_company.model.jpa.Office;
+import org.informatics.logistics_company.model.jpa.OpenTime;
 import org.informatics.logistics_company.repository.LocationRepository;
 import org.informatics.logistics_company.repository.OfficeRepository;
 import org.informatics.logistics_company.repository.CompanyRepository;
 import org.informatics.logistics_company.repository.OpenTimeRepository;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
-import org.informatics.logistics_company.model.jpa.Company;
+import java.util.Optional;
 
 
 @Service
@@ -200,5 +204,21 @@ public class OfficeService {
         }
 
         return offices.stream().map(this::toResponsePublic).toList();
+    }
+
+    public List<Company> getAllCompanies() {
+        return companyRepository.findAll();
+    }
+
+    public List<OpenTime> getAllOpenTimes() {
+        return openTimeRepository.findAll();
+    }
+
+    public List<Location> getAllLocations() {
+        return locationRepository.findAll();
+    }
+
+    public Optional<String> getCompanyNameById(Long id) {
+        return companyRepository.findById(id).map(Company::getCompanyName);
     }
 }

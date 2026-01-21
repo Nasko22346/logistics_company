@@ -1,5 +1,8 @@
 package org.informatics.logistics_company.dto.office;
 
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -7,18 +10,27 @@ public class OfficeForm {
     @Getter
     @Setter
     private Long id;
+
     @Getter
     @Setter
+    @NotBlank(message = "Phone number is required")
     private String officePhone;
+
     @Getter
     @Setter
+    @NotBlank(message = "Email is required")
+    @Email(message = "Invalid email format")
     private String officeEmail;
+
     @Getter
     @Setter
+    @NotNull(message = "Company is required")
     private Long companyId;
+
     @Getter
     @Setter
     private Long openTimeId;
+
     @Getter
     @Setter
     private Long locationId;

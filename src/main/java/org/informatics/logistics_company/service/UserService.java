@@ -28,5 +28,14 @@ public class UserService {
 
         loginRepository.save(user);
     }
+
+    public void login(String email, String rawPassword) {
+        LoginDetails user = loginRepository.findByEmail(email)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid email or password"));
+
+        if (!passwordEncoder.matches(rawPassword, user.getPassword())) {
+            throw new IllegalArgumentException("Invalid email or password");
+        }
+    }
 }
 

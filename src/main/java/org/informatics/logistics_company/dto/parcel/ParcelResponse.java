@@ -33,8 +33,8 @@ public class ParcelResponse {
         this.receiverId = parcel.getReceiverUser() != null ? parcel.getReceiverUser().getId() : null;
         this.receiverName = parcel.getReceiverUser() != null ? parcel.getReceiverUser().getFirstName() + " " + parcel.getReceiverUser().getLastName() : null;
         this.registeredByStaffId = parcel.getStaff() != null ? parcel.getStaff().getStaffId() : null;
-        this.registeredByStaffName = parcel.getStaff() != null && parcel.getStaff().getStaffUserInfo() != null ?
-            parcel.getStaff().getStaffUserInfo().getFirstName() + " " +
-            parcel.getStaff().getStaffUserInfo().getLastName() : null;
+        this.registeredByStaffName = parcel.getStaff() != null && parcel.getStaff().getStaffUserDetails() != null ?
+            parcel.getStaff().getStaffUserDetails().getFirstName() + " " +
+            parcel.getStaff().getStaffUserDetails().getLastName() : null;
     }
 }

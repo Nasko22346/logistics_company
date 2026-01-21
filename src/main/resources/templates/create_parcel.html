@@ -39,7 +39,7 @@
             </div>
 
             <!-- Parcel Creation Form -->
-            <form th:action="@{/api/v1/parcels/create}" th:object="${parcelRequest}" method="post">
+            <form th:action="@{/parcels/create}" th:object="${parcelRequest}" method="post">
 
                 <!-- Weight Field -->
                 <div class="form-group" th:classappend="${#fields.hasErrors('weight') ? 'has-error' : ''}">

@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
-@RequestMapping("/api/v1/parcels")
+@RequestMapping("/parcels")
 public class ParcelViewController {
 
     private final ParcelService parcelService;
@@ -36,7 +36,7 @@ public class ParcelViewController {
         return "client_parcels";
     }
 
-    @GetMapping("/create")
+    @GetMapping("/get-create-form")
     public String showCreateParcelForm(Model model) {
         model.addAttribute("parcelRequest", new ParcelRequest());
         return "create_parcel";
@@ -50,7 +50,7 @@ public class ParcelViewController {
 
         try {
             parcelService.createParcel(parcelRequest);
-            return "redirect:/api/v1/parcels/all";
+            return "redirect:/parcels/all";
         } catch (Exception e) {
             model.addAttribute("error", "Error creating parcel: " + e.getMessage());
             return "create_parcel";
@@ -67,7 +67,7 @@ public class ParcelViewController {
 
     @GetMapping("/by-employee/{employeeId}")
     public String getParcelsByEmployee(@PathVariable Long employeeId, Model model) {
-        model.addAttribute("parcels", parcelService.fetchAllParcels());
+        model.addAttribute("parcels", parcelService.fetchParcelsByStaff(employeeId));
         model.addAttribute("filterType", "by-employee");
         model.addAttribute("filterId", employeeId);
         return "parcels";
@@ -75,14 +75,15 @@ public class ParcelViewController {
 
     @GetMapping("/not-received")
     public String getParcelsNotReceived(Model model) {
-        model.addAttribute("parcels", parcelService.fetchAllParcels());
+        model.addAttribute("parcels", parcelService.fetchAllNotDeliveredParcels());
         model.addAttribute("filterType", "not-received");
         return "parcels";
     }
 
+    //TODO: Merge both endpoints below into one with a parameter indicating sender/receiver
     @GetMapping("/by-sender/{senderId}")
     public String getParcelsBySender(@PathVariable Long senderId, Model model) {
-        model.addAttribute("parcels", parcelService.fetchAllParcels());
+        model.addAttribute("parcels", parcelService.fetchParcelsBySender(senderId));
         model.addAttribute("filterType", "by-sender");
         model.addAttribute("filterId", senderId);
         return "parcels";
@@ -90,7 +91,7 @@ public class ParcelViewController {
 
     @GetMapping("/by-receiver/{receiverId}")
     public String getParcelsByReceiver(@PathVariable Long receiverId, Model model) {
-        model.addAttribute("parcels", parcelService.fetchAllParcels());
+        model.addAttribute("parcels", parcelService.fetchParcelsByReceiver(receiverId));
         model.addAttribute("filterType", "by-receiver");
         model.addAttribute("filterId", receiverId);
         return "parcels";
@@ -105,11 +106,11 @@ public class ParcelViewController {
 
     @GetMapping("/by-sender")
     public String filterBySenderForm(@RequestParam Long senderId) {
-        return "redirect:/api/v1/parcels/by-sender/" + senderId;
+        return "redirect:/parcels/by-sender/" + senderId;
     }
 
     @GetMapping("/by-receiver")
     public String filterByReceiverForm(@RequestParam Long receiverId) {
-        return "redirect:/api/v1/parcels/by-receiver/" + receiverId;
+        return "redirect:/parcels/by-receiver/" + receiverId;
     }
 }

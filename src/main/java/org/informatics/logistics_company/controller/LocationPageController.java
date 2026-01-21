@@ -1,10 +1,12 @@
-package org.informatics.logistics_company.controller.web;
+package org.informatics.logistics_company.controller;
 
+import jakarta.validation.Valid;
 import org.informatics.logistics_company.dto.location.LocationForm;
 import org.informatics.logistics_company.dto.location.LocationRequest;
 import org.informatics.logistics_company.service.LocationService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
@@ -31,7 +33,10 @@ public class LocationPageController {
     }
 
     @PostMapping("/locations")
-    public String create(@ModelAttribute("form") LocationForm form) {
+    public String create(@Valid @ModelAttribute("form") LocationForm form, BindingResult br) {
+        if (br.hasErrors()) {
+            return "location-form";
+        }
         locationService.create(new LocationRequest(
                 form.getLocationCountry(),
                 form.getProvince(),
@@ -55,7 +60,11 @@ public class LocationPageController {
     }
 
     @PostMapping("/locations/{id}")
-    public String update(@PathVariable Long id, @ModelAttribute("form") LocationForm form) {
+    public String update(@PathVariable Long id, @Valid @ModelAttribute("form") LocationForm form, BindingResult br) {
+        if (br.hasErrors()) {
+            form.setId(id);
+            return "location-form";
+        }
         locationService.update(id, new LocationRequest(
                 form.getLocationCountry(),
                 form.getProvince(),

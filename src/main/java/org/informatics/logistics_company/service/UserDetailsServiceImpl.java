@@ -23,9 +23,11 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         LoginDetails user = loginRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
+        String roleName = user.getRole() != null ? user.getRole().name() : "USER";
+
         return User.withUsername(user.getEmail())
                 .password(user.getPassword())
-                .roles("USER")
+                .roles(roleName)
                 .build();
     }
 }

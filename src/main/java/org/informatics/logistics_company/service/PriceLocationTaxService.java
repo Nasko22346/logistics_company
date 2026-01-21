@@ -89,4 +89,27 @@ public class PriceLocationTaxService {
             throw new RuntimeException("Cannot resolve Location id getter. Rename getLocationId/getId in PriceLocationTaxService.");
         }
     }
+
+    public List<Location> getAllLocations() {
+        return locationRepo.findAll();
+    }
+
+    public List<PriceLocationTaxResponse> search(String q) {
+        var all = loadData();
+
+        if (q == null || q.isBlank()) {
+            return all;
+        }
+
+        String qq = q.trim().toLowerCase();
+
+        return all.stream().filter(r -> {
+            String idStr = r.id() != null ? String.valueOf(r.id()) : "";
+            String taxStr = r.locationTax() != null ? r.locationTax().toPlainString() : "";
+            String locIdStr = r.locationId() != null ? String.valueOf(r.locationId()) : "";
+            String locLabel = r.locationLabel() != null ? r.locationLabel().toLowerCase() : "";
+
+            return idStr.contains(qq) || taxStr.contains(qq) || locIdStr.contains(qq) || locLabel.contains(qq);
+        }).toList();
+    }
 }

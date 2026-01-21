@@ -17,7 +17,7 @@ public class AuthController {
 
     @GetMapping("/")
     public String index() {
-        return "index";
+        return "home";
     }
 
     @PostMapping("/register")
@@ -32,10 +32,27 @@ public class AuthController {
 
         try {
             userService.register(email, password);
-
             return "redirect:/?success";
         } catch (Exception e) {
             return "redirect:/?error=register_failed";
         }
     }
+
+    @GetMapping("/login-page")
+    public String loginPage() {
+        return "login";
+    }
+
+//    @PostMapping("/login")
+//    public String login(
+//            @RequestParam String email,
+//            @RequestParam String password
+//    ) {
+//        try {
+//            userService.login(email, password);
+//            return "redirect:/home";
+//        } catch (Exception e) {
+//            return "redirect:/?error=login_failed";
+//        }
+//    }
 }
