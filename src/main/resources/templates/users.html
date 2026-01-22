@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="bg" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Users</title>
+  <link rel="stylesheet" th:href="@{/css/app.css}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+<div th:replace="~{fragments/admin-navbar :: navbar('users')}"></div>
+
+<div class="container">
+  <h1 class="page-title">Users</h1>
+
+  <div class="card">
+    <div style="display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom:12px;">
+      <form method="get" th:action="@{/admin/users}" style="display:flex; gap:8px; align-items:center;">
+        <input type="text" name="q" placeholder="Search (email, name, phone)" th:value="${q}" />
+        <button class="btn btn-primary" type="submit">Search</button>
+        <a class="btn btn-secondary" th:href="@{/admin/users}">Clear</a>
+      </form>
+
+      <a class="btn btn-primary" th:href="@{/admin/users/new}">Add User</a>
+    </div>
+
+    <div th:if="${#lists.isEmpty(users)}" class="empty-message">
+      Няма потребители.
+    </div>
+
+    <table class="table" th:unless="${#lists.isEmpty(users)}">
+      <thead>
+      <tr>
+        <th>ID</th>
+        <th>Email</th>
+        <th>Name</th>
+        <th>Phone</th>
+        <th>Office</th>
+        <th>Position</th>
+        <th>Actions</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="u : ${users}">
+        <td th:text="${u.staffId}">1</td>
+        <td th:text="${u.staffUserInfo.loginInfo.email}">a@b.com</td>
+        <td th:text="${u.staffUserInfo.firstName + ' ' + (u.staffUserInfo.middleName?:'') + ' ' + u.staffUserInfo.lastName}">Name</td>
+        <td th:text="${u.staffUserInfo.phoneNumber}">0888...</td>
+        <td th:text="${u.office.officeId}">Office</td>
+        <td th:text="${u.position}">DRIVER</td>
+        <td>
+          <a class="btn btn-primary" th:href="@{/admin/users/{id}/edit(id=${u.staffId})}">Edit</a>
+
+          <form th:action="@{/admin/users/{id}/delete(id=${u.staffId})}" method="post" style="display:inline;">
+            <button class="btn btn-primary" type="submit" onclick="return confirm('Delete this user?')">Delete</button>
+          </form>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+</body>
+</html>

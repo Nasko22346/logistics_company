@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="bg" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>User</title>
+  <link rel="stylesheet" th:href="@{/css/app.css}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+<div th:replace="~{fragments/admin-navbar :: navbar('user-form')}"></div>
+
+<div class="container">
+  <div class="form-container">
+    <h1 th:text="${form.staffId == null ? 'Create User' : 'Edit User'}">User</h1>
+
+    <form th:action="${form.staffId == null} ? @{/admin/users} : @{/admin/users/{id}(id=${form.staffId})}"
+          th:object="${form}"
+          method="post">
+
+      <!-- важно: вътре в form -->
+      <div th:replace="~{fragments/validation :: validation}"></div>
+
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input id="email" type="email" th:field="*{email}" required>
+      </div>
+
+      <div class="form-group">
+        <label for="password"
+               th:text="${form.staffId == null ? 'Password' : 'Password (leave empty to keep)'}">Password</label>
+        <input id="password" type="password" th:field="*{password}">
+      </div>
+
+      <div class="form-group">
+        <label for="firstName">First name</label>
+        <input id="firstName" type="text" th:field="*{firstName}" required>
+      </div>
+
+      <div class="form-group">
+        <label for="middleName">Middle name</label>
+        <input id="middleName" type="text" th:field="*{middleName}">
+      </div>
+
+      <div class="form-group">
+        <label for="lastName">Last name</label>
+        <input id="lastName" type="text" th:field="*{lastName}" required>
+      </div>
+
+      <div class="form-group">
+        <label for="phoneNumber">Phone</label>
+        <input id="phoneNumber" type="text" th:field="*{phoneNumber}">
+      </div>
+
+      <div class="form-group">
+        <label for="officeId">Office</label>
+        <select id="officeId" th:field="*{officeId}" required>
+          <option value="">Select office</option>
+          <option th:each="o : ${offices}"
+                  th:value="${o.officeId}"
+                  th:text="${'Office #' + o.officeId}">
+          </option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="position">Position</label>
+        <select id="position" th:field="*{position}" required>
+          <option value="">Select position</option>
+          <option th:each="p : ${positions}" th:value="${p}" th:text="${p}"></option>
+        </select>
+      </div>
+
+      <div class="form-buttons">
+        <button type="submit" class="btn btn-primary">Save</button>
+        <a class="btn btn-secondary" th:href="@{/admin/users}">Cancel</a>
+      </div>
+    </form>
+  </div>
+</div>
+
+</body>
+</html>

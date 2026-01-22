@@ -1,15 +1,13 @@
-<div th:fragment="messages">
-    <div th:if="${errorMessage != null}" class="alert alert-danger" th:text="${errorMessage}">
-        Error
-    </div>
-
-    <div th:if="${#fields.hasAnyErrors()}" class="alert alert-danger">
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<div th:fragment="validation">
+    <div th:if="${#fields.hasErrors('*')}" class="alert alert-danger" style="margin-bottom:12px;">
         <ul style="margin:0; padding-left:18px;">
-            <li th:each="e : ${#fields.errors('*')}" th:text="${e}">Validation error</li>
+            <li th:each="e : ${#fields.errors('*')}" th:text="${e}"></li>
+            <li th:each="e : ${#fields.globalErrors()}" th:text="${e}"></li>
         </ul>
     </div>
-
-    <div th:if="${successMessage != null}" class="alert alert-success" th:text="${successMessage}">
-        OK
-    </div>
 </div>
+</body>
+</html>
