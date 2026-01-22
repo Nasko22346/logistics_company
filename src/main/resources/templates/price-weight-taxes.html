@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="bg" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Price Weight Taxes</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" th:href="@{/css/app.css}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+<div th:replace="~{fragments/admin-navbar :: navbar('price-weight-taxes')}"></div>
+
+<div class="container">
+  <h1 class="page-title">Price Weight Taxes</h1>
+  <div class="muted" style="margin-bottom: 16px;">Таблица с данъчни стойности според максимално тегло</div>
+
+  <div class="card">
+
+    <div style="display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom:12px;">
+      <form th:action="@{/admin/price-weight-taxes}" method="get" style="display:flex; gap:8px; align-items:center;">
+        <input type="text" name="q" placeholder="Search..." th:value="${q}" />
+        <button class="btn btn-secondary" type="submit">Search</button>
+        <a class="btn btn-secondary" th:href="@{/admin/price-weight-taxes}">Clear</a>
+      </form>
+
+      <a class="btn btn-primary" th:href="@{/admin/price-weight-taxes/new}">Add</a>
+    </div>
+
+    <div th:if="${#lists.isEmpty(items)}" class="empty-message">
+      Няма записи.
+    </div>
+
+    <table class="table" th:unless="${#lists.isEmpty(items)}">
+      <thead>
+      <tr>
+        <th>ID</th>
+        <th>Max Weight</th>
+        <th>Tax</th>
+        <th>Actions</th>
+      </tr>
+      </thead>
+
+      <tbody>
+      <tr th:each="x : ${items}">
+        <td th:text="${x.id}">1</td>
+        <td th:text="${x.maxWeightAmount}">10.0</td>
+        <td th:text="${x.weightTax}">5.50</td>
+        <td>
+          <a class="btn btn-primary"
+             th:href="@{/admin/price-weight-taxes/{id}/edit(id=${x.id})}">Edit</a>
+
+          <form th:action="@{/admin/price-weight-taxes/{id}/delete(id=${x.id})}"
+                method="post"
+                style="display:inline;">
+            <button type="submit"
+                    class="btn btn-primary"
+                    onclick="return confirm('Delete this record?')">
+              Delete
+            </button>
+          </form>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+
+  </div>
+</div>
+
+</body>
+</html>

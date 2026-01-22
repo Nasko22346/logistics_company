@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="bg" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Price Weight Tax</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" th:href="@{/css/app.css}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+<div th:replace="~{fragments/admin-navbar :: navbar('price-weight-tax-form')}"></div>
+
+<div class="container">
+  <div class="form-container">
+    <h1 th:text="${form.id == null ? 'Create PriceWeightTax' : 'Edit PriceWeightTax'}">PriceWeightTax</h1>
+
+    <form th:action="${form.id == null} ? @{/admin/price-weight-taxes} : @{/admin/price-weight-taxes/{id}(id=${form.id})}"
+          th:object="${form}"
+          method="post">
+
+      <div th:replace="~{fragments/validation :: messages}"></div>
+
+      <div class="form-group">
+        <label for="maxWeightAmount">Max Weight</label>
+        <input id="maxWeightAmount"
+               type="number"
+               step="0.01"
+               th:field="*{maxWeightAmount}"
+               required>
+      </div>
+
+      <div class="form-group">
+        <label for="weightTax">Tax</label>
+        <input id="weightTax"
+               type="number"
+               step="0.01"
+               th:field="*{weightTax}"
+               required>
+      </div>
+
+      <div class="form-buttons">
+        <button type="submit" class="btn btn-primary">Save</button>
+        <a class="btn btn-secondary" th:href="@{/admin/price-weight-taxes}">Cancel</a>
+      </div>
+    </form>
+  </div>
+</div>
+
+</body>
+</html>

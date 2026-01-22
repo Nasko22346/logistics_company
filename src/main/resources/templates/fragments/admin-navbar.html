@@ -35,9 +35,16 @@
     </li>
 
     <li class="nav-item">
-      <a th:href="@{/admin/price-location-taxes}" class="nav-link" th:classappend="${active == 'plt'} ? ' active' : ''">
+      <a th:href="@{/admin/price-location-taxes}" class="nav-link" th:classappend="${active == 'price-location-taxes'} ? ' active' : ''">
         <i class="fas fa-money-bill-wave nav-icon"></i>
         <span class="tooltip">PriceLocationTax</span>
+      </a>
+    </li>
+
+    <li class="nav-item">
+      <a th:href="@{/admin/price-weight-taxes}" class="nav-link" th:classappend="${active == 'price-weight-taxes'} ? ' active' : ''">
+        <i class="fas fa-money-bill-wave nav-icon"></i>
+        <span class="tooltip">PriceWeightTax</span>
       </a>
     </li>
 
