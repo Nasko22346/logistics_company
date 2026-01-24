@@ -168,10 +168,8 @@
 </head>
 
 <body>
-
-<div class="navbar">
-    <a th:href="@{/}">Logistics Company</a>
-</div>
+<!-- Navigation Bar -->
+<div th:replace="~{fragments/admin-navbar :: navbar('home')}"></div>
 
 <div class="container">
     <div class="track-box">

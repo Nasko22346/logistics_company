@@ -9,17 +9,7 @@
 </head>
 <body>
     <!-- Navigation Bar -->
-    <nav class="navbar">
-        <a href="/" class="navbar-brand">Papa Express</a>
-        <ul class="navbar-nav">
-            <li class="nav-item">
-                <a th:href="@{/api/v1/parcels/all}" class="nav-link">
-                    <i class="fas fa-box nav-icon"></i>
-                    <span class="tooltip">Parcels</span>
-                </a>
-            </li>
-        </ul>
-    </nav>
+    <div th:replace="~{fragments/admin-navbar :: navbar('home')}"></div>
 
     <!-- Login Form -->
     <div class="container">
