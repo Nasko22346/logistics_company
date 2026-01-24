@@ -18,10 +18,10 @@ public class PublicTrackingController {
     }
 
     @GetMapping("/track-parcel")
-    public String trackParcel(@RequestParam(required = false) Long trackingNumber, Model model) {
+    public String trackParcel(@RequestParam(required = false) String trackingNumber, Model model) {
         if (trackingNumber != null) {
             try {
-                Parcel parcel = parcelService.fetchParcelByID(trackingNumber);
+                Parcel parcel = parcelService.fetchParcelByTrackingNumber(trackingNumber);
                 model.addAttribute("parcel", parcel);
                 model.addAttribute("trackingNumber", trackingNumber);
             } catch (RuntimeException e) {

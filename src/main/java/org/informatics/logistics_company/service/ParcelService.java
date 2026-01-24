@@ -227,6 +227,12 @@ public class ParcelService {
     }
 
     @Transactional(readOnly = true)
+    public Parcel fetchParcelByTrackingNumber(String trackingNumber) {
+        return parcelRepository.findByTrackingNumberContainingIgnoreCaseOrderByIdDesc(trackingNumber).stream().findFirst()
+                .orElseThrow(() -> new RuntimeException("Parcel with TrackingNumber " + trackingNumber + " not found"));
+    }
+
+    @Transactional(readOnly = true)
     public List<Parcel> fetchParcelsByStaff(Long staffId) {
         return parcelRepository.findByStaff_StaffIdOrderByIdDesc(staffId);
     }

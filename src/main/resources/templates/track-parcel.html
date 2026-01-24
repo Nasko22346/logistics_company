@@ -177,7 +177,7 @@
         <p style="text-align: center; color: #666;">Enter your tracking number to get real-time updates</p>
 
         <form th:action="@{/track-parcel}" method="get" class="search-form">
-            <input type="number"
+            <input type="text"
                    name="trackingNumber"
                    placeholder="Enter tracking number (e.g., 12345)"
                    required
@@ -198,13 +198,13 @@
             <tbody>
                 <tr>
                     <th>Tracking Number</th>
-                    <td th:text="${parcel.id}">#12345</td>
+                    <td th:text="${parcel.trackingNumber}">#12345</td>
                 </tr>
                 <tr>
                     <th>Status</th>
                     <td>
-                        <span th:text="${parcel.status}"
-                              th:class="'status-badge status-' + ${parcel.status}"
+                        <span th:text="${parcel.parcelStatus}"
+                              th:class="'status-badge status-' + ${parcel.parcelStatus}"
                               class="status-badge">PENDING</span>
                     </td>
                 </tr>
@@ -230,11 +230,19 @@
                 </tr>
                 <tr>
                     <th>Sender</th>
-                    <td th:text="${parcel.senderName != null ? parcel.senderName : 'N/A'}">John Doe</td>
+                    <td th:text="${parcel.senderUser != null
+                        ? parcel.senderUser.firstName + ' ' +
+                          (parcel.senderUser.middleName != null ? parcel.senderUser.middleName + ' ' : '') +
+                          parcel.senderUser.lastName
+                        : 'N/A'}">John Doe</td>
                 </tr>
                 <tr>
                     <th>Receiver</th>
-                    <td th:text="${parcel.receiverName != null ? parcel.receiverName : 'N/A'}">Jane Smith</td>
+                    <td th:text="${parcel.receiverUser != null
+                        ? parcel.receiverUser.firstName + ' ' +
+                          (parcel.receiverUser.middleName != null ? parcel.receiverUser.middleName + ' ' : '') +
+                          parcel.receiverUser.lastName
+                        : 'N/A'}">Jane Smith</td>
                 </tr>
             </tbody>
         </table>
