@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="bg" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Parcels (Admin)</title>
+  <link rel="stylesheet" th:href="@{/css/app.css}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+<div th:replace="fragments/admin-navbar :: navbar('parcel-admin')"></div>
+
+<div class="container">
+  <h1 class="page-title">Parcels (Admin)</h1>
+
+  <div class="card" style="margin-bottom: 12px;">
+    <form method="get" th:action="@{/admin/parcels}" style="display:flex; gap:10px; align-items:center;">
+      <input class="input" type="text" name="q" placeholder="Search by tracking number..."
+             th:value="${q}">
+      <button class="btn btn-primary" type="submit">Search</button>
+      <a class="btn btn-secondary" th:href="@{/admin/parcels}">Clear</a>
+
+      <div style="flex:1;"></div>
+
+      <a class="btn btn-primary" th:href="@{/admin/parcels/new}">+ New Parcel</a>
+    </form>
+  </div>
+
+  <div class="card">
+    <div th:if="${#lists.isEmpty(parcels)}" class="empty-message">Няма пратки.</div>
+
+    <table class="table" th:unless="${#lists.isEmpty(parcels)}">
+      <thead>
+      <tr>
+        <th>ID</th>
+        <th>Tracking</th>
+        <th>Status</th>
+        <th>Weight</th>
+        <th>Price</th>
+        <th>Sent</th>
+        <th>Received</th>
+        <th>Send Location</th>
+        <th>Receiver Location</th>
+        <th>Actions</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="p : ${parcels}">
+        <td th:text="${p.id}">1</td>
+        <td th:text="${p.trackingNumber}">ABC123...</td>
+        <td th:text="${p.parcelStatus}">CREATED</td>
+        <td th:text="${p.weight}">2.5</td>
+        <td th:text="${p.price}">10.00</td>
+        <td th:text="${p.sentDate}">2026-...</td>
+        <td th:text="${p.receivedDate}">2026-...</td>
+        <td th:text="${p.sendLocationLabel}">BG...</td>
+        <td th:text="${p.receiverLocationLabel}">BG...</td>
+        <td>
+          <a class="btn btn-primary" th:href="@{/admin/parcels/{id}/edit(id=${p.id})}">Edit</a>
+          <form th:action="@{/admin/parcels/{id}/delete(id=${p.id})}" method="post" style="display:inline;">
+            <button class="btn btn-primary" type="submit"
+                    onclick="return confirm('Delete this parcel?')">Delete</button>
+          </form>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+
+  </div>
+</div>
+
+</body>
+</html>

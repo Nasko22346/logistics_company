@@ -101,7 +101,7 @@ public class ParcelViewController {
 
     @GetMapping("/by-employee")
     public String filterByEmployeeForm(@RequestParam Long employeeId) {
-        return "redirect:/api/v1/parcels/by-employee/" + employeeId;
+        return "redirect:/parcels/by-employee/" + employeeId;
     }
 
     @GetMapping("/by-sender")
@@ -114,16 +114,3 @@ public class ParcelViewController {
         return "redirect:/parcels/by-receiver/" + receiverId;
     }
 }
-
-
-//2026-01-24T10:22:45.848+02:00  WARN 46948 --- [LogisticsCompany] [io-8080-exec-10] o.s.s.c.bcrypt.BCryptPasswordEncoder     : Encoded password does not look like BCrypt
-//2026-01-24T10:22:45.849+02:00 DEBUG 46948 --- [LogisticsCompany] [io-8080-exec-10] o.s.s.a.dao.DaoAuthenticationProvider    : Failed to authenticate since password does not match stored value
-//2026-01-24T10:22:45.849+02:00 DEBUG 46948 --- [LogisticsCompany] [io-8080-exec-10] o.s.s.authentication.ProviderManager     : Authentication failed with provider DaoAuthenticationProvider since Bad credentials
-//2026-01-24T10:22:45.849+02:00 DEBUG 46948 --- [LogisticsCompany] [io-8080-exec-10] o.s.s.authentication.ProviderManager     : Denying authentication since all attempted providers failed
-//2026-01-24T10:22:45.850+02:00 DEBUG 46948 --- [LogisticsCompany] [io-8080-exec-10] o.s.s.web.DefaultRedirectStrategy        : Redirecting to /?error
-//2026-01-24T10:22:45.883+02:00 DEBUG 46948 --- [LogisticsCompany] [nio-8080-exec-1] o.s.security.web.FilterChainProxy        : Securing GET /?error
-//2026-01-24T10:22:45.884+02:00 DEBUG 46948 --- [LogisticsCompany] [nio-8080-exec-1] o.s.security.web.FilterChainProxy        : Secured GET /?error
-//2026-01-24T10:22:45.886+02:00 DEBUG 46948 --- [LogisticsCompany] [nio-8080-exec-1] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
-//2026-01-24T10:22:45.909+02:00 DEBUG 46948 --- [LogisticsCompany] [nio-8080-exec-2] o.s.security.web.FilterChainProxy        : Securing GET /css/app.css
-//2026-01-24T10:22:45.909+02:00 DEBUG 46948 --- [LogisticsCompany] [nio-8080-exec-2] o.s.security.web.FilterChainProxy        : Secured GET /css/app.css
-//2026-01-24T10:22:45.913+02:00 DEBUG 46948 --- [LogisticsCompany] [nio-8080-exec-2] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext

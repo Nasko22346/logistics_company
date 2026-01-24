@@ -1,35 +1,25 @@
 package org.informatics.logistics_company.dto.parcel;
 
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
-import lombok.Data;
+import org.informatics.logistics_company.model.enums.ParcelStatus;
 
-@Data
-public class ParcelRequest {
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
-//    @NotNull(message = "Weight cannot be null")
-    @Positive(message = "Weight must be positive")
-    private Double weight;
-
-//    @NotNull(message = "SenderID cannot be null")
-    @Positive(message = "SenderID must be positive")
-    private Long senderId;
-
-//    @NotNull(message = "ReceiverID cannot be null")
-    @Positive(message = "ReceiverID must be positive")
-    private Long receiverId;
-
-//    @NotNull(message = "RegisteredByStaffID cannot be null")
-    @Positive(message = "RegisteredByStaffID must be positive")
-    private Long registeredByStaffId;
-
-//    @NotNull(message = "SentLocationID cannot be null")
-    @Positive(message = "SentLocationID must be positive")
-    private Long sentLocationId;
-
-//    @NotNull(message = "ReceivedLocationID cannot be null")
-    @Positive(message = "ReceivedLocationID must be positive")
-    private Long receivedLocationId;
-
-    private boolean deliverToAddress;
+public record ParcelRequest(
+        Double weight,
+        BigDecimal price,
+        LocalDateTime sentDate,
+        LocalDateTime receivedDate,
+        Long sendLocationId,
+        Long receiverLocationId,
+        ParcelStatus parcelStatus,
+        Long senderUserId,
+        Long receiverUserId,
+        Long priceLocationTaxId,
+        Long priceWeightTaxId,
+        Long staffId
+) {
+    public ParcelRequest() {
+        this(null, null, null, null, null, null, null, null, null, null, null, null);
+    }
 }

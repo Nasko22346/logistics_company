@@ -49,7 +49,8 @@ public class Parcel {
     @JoinColumn(name = "receiver_user_id")
     private UserDetails receiverUser;
 
-    //TODO: Tracking number. Return it to the user when creating a parcel, so that it can be traced later.
+    @Column(name = "tracking_number", unique = true, length = 32)
+    private String trackingNumber;
 
     @ManyToOne
     @JoinColumn(name = "price_location_tax_id")

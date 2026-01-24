@@ -1,6 +1,7 @@
 package org.informatics.logistics_company.controller;
 
 import org.informatics.logistics_company.dto.parcel.ParcelResponse;
+import org.informatics.logistics_company.model.jpa.Parcel;
 import org.informatics.logistics_company.service.ParcelService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,7 +21,7 @@ public class PublicTrackingController {
     public String trackParcel(@RequestParam(required = false) Long trackingNumber, Model model) {
         if (trackingNumber != null) {
             try {
-                ParcelResponse parcel = parcelService.fetchParcelByID(trackingNumber);
+                Parcel parcel = parcelService.fetchParcelByID(trackingNumber);
                 model.addAttribute("parcel", parcel);
                 model.addAttribute("trackingNumber", trackingNumber);
             } catch (RuntimeException e) {
