@@ -40,15 +40,16 @@ public class SecurityConfig {
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
+                        .loginPage("/login-page")
                         .loginProcessingUrl("/login")
                         .usernameParameter("email")
                         .passwordParameter("password")
-                        .defaultSuccessUrl("/homepage.html", true)
-                        .failureUrl("/?error")
+                        .defaultSuccessUrl("/admin", true)
+                        .failureUrl("/login-page?error")
                         .permitAll()
                 )
                 .logout(logout -> logout
-                        .logoutSuccessUrl("/?logout")
+                        .logoutSuccessUrl("/login-page?logout")
                 );
 
         return http.build();

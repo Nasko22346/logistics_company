@@ -55,7 +55,7 @@ a{ color: inherit; }
 .muted{ color: var(--muted); }
 
 /* =========================
-   Navbar (твоя style.css, но централизиран)
+   Navbar (enhanced styling)
 ========================= */
 
 .searchbar {
@@ -72,21 +72,36 @@ a{ color: inherit; }
 }
 
 .navbar{
-    background: var(--nav);
+    background: linear-gradient(135deg, #2c3e50 0%, #1a252f 100%);
     padding: 0;
-    box-shadow: var(--shadow);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
     display:flex;
     align-items:center;
     justify-content: space-between;
-    height:60px;
+    height:64px;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
 }
 
 .navbar-brand{
     color:white;
-    font-size:24px;
+    font-size:26px;
     font-weight:bold;
-    padding: 0 20px;
+    padding: 0 24px;
     text-decoration:none;
+    letter-spacing: 0.5px;
+    transition: color 0.2s;
+}
+
+.navbar-brand:hover{
+    color: #4CAF50;
+}
+
+.navbar > div {
+    display: flex;
+    align-items: center;
+    height: 100%;
 }
 
 .navbar-nav{
@@ -95,34 +110,90 @@ a{ color: inherit; }
     margin:0;
     padding:0;
     height:100%;
+    align-items: center;
 }
 
-.nav-item{ height: 100%; }
+.nav-item{
+    height: 100%;
+    display: flex;
+    align-items: center;
+}
 
 .nav-link{
     display:flex;
     flex-direction:column;
     align-items:center;
     justify-content:center;
-    padding: 10px 20px;
-    color:white;
+    padding: 12px 18px;
+    color: rgba(255,255,255,0.85);
     text-decoration:none;
     height:100%;
-    transition: background-color .2s;
+    transition: all 0.3s ease;
     position:relative;
+    border-bottom: 3px solid transparent;
 }
 
 .nav-link:hover{
-    background: var(--blue);
+    background: rgba(255,255,255,0.1);
+    color: white;
+    border-bottom-color: var(--primary);
+}
+
+.nav-link.active{
+    background: rgba(76, 175, 80, 0.2);
+    color: white;
+    border-bottom-color: var(--primary);
 }
 
 .nav-icon{
-    font-size: 22px;
-    margin-bottom: 4px;
+    font-size: 20px;
+    margin-bottom: 2px;
+    transition: transform 0.2s;
+}
+
+.nav-link:hover .nav-icon{
+    transform: scale(1.1);
 }
 
 .nav-text{
-    font-size: 12px;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.3px;
+}
+
+/* Nav section divider */
+.nav-divider{
+    width: 1px;
+    height: 30px;
+    background: rgba(255,255,255,0.2);
+    margin: 0 8px;
+}
+
+/* Special styling for login/logout buttons */
+.nav-link.nav-login{
+    background: var(--primary);
+    margin: 0 8px;
+    border-radius: 6px;
+    height: auto;
+    padding: 10px 16px;
+}
+
+.nav-link.nav-login:hover{
+    background: var(--primary-hover);
+    border-bottom-color: transparent;
+}
+
+.nav-link.nav-logout{
+    background: rgba(244, 67, 54, 0.8);
+    margin: 0 8px;
+    border-radius: 6px;
+    height: auto;
+    padding: 10px 16px;
+}
+
+.nav-link.nav-logout:hover{
+    background: var(--danger);
+    border-bottom-color: transparent;
 }
 
 .alert-danger {

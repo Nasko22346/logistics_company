@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Papa Express</title>
+    <title>Register - Papa Express</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
@@ -21,30 +21,20 @@
         </ul>
     </nav>
 
-    <!-- Login Form -->
+    <!-- Register Form -->
     <div class="container">
         <div class="form-container">
-            <h1>Login</h1>
+            <h1>Register</h1>
 
-            <!-- Error Message -->
+            <!-- Error Messages -->
             <div th:if="${param.error}" class="error-alert">
                 <i class="fas fa-exclamation-circle"></i>
-                <span>Invalid email or password. Please try again.</span>
+                <span th:if="${param.error == 'password_mismatch'}">Passwords do not match. Please try again.</span>
+                <span th:if="${param.error == 'register_failed'}">Registration failed. Please try again.</span>
+                <span th:if="${param.error != 'password_mismatch' && param.error != 'register_failed'}">An error occurred. Please try again.</span>
             </div>
 
-            <!-- Success Message (after logout) -->
-            <div th:if="${param.logout}" class="success-message">
-                <i class="fas fa-check-circle"></i>
-                <span>You have been logged out successfully.</span>
-            </div>
-
-            <!-- Success Message (after registration) -->
-            <div th:if="${param.registered}" class="success-message">
-                <i class="fas fa-check-circle"></i>
-                <span>Registration successful! Please log in with your new account.</span>
-            </div>
-
-            <form th:action="@{/login}" method="post">
+            <form th:action="@{/register}" method="post">
                 <div class="form-group">
                     <label for="email">Email <span style="color: red;">*</span></label>
                     <input type="email" id="email" name="email" placeholder="Enter your email" required>
@@ -53,9 +43,13 @@
                     <label for="password">Password <span style="color: red;">*</span></label>
                     <input type="password" id="password" name="password" placeholder="Enter your password" required>
                 </div>
+                <div class="form-group">
+                    <label for="confirmPassword">Confirm Password <span style="color: red;">*</span></label>
+                    <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm your password" required>
+                </div>
                 <div class="form-buttons">
                     <button type="submit" class="btn btn-primary">
-                        <i class="fas fa-sign-in-alt"></i> Sign In
+                        <i class="fas fa-user-plus"></i> Create Account
                     </button>
                     <a href="/" class="btn btn-secondary">
                         <i class="fas fa-times"></i> Cancel
@@ -63,8 +57,8 @@
                 </div>
             </form>
             <div style="text-align: center; margin-top: 20px;">
-                <span>Don't have an account?</span>
-                <a href="/register" style="color: #007bff; text-decoration: none; margin-left: 5px;">Register</a>
+                <span>Already have an account?</span>
+                <a href="/login-page" style="color: #007bff; text-decoration: none; margin-left: 5px;">Login</a>
             </div>
         </div>
     </div>

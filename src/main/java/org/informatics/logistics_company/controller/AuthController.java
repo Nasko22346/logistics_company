@@ -27,20 +27,25 @@ public class AuthController {
             @RequestParam String confirmPassword
     ) {
         if (!password.equals(confirmPassword)) {
-            return "redirect:/?error=password_mismatch";
+            return "redirect:/register?error=password_mismatch";
         }
 
         try {
             userService.register(email, password);
-            return "redirect:/?success";
+            return "redirect:/login-page?registered";
         } catch (Exception e) {
-            return "redirect:/?error=register_failed";
+            return "redirect:/register?error=register_failed";
         }
     }
 
     @GetMapping("/login-page")
     public String loginPage() {
         return "login";
+    }
+
+    @GetMapping("/register")
+    public String registerPage() {
+        return "register";
     }
 
 //    @PostMapping("/login")

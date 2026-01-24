@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,7 +13,7 @@
 </head>
 <body>
     <!-- Navigation Bar -->
-    <div th:if="" th:replace="~{fragments/admin-navbar :: navbar('home')}"></div>
+    <div th:replace="~{fragments/admin-navbar :: navbar('home')}"></div>
 
     <!-- Main Content -->
     <div class="container">
