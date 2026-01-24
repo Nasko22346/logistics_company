@@ -1,5 +1,6 @@
 package org.informatics.logistics_company.service;
 
+import org.informatics.logistics_company.dto.parcel.ParcelAdminRow;
 import org.informatics.logistics_company.dto.parcel.ParcelRequest;
 import org.informatics.logistics_company.dto.parcel.ParcelResponse;
 import org.informatics.logistics_company.model.enums.ParcelStatus;
@@ -305,15 +306,55 @@ public class ParcelService {
         return toResponse(parcel);
     }
 
-    public List<ParcelResponse> fetchAllAdminParcels(boolean hideDelivered) {
-        List<Parcel> parcels = hideDelivered
-                ? parcelRepository.extractAllNotDeliveredParcels(ParcelStatus.DELIVERED)
-                : parcelRepository.findAll();
+    public List<ParcelAdminRow> fetchAllAdminParcels(String q, boolean hideDelivered) {
+        String query = (q == null) ? "" : q.trim();
 
-        return parcels.stream()
-                .map(this::toResponse)   // важно: DTO!
+        return parcelRepository.adminSearch(query, hideDelivered)
+                .stream()
+                .map(this::toAdminRow)
                 .toList();
     }
 
+    private String fullName(UserDetails u) {
+        if (u == null) return null;
+        return String.join(" ",
+                safe(u.getFirstName()),
+                safe(u.getMiddleName()),
+                safe(u.getLastName())
+        ).trim().replaceAll("\\s+", " ");
+    }
+
+
+    private ParcelAdminRow toAdminRow(Parcel p) {
+        String senderName = fullName(p.getSenderUser());
+        String receiverName = fullName(p.getReceiverUser());
+
+        String staffName = null;
+        if (p.getStaff() != null) {
+            // според твоя модел (ти каза getStaffUserDetails())
+            staffName = fullName(p.getStaff().getStaffUserDetails());
+        }
+
+        String sendLocationLabel = locationLabel(p.getSendLocation());
+        String receiverLocationLabel = locationLabel(p.getReceiverLocation());
+
+        return new ParcelAdminRow(
+                p.getId(),
+                p.getTrackingNumber(),
+                p.getWeight(),
+                p.getPrice(),
+                p.getSentDate(),
+                p.getReceivedDate(),
+                p.getParcelStatus(),
+                sendLocationLabel,
+                receiverLocationLabel,
+                p.getSenderUser() != null ? p.getSenderUser().getId() : null,
+                p.getReceiverUser() != null ? p.getReceiverUser().getId() : null,
+                p.getStaff() != null ? p.getStaff().getStaffId() : null,
+                senderName,
+                receiverName,
+                staffName
+        );
+    }
 
 }

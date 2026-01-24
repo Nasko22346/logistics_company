@@ -15,16 +15,17 @@
 
   <div class="card" style="margin-bottom: 12px;">
     <form method="get" th:action="@{/admin/parcels}" style="display:flex; gap:10px; align-items:center;">
-      <input class="input" type="text" name="q" placeholder="Search by tracking number..."
-             th:value="${q}">
+      <input type="text" name="q" placeholder="Search by client/staff name/tracking number..."
+             th:value="${q}" style="width:260px;"/>
+      <button class="btn btn-primary" type="submit">Search</button>
+      <a class="btn btn-secondary" th:href="@{/admin/parcels}">Clear</a>
       <label style="display:flex; gap:8px; align-items:center;">
         <input type="checkbox" name="hideDelivered" value="true"
                th:checked="${hideDelivered}"
                onchange="this.form.submit()">
         Скрий доставените (DELIVERED)
       </label>
-      <button class="btn btn-primary" type="submit">Search</button>
-      <a class="btn btn-secondary" th:href="@{/admin/parcels}">Clear</a>
+
 
       <div style="flex:1;"></div>
 
@@ -40,6 +41,9 @@
       <tr>
         <th>ID</th>
         <th>Tracking</th>
+        <th>Sender</th>
+        <th>Receiver</th>
+        <th>Staff</th>
         <th>Status</th>
         <th>Weight</th>
         <th>Price</th>
@@ -54,6 +58,9 @@
       <tr th:each="p : ${parcels}">
         <td th:text="${p.id}">1</td>
         <td th:text="${p.trackingNumber}">ABC123...</td>
+        <td th:text="${p.senderName ?: 'N/A'}">Sender</td>
+        <td th:text="${p.receiverName ?: 'N/A'}">Receiver</td>
+        <td th:text="${p.staffName ?: 'N/A'}">Staff</td>
         <td th:text="${p.parcelStatus}">CREATED</td>
         <td th:text="${p.weight}">2.5</td>
         <td th:text="${p.price}">10.00</td>
