@@ -1,4 +1,4 @@
-package org.informatics.logistics_company.controller.web;
+package org.informatics.logistics_company.controller;
 
 import jakarta.validation.Valid;
 import org.springframework.validation.BindingResult;
@@ -33,7 +33,7 @@ public class CompanyPageController {
     }
 
     @PostMapping("/companies")
-    public String create(@ModelAttribute("form") CompanyForm form, BindingResult br) {
+    public String create(@Valid @ModelAttribute("form") CompanyForm form, BindingResult br) {
         if (br.hasErrors()) {
             return "company-form";
         }

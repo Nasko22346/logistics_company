@@ -2,11 +2,12 @@ package org.informatics.logistics_company.model.jpa;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import org.informatics.logistics_company.model.enums.Role;
 
 @Data
 @Table(name = "login_info")
 @Entity
-public class LoginInfo {
+public class LoginDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,4 +19,8 @@ public class LoginInfo {
 
     @Column(name = "login_password")
     private String password;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "role")
+    private Role role = Role.USER;
 }

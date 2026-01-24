@@ -6,7 +6,7 @@ import lombok.Data;
 @Data
 @Entity
 @Table(name = "user_info")
-public class UserInfo {
+public class UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,5 +30,5 @@ public class UserInfo {
 
     @OneToOne
     @JoinColumn(name = "login_id", referencedColumnName = "login_id")
-    private LoginInfo loginInfo;
+    private LoginDetails loginDetails;
 }
