@@ -19,12 +19,16 @@ public class Office {
     private String officeEmail;
 
     @ManyToOne
+    @JoinColumn(name = "company_id", nullable = false)
     private Company company;
 
     @ManyToOne
+    @JoinColumn(name = "open_time_id")
     private OpenTime openTime;
 
     @OneToOne
+    @JoinColumn(name = "location_id")
     private Location location;
+
 }
 

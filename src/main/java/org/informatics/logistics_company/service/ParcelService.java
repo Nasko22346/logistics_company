@@ -121,4 +121,26 @@ public class ParcelService {
         return parcelRepository.extractAllNotDeliveredParcels(ParcelStatus.DELIVERED)
                 .stream().map(ParcelResponse::new).collect(Collectors.toList());
     }
+
+    /**
+     * Method to fetch all parcels sent by a given sender
+     *
+     * @param senderId - id of the sender
+     * @return list of all parcels sent by the given sender
+     */
+    public List<ParcelResponse> fetchParcelsBySender(Long senderId) {
+        return parcelRepository.findAllBySenderUserId(senderId)
+                .stream().map(ParcelResponse::new).toList();
+    }
+
+    /**
+     * Method to fetch all parcels received by a given receiver
+     *
+     * @param receiverId - id of the receiver
+     * @return list of all parcels for the given receiver
+     */
+    public List<ParcelResponse> fetchParcelsByReceiver(Long receiverId) {
+        return parcelRepository.extractAllParcelsByReceiverID(receiverId)
+                .stream().map(ParcelResponse::new).toList();
+    }
 }

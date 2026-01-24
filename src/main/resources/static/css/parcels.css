@@ -1,0 +1,209 @@
+/*
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+    background-color: #f5f5f5;
+}
+
+h1 {
+    color: #333;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: white;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+th, td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+th {
+    background-color: #4CAF50;
+    color: white;
+    font-weight: bold;
+}
+
+tr:hover {
+    background-color: #f5f5f5;
+}
+
+.status-badge {
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.status-PENDING {
+    background-color: #ffc107;
+    color: #000;
+}
+
+.status-IN_TRANSIT {
+    background-color: #2196F3;
+    color: white;
+}
+
+.status-DELIVERED {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.status-RETURNED {
+    background-color: #ff9800;
+    color: white;
+}
+
+.status-CANCELLED {
+    background-color: #f44336;
+    color: white;
+}
+
+.empty-message {
+    text-align: center;
+    padding: 40px;
+    color: #666;
+}
+*/
+
+.status-badge{
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: bold;
+    display:inline-block;
+}
+
+.status-PENDING{ background:#ffc107; color:#000; }
+.status-IN_TRANSIT{ background:#2196F3; color:#fff; }
+.status-DELIVERED{ background:#4CAF50; color:#fff; }
+.status-RETURNED{ background:#ff9800; color:#fff; }
+.status-CANCELLED{ background:#f44336; color:#fff; }
+
+.clickable-row {
+    cursor: pointer;
+}
+
+.clickable-row:hover {
+    background-color: #e8f5e9;
+}
+
+.parcel-details {
+    max-width: 600px;
+    margin: 20px auto;
+}
+
+.parcel-details table {
+    width: 100%;
+}
+
+.parcel-details th {
+    width: 40%;
+    background-color: #f5f5f5;
+    color: #333;
+}
+
+.back-link {
+    text-align: center;
+    margin-top: 20px;
+}
+
+/* Filter toolbar styling */
+.filter-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+    padding: 15px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.filter-label {
+    font-weight: bold;
+    color: #333;
+    margin-right: 10px;
+}
+
+.filter-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    background-color: #f5f5f5;
+    color: #333;
+    text-decoration: none;
+    border-radius: 4px;
+    font-size: 14px;
+    transition: background-color 0.3s, color 0.3s;
+    border: 1px solid #ddd;
+}
+
+.filter-btn:hover {
+    background-color: #4CAF50;
+    color: white;
+    border-color: #4CAF50;
+}
+
+.filter-btn.active {
+    background-color: #4CAF50;
+    color: white;
+    border-color: #4CAF50;
+}
+
+.filter-btn i {
+    font-size: 14px;
+}
+
+/* Inline filter forms */
+.filter-form {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.filter-form input[type="number"] {
+    width: 70px;
+    padding: 6px 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 13px;
+}
+
+.filter-form input[type="number"]:focus {
+    outline: none;
+    border-color: #4CAF50;
+}
+
+.filter-form button {
+    padding: 6px 12px;
+    background-color: #f5f5f5;
+    color: #333;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 13px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.filter-form button:hover {
+    background-color: #4CAF50;
+    color: white;
+    border-color: #4CAF50;
+}
+
+.filter-form button.active {
+    background-color: #4CAF50;
+    color: white;
+    border-color: #4CAF50;
+}

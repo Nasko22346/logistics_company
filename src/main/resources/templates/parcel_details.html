@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parcel Details - Papa Express</title>
+    <link rel="stylesheet" th:href="@{/css/parcels.css}">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+<!-- Navigation Bar -->
+<!-- Navigation Bar -->
+<div th:replace="~{fragments/admin-navbar :: navbar('home')}"></div>
+
+<h1>Parcel Details</h1>
+
+<div class="parcel-details">
+    <table>
+        <tbody>
+            <tr>
+                <th>ID</th>
+                <td th:text="${parcel.id}">1</td>
+            </tr>
+            <tr>
+                <th>Weight (kg)</th>
+                <td th:text="${#numbers.formatDecimal(parcel.weight, 1, 2)}">1.50</td>
+            </tr>
+            <tr>
+                <th>Price (BGN)</th>
+                <td th:text="${#numbers.formatDecimal(parcel.price, 1, 2)}">15.00</td>
+            </tr>
+            <tr>
+                <th>Status</th>
+                <td>
+                    <span th:text="${parcel.status}"
+                          th:class="'status-badge status-' + ${parcel.status}"
+                          class="status-badge">PENDING</span>
+                </td>
+            </tr>
+            <tr>
+                <th>Sent Date</th>
+                <td th:text="${parcel.sentDate != null ? #temporals.format(parcel.sentDate, 'dd/MM/yyyy') : 'N/A'}">15/01/2024</td>
+            </tr>
+            <tr>
+                <th>Received Date</th>
+                <td th:text="${parcel.receivedDate != null ? #temporals.format(parcel.receivedDate, 'dd/MM/yyyy') : 'N/A'}">16/01/2024</td>
+            </tr>
+            <tr>
+                <th>Sender</th>
+                <td th:text="${parcel.senderName ?: 'Unknown'}">John Doe</td>
+            </tr>
+            <tr>
+                <th>Receiver</th>
+                <td th:text="${parcel.receiverName ?: 'Unknown'}">Jane Smith</td>
+            </tr>
+            <tr>
+                <th>Registered By</th>
+                <td th:text="${parcel.registeredByStaffName ?: 'N/A'}">Staff Member</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<div class="back-link">
+    <a th:href="@{/api/v1/parcels/all}" class="btn btn-secondary">
+        <i class="fas fa-arrow-left"></i> Back to All Parcels
+    </a>
+</div>
+</body>
+</html>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="bg">
+<head>
+  <meta charset="UTF-8">
+  <title>Location</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" th:href="@{/css/app.css}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+<!-- Navigation Bar -->
+<div th:replace="~{fragments/admin-navbar :: navbar('home')}"></div>
+
+<div class="container">
+  <div class="form-container">
+    <h1 th:text="${form.id == null ? 'Create Location' : 'Edit Location'}">Location</h1>
+
+    <form th:action="${form.id == null} ? @{/admin/locations} : @{/admin/locations/{id}(id=${form.id})}"
+          th:object="${form}"
+          method="post">
+
+      <div class="form-group">
+        <label for="locationCountry">Country</label>
+        <input id="locationCountry" type="text" th:field="*{locationCountry}" required>
+      </div>
+
+      <div class="form-group">
+        <label for="province">Province</label>
+        <input id="province" type="text" th:field="*{province}">
+      </div>
+
+      <div class="form-group">
+        <label for="locationRegion">Region</label>
+        <input id="locationRegion" type="text" th:field="*{locationRegion}">
+      </div>
+
+      <div class="form-group">
+        <label for="locationDescription">Description</label>
+        <input id="locationDescription" type="text" th:field="*{locationDescription}">
+      </div>
+
+      <div class="form-buttons">
+        <button type="submit" class="btn btn-primary">Save</button>
+        <a th:href="@{/admin/locations}" class="btn btn-secondary">Cancel</a>
+      </div>
+    </form>
+  </div>
+</div>
+
+</body>
+</html>

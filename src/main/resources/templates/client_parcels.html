@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Parcels - Papa Express</title>
+    <link rel="stylesheet" th:href="@{/css/parcels.css}">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+<!-- Navigation Bar -->
+<div th:replace="~{fragments/admin-navbar :: navbar('home')}"></div>
+
+<h1>My Parcels</h1>
+
+<div th:if="${#lists.isEmpty(parcels)}" class="empty-message">
+    <p>No parcels found for this client.</p>
+</div>
+
+<table th:unless="${#lists.isEmpty(parcels)}">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Weight (kg)</th>
+        <th>Price (BGN)</th>
+        <th>Status</th>
+        <th>Sent Date</th>
+        <th>Received Date</th>
+        <th>Sender</th>
+        <th>Receiver</th>
+        <th>Registered By</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="parcel : ${parcels}">
+        <td th:text="${parcel.id}">1</td>
+        <td th:text="${#numbers.formatDecimal(parcel.weight, 1, 2)}">1.50</td>
+        <td th:text="${#numbers.formatDecimal(parcel.price, 1, 2)}">15.00</td>
+        <td>
+                <span th:text="${parcel.status}"
+                      th:class="'status-badge status-' + ${parcel.status}"
+                      class="status-badge">PENDING</span>
+        </td>
+        <td th:text="${parcel.sentDate != null ? #temporals.format(parcel.sentDate, 'dd/MM/yyyy') : 'N/A'}">15/01/2024
+        </td>
+        <td th:text="${parcel.receivedDate != null ? #temporals.format(parcel.receivedDate, 'dd/MM/yyyy') : 'N/A'}">
+            16/01/2024
+        </td>
+        <td th:text="${parcel.senderName ?: 'Unknown'}">John Doe</td>
+        <td th:text="${parcel.receiverName ?: 'Unknown'}">Jane Smith</td>
+        <td th:text="${parcel.registeredByStaffName ?: 'N/A'}">Staff Member</td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

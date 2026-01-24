@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="bg" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Offices</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link rel="stylesheet" th:href="@{/css/app.css}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+<div th:replace="~{fragments/admin-navbar :: navbar('offices')}"></div>
+
+<div class="container">
+  <h1 class="page-title">Offices</h1>
+  <div class="muted" style="margin-bottom: 16px;">Списък на всички офиси</div>
+
+  <div th:if="${companyId != null}" class="muted" style="margin-bottom: 12px;">
+    Filter: <b th:text="${companyName != null ? companyName : ('Company #' + companyId)}"></b>
+    <a class="link" th:href="@{/admin/offices}" style="margin-left:10px;">Clear</a>
+  </div>
+
+  <div class="card">
+    <div style="display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom:12px;">
+      <div>
+        <span class="muted" th:text="'Total: ' + ${#lists.size(offices)}">Total: 0</span>
+      </div>
+
+      <div>
+        <a class="btn btn-secondary" th:href="@{/}">Home</a>
+        <a class="btn btn-primary" th:href="@{/admin/offices/new}">Add Office</a>
+      </div>
+    </div>
+
+    <div th:if="${#lists.isEmpty(offices)}" class="empty-message">
+      Няма офиси.
+    </div>
+
+    <form th:action="@{/admin/offices}" method="get" class="searchbar">
+      <input type="hidden" name="companyId" th:value="${companyId}" th:if="${companyId != null}"/>
+
+      <input type="text" name="q" placeholder="Search office (phone, email, company)..."
+             th:value="${q}">
+      <button type="submit" class="btn btn-primary">Search</button>
+
+      <a class="btn btn-secondary"
+         th:href="${companyId != null} ? @{/admin/offices(companyId=${companyId})} : @{/admin/offices}"
+         th:if="${q != null and !#strings.isEmpty(q)}">Clear</a>
+    </form>
+
+    <table class="table" th:unless="${#lists.isEmpty(offices)}">
+      <thead>
+      <tr>
+        <th>ID</th>
+        <th>Phone</th>
+        <th>Email</th>
+        <th>Company</th>
+        <th>Open Time</th>
+        <th>Location</th>
+        <th>Actions</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="o : ${offices}">
+        <td th:text="${o.officeId}">1</td>
+        <td th:text="${o.officePhone}">0888...</td>
+        <td th:text="${o.officeEmail}">office@mail.com</td>
+        <td>
+          <span th:if="${o.companyId != null}" th:text="${o.companyName ?: 'No company'}">Company</span>
+          <span class="muted" th:if="${o.companyId == null}">No company</span>
+        </td>
+        <!-- OpenTime -->
+        <td>
+          <span th:if="${o.openTime != null}"
+            th:text="${'ID: ' + o.openTime.workTimeId}">ID: 1</span>
+          <span class="muted" th:if="${o.openTime == null}">None</span>
+        </td>
+
+        <!-- Location -->
+        <td>
+          <span th:if="${o.location != null}"
+                th:text="${o.location.locationCountry + ', ' + o.location.province + ', ' + o.location.locationRegion}">
+            BG, Sofia, Center
+          </span>
+          <span class="muted" th:if="${o.location == null}">None</span>
+        </td>
+        <td data-label="Actions">
+          <a class="btn btn-primary" th:href="@{/admin/offices/{id}/edit(id=${o.officeId})}">Edit</a>
+
+          <form th:action="@{/admin/offices/{id}/delete(id=${o.officeId})}" method="post" style="display:inline;">
+
+            <button type="submit" class="btn btn-primary"
+                    onclick="return confirm('Delete this office?')">
+              Delete
+            </button>
+          </form>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+</body>
+</html>
