@@ -18,7 +18,7 @@ public class UserService {
     }
 
     public void register(String email, String rawPassword) {
-        if (loginRepository.existsByEmail(email)) {
+        if (loginRepository.existsByEmailIgnoreCase(email)) {
             throw new IllegalArgumentException("Email already exists");
         }
 

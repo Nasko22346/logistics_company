@@ -1,4 +1,4 @@
-package org.informatics.logistics_company.controller.web;
+package org.informatics.logistics_company.controller;
 
 import jakarta.validation.Valid;
 import org.informatics.logistics_company.dto.staff.StaffUserForm;
@@ -76,11 +76,11 @@ public class StaffUserPageController {
         form.setStaffId(staff.getStaffId());
         form.setOfficeId(staff.getOffice().getOfficeId());
         form.setPosition(staff.getPosition());
-        form.setFirstName(staff.getStaffUserInfo().getFirstName());
-        form.setMiddleName(staff.getStaffUserInfo().getMiddleName());
-        form.setLastName(staff.getStaffUserInfo().getLastName());
-        form.setPhoneNumber(staff.getStaffUserInfo().getPhoneNumber());
-        form.setEmail(staff.getStaffUserInfo().getLoginInfo().getEmail());
+        form.setFirstName(staff.getStaffUserDetails().getFirstName());
+        form.setMiddleName(staff.getStaffUserDetails().getMiddleName());
+        form.setLastName(staff.getStaffUserDetails().getLastName());
+        form.setPhoneNumber(staff.getStaffUserDetails().getPhoneNumber());
+        form.setEmail(staff.getStaffUserDetails().getLoginDetails().getEmail());
         form.setPassword(""); // празно -> няма промяна
 
         model.addAttribute("form", form);

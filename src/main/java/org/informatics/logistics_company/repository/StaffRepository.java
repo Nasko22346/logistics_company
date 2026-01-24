@@ -11,14 +11,14 @@ import java.util.List;
 public interface StaffRepository extends JpaRepository<Staff, Long> {
 
     @Override
-    @EntityGraph(attributePaths = {"office", "staffUserInfo", "staffUserInfo.loginInfo"})
+    @EntityGraph(attributePaths = {"office", "staffUserDetails", "staffUserDetails.loginDetails"})
     List<Staff> findAll();
 
-    @EntityGraph(attributePaths = {"office", "staffUserInfo", "staffUserInfo.loginInfo"})
+    @EntityGraph(attributePaths = {"office", "staffUserDetails", "staffUserDetails.loginDetails"})
     @Query("""
         select distinct s from Staff s
-        join s.staffUserInfo ui
-        join ui.loginInfo li
+        join s.staffUserDetails ui
+        join ui.loginDetails li
         where lower(li.email) like lower(concat('%', :q, '%'))
            or lower(ui.firstName) like lower(concat('%', :q, '%'))
            or lower(ui.middleName) like lower(concat('%', :q, '%'))

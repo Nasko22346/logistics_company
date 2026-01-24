@@ -43,9 +43,9 @@
       <tbody>
       <tr th:each="u : ${users}">
         <td th:text="${u.staffId}">1</td>
-        <td th:text="${u.staffUserInfo.loginInfo.email}">a@b.com</td>
-        <td th:text="${u.staffUserInfo.firstName + ' ' + (u.staffUserInfo.middleName?:'') + ' ' + u.staffUserInfo.lastName}">Name</td>
-        <td th:text="${u.staffUserInfo.phoneNumber}">0888...</td>
+        <td th:text="${u.staffUserDetails.loginDetails.email}">a@b.com</td>
+        <td th:text="${u.staffUserDetails.firstName + ' ' + (u.staffUserDetails.middleName?:'') + ' ' + u.staffUserDetails.lastName}">Name</td>
+        <td th:text="${u.staffUserDetails.phoneNumber}">0888...</td>
         <td th:text="${u.office.officeId}">Office</td>
         <td th:text="${u.position}">DRIVER</td>
         <td>
