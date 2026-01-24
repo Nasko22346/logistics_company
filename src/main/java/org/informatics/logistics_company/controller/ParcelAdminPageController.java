@@ -37,8 +37,9 @@ public class ParcelAdminPageController {
     }
 
     @GetMapping("/parcels")
-    public String list(@RequestParam(required = false) String q, Model model) {
-        model.addAttribute("parcels", parcelService.listAll(q));
+    public String list(@RequestParam(defaultValue = "false") boolean hideDelivered, @RequestParam(required = false) String q, Model model) {
+        model.addAttribute("parcels", parcelService.fetchAllAdminParcels(hideDelivered));
+        model.addAttribute("hideDelivered", hideDelivered);
         model.addAttribute("q", q);
         return "parcel-admin";
     }

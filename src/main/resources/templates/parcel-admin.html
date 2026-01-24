@@ -17,6 +17,12 @@
     <form method="get" th:action="@{/admin/parcels}" style="display:flex; gap:10px; align-items:center;">
       <input class="input" type="text" name="q" placeholder="Search by tracking number..."
              th:value="${q}">
+      <label style="display:flex; gap:8px; align-items:center;">
+        <input type="checkbox" name="hideDelivered" value="true"
+               th:checked="${hideDelivered}"
+               onchange="this.form.submit()">
+        Скрий доставените (DELIVERED)
+      </label>
       <button class="btn btn-primary" type="submit">Search</button>
       <a class="btn btn-secondary" th:href="@{/admin/parcels}">Clear</a>
 

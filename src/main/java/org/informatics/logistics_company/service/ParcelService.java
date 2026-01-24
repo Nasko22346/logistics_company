@@ -2,6 +2,7 @@ package org.informatics.logistics_company.service;
 
 import org.informatics.logistics_company.dto.parcel.ParcelRequest;
 import org.informatics.logistics_company.dto.parcel.ParcelResponse;
+import org.informatics.logistics_company.model.enums.ParcelStatus;
 import org.informatics.logistics_company.model.jpa.*;
 import org.informatics.logistics_company.repository.*;
 import org.springframework.stereotype.Service;
@@ -303,5 +304,16 @@ public class ParcelService {
                 .orElseThrow(() -> new RuntimeException("Parcel with id " + id + " not found"));
         return toResponse(parcel);
     }
+
+    public List<ParcelResponse> fetchAllAdminParcels(boolean hideDelivered) {
+        List<Parcel> parcels = hideDelivered
+                ? parcelRepository.extractAllNotDeliveredParcels(ParcelStatus.DELIVERED)
+                : parcelRepository.findAll();
+
+        return parcels.stream()
+                .map(this::toResponse)   // важно: DTO!
+                .toList();
+    }
+
 
 }

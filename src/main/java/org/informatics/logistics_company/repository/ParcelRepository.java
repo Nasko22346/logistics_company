@@ -1,5 +1,6 @@
 package org.informatics.logistics_company.repository;
 
+import org.informatics.logistics_company.dto.parcel.ParcelResponse;
 import org.informatics.logistics_company.model.enums.ParcelStatus;
 import org.informatics.logistics_company.model.jpa.Parcel;
 import org.springframework.data.jpa.repository.EntityGraph;
@@ -91,6 +92,13 @@ public interface ParcelRepository extends JpaRepository<Parcel, Long> {
 
     // 5e. Всички пратки, които са изпратени, но не да получени
     @Query("SELECT p FROM Parcel p WHERE p.parcelStatus != :status")
+    @EntityGraph(attributePaths = {
+            "sendLocation", "receiverLocation",
+            "senderUser", "senderUser.loginDetails",
+            "receiverUser", "receiverUser.loginDetails",
+            "priceLocationTax", "priceWeightTax",
+            "staff"
+    })
     List<Parcel> extractAllNotDeliveredParcels(ParcelStatus status);
 
 
