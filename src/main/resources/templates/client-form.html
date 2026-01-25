@@ -22,22 +22,22 @@
 
       <div th:replace="~{fragments/validation :: validation}"></div>
 
-      <div>
+      <div class="form-group">
         <label>First name</label>
         <input type="text" th:field="*{firstName}">
       </div>
 
-      <div>
+      <div class="form-group">
         <label>Middle name</label>
         <input type="text" th:field="*{middleName}">
       </div>
 
-      <div>
+      <div class="form-group">
         <label>Last name</label>
         <input type="text" th:field="*{lastName}">
       </div>
 
-      <div>
+      <div class="form-group">
         <label>Phone</label>
         <input type="text" th:field="*{phoneNumber}">
       </div>
@@ -47,24 +47,24 @@
   <!--    <h3>Login (optional)</h3>-->
   <!--    <p class="muted">Leave empty to keep “no login”. If editing: leaving password empty keeps the old password.</p>-->
 
-      <div>
+      <div class="form-group">
         <label>Email</label>
         <input type="email" th:field="*{loginEmail}">
       </div>
 
-      <div>
+      <div class="form-group">
         <label>Password</label>
         <input type="text" th:field="*{loginPassword}">
       </div>
 
-      <div>
+      <div class="form-group">
         <label>Role</label>
         <select th:field="*{role}">
           <option th:each="r : ${roles}" th:value="${r}" th:text="${r}"></option>
         </select>
       </div>
 
-      <div style="margin-top:16px;">
+      <div style="margin-top:16px;" class="form-buttons">
         <button class="btn btn-primary" type="submit">Save</button>
         <a class="btn" th:href="@{/admin/clients}">Cancel</a>
       </div>
