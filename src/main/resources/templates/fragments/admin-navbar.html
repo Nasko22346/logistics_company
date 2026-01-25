@@ -36,7 +36,7 @@
                 <a th:href="@{/admin/price-location-taxes}" class="nav-link"
                    th:classappend="${active == 'plt'} ? ' active' : ''">
                     <i class="fas fa-money-bill-wave nav-icon"></i>
-                    <span class="tooltip">Pricing</span>
+                    <span class="tooltip">Pricing to Location</span>
                 </a>
             </li>
 
@@ -50,7 +50,14 @@
             <li sec:authorize="isAuthenticated()" class="nav-item">
                 <a th:href="@{/admin/users}" class="nav-link" th:classappend="${active == 'users'} ? ' active' : ''">
                     <i class="fas fa-user nav-icon"></i>
-                    <span class="tooltip">Users</span>
+                    <span class="tooltip">Staff Users</span>
+                </a>
+            </li>
+
+            <li sec:authorize="isAuthenticated()" class="nav-item">
+                <a th:href="@{/admin/clients}" class="nav-link" th:classappend="${active == 'clients'} ? ' active' : ''">
+                    <i class="fas fa-user nav-icon"></i>
+                    <span class="tooltip">Client Users</span>
                 </a>
             </li>
 

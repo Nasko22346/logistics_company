@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Client form</title>
+
+  <link rel="stylesheet" th:href="@{/css/app.css}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+<div th:replace="~{fragments/admin-navbar :: navbar('clients')}"></div>
+
+<div class="container">
+  <div class="form-container">
+    <h1 th:text="${form.id == null ? 'Create Client' : 'Edit Client'}">Client</h1>
+
+    <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+
+    <form th:action="${form.id == null} ? @{/admin/clients} : @{/admin/clients/{id}(id=${form.id})}"
+          th:object="${form}"
+          method="post">
+
+      <div th:replace="~{fragments/validation :: validation}"></div>
+
+      <div>
+        <label>First name</label>
+        <input type="text" th:field="*{firstName}">
+      </div>
+
+      <div>
+        <label>Middle name</label>
+        <input type="text" th:field="*{middleName}">
+      </div>
+
+      <div>
+        <label>Last name</label>
+        <input type="text" th:field="*{lastName}">
+      </div>
+
+      <div>
+        <label>Phone</label>
+        <input type="text" th:field="*{phoneNumber}">
+      </div>
+
+      <hr>
+
+  <!--    <h3>Login (optional)</h3>-->
+  <!--    <p class="muted">Leave empty to keep “no login”. If editing: leaving password empty keeps the old password.</p>-->
+
+      <div>
+        <label>Email</label>
+        <input type="email" th:field="*{loginEmail}">
+      </div>
+
+      <div>
+        <label>Password</label>
+        <input type="text" th:field="*{loginPassword}">
+      </div>
+
+      <div>
+        <label>Role</label>
+        <select th:field="*{role}">
+          <option th:each="r : ${roles}" th:value="${r}" th:text="${r}"></option>
+        </select>
+      </div>
+
+      <div style="margin-top:16px;">
+        <button class="btn btn-primary" type="submit">Save</button>
+        <a class="btn" th:href="@{/admin/clients}">Cancel</a>
+      </div>
+    </form>
+  </div>
+</div>
+</body>
+</html>

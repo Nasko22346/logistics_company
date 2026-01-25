@@ -5,9 +5,11 @@ import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+@Repository
 public interface StaffRepository extends JpaRepository<Staff, Long> {
 
     @Override
@@ -26,4 +28,6 @@ public interface StaffRepository extends JpaRepository<Staff, Long> {
            or lower(ui.phoneNumber) like lower(concat('%', :q, '%'))
     """)
     List<Staff> search(@Param("q") String q);
+
+    boolean existsByStaffUserDetails_Id(Long userId);
 }
