@@ -7,6 +7,7 @@ import org.informatics.logistics_company.model.jpa.UserDetails;
 import org.informatics.logistics_company.repository.LoginDetailsRepository;
 import org.informatics.logistics_company.repository.StaffRepository;
 import org.informatics.logistics_company.repository.UserDetailsRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,13 +20,16 @@ public class ClientService {
     private final UserDetailsRepository userDetailsRepository;
     private final StaffRepository staffRepository;
     private final LoginDetailsRepository loginDetailsRepository;
+    private final PasswordEncoder passwordEncoder;
 
     public ClientService(UserDetailsRepository userDetailsRepository,
                          StaffRepository staffRepository,
-                         LoginDetailsRepository loginDetailsRepository) {
+                         LoginDetailsRepository loginDetailsRepository,
+                         PasswordEncoder passwordEncoder) {
         this.userDetailsRepository = userDetailsRepository;
         this.staffRepository = staffRepository;
         this.loginDetailsRepository = loginDetailsRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public List<UserDetails> listClients(String q) {
@@ -52,7 +56,7 @@ public class ClientService {
                 u.getLastName(),
                 u.getPhoneNumber(),
                 login != null ? login.getEmail() : null,
-                null, // password не връщаме към UI (можеш и да го показваш, но е лоша идея)
+                null,
                 login != null ? login.getRole() : Role.USER
         );
     }
@@ -62,11 +66,12 @@ public class ClientService {
         UserDetails u = new UserDetails();
         applyBasic(u, form);
 
-        // optional login
         LoginDetails login = buildOrNullLogin(null, form);
+
         u.setLoginDetails(login);
 
         if (login != null) {
+            login.setPassword(passwordEncoder.encode(form.getLoginPassword()));
             loginDetailsRepository.save(login);
         }
         userDetailsRepository.save(u);
@@ -87,7 +92,6 @@ public class ClientService {
         LoginDetails updated = buildOrNullLogin(current, form);
 
         if (updated == null && current != null) {
-            // махаме логина, ако формата е празна (по желание)
             u.setLoginDetails(null);
             userDetailsRepository.save(u);
             loginDetailsRepository.delete(current);
@@ -95,6 +99,7 @@ public class ClientService {
         }
 
         if (updated != null) {
+            updated.setPassword(passwordEncoder.encode(form.getLoginPassword()));
             LoginDetails saved = loginDetailsRepository.save(updated);
             u.setLoginDetails(saved);
         }
@@ -130,11 +135,7 @@ public class ClientService {
         u.setPhoneNumber(form.getPhoneNumber());
     }
 
-    /**
-     * Ако email/password са празни -> връща null (няма login).
-     * Ако има поне едно от тях -> създава/ъпдейтва login.
-     * Ако password е празна при edit -> оставя старата (ако има).
-     */
+
     private LoginDetails buildOrNullLogin(LoginDetails existing, ClientForm form) {
         String email = safe(form.getLoginEmail());
         String pass = safe(form.getLoginPassword());
@@ -146,7 +147,6 @@ public class ClientService {
 
         if (!email.isBlank()) login.setEmail(email);
 
-        // ако е edit и не е попълнил парола -> не я пипаме
         if (!pass.isBlank()) login.setPassword(pass);
 
         login.setRole(form.getRole() != null ? form.getRole() : Role.USER);
