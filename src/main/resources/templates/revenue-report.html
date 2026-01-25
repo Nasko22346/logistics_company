@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"/>
+  <title>Revenue Report</title>
+  <style>
+    .container { max-width: 1100px; margin: 24px auto; padding: 0 16px; }
+    .row { display:flex; gap:12px; align-items:end; flex-wrap:wrap; }
+    .card { background:#fff; border-radius:10px; padding:16px; box-shadow:0 2px 10px rgba(0,0,0,.06); margin-bottom:16px; }
+    table { width:100%; border-collapse:collapse; }
+    th, td { padding:10px; border-bottom:1px solid #eee; text-align:left; }
+    .muted { color:#777; }
+    .kpi { display:flex; gap:16px; flex-wrap:wrap; }
+    .kpi div { min-width: 180px; }
+    input[type="date"]{ padding:8px; }
+    button { padding:10px 14px; cursor:pointer; }
+    label { font-size: 14px; }
+  </style>
+
+  <link rel="stylesheet" th:href="@{/css/style.css}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+<div th:replace="~{fragments/admin-navbar :: navbar('reports')}"></div>
+
+<div class="container">
+
+  <div class="card">
+    <h2 style="margin-top:0;">Revenue Report</h2>
+
+    <form method="get" th:action="@{/admin/reports/revenue}" class="row">
+      <div>
+        <label>From</label><br/>
+        <input type="date" name="from" th:value="${report.fromDate}"/>
+      </div>
+
+      <div>
+        <label>To</label><br/>
+        <input type="date" name="to" th:value="${report.toDate}"/>
+      </div>
+
+      <div style="padding-top:20px;">
+        <label>
+          <input type="checkbox" name="excludeCancelled" value="true" th:checked="${excludeCancelled}"/>
+          Exclude CANCELLED
+        </label>
+      </div>
+
+      <div style="padding-top:20px;">
+        <button type="submit">Generate</button>
+      </div>
+    </form>
+  </div>
+
+  <div class="card">
+    <div class="kpi">
+      <div><div class="muted">Parcels</div><div th:text="${report.parcelsCount}">0</div></div>
+      <div><div class="muted">Base sum</div><div th:text="${#numbers.formatDecimal(report.baseSum,1,2)} + ' BGN'">0</div></div>
+      <div><div class="muted">Weight tax sum</div><div th:text="${#numbers.formatDecimal(report.weightTaxSum,1,2)} + ' BGN'">0</div></div>
+      <div><div class="muted">Location tax sum</div><div th:text="${#numbers.formatDecimal(report.locationTaxSum,1,2)} + ' BGN'">0</div></div>
+      <div><div class="muted"><b>Total revenue</b></div><div><b th:text="${#numbers.formatDecimal(report.totalRevenue,1,2)} + ' BGN'">0</b></div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3 style="margin-top:0;">Details</h3>
+    <table>
+      <thead>
+      <tr>
+        <th>ID</th>
+        <th>Tracking</th>
+        <th>Sent date</th>
+        <th>Status</th>
+        <th>Base</th>
+        <th>Weight tax</th>
+        <th>Location tax</th>
+        <th>Total</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="r : ${report.rows}">
+        <td th:text="${r.parcelId}">1</td>
+        <td th:text="${r.trackingNumber}">ABC</td>
+        <td th:text="${r.sentDate != null ? #temporals.format(r.sentDate, 'dd/MM/yyyy HH:mm') : 'N/A'}">N/A</td>
+        <td th:text="${r.status}">PENDING</td>
+        <td th:text="${#numbers.formatDecimal(r.basePrice,1,2)}">0</td>
+        <td th:text="${#numbers.formatDecimal(r.weightTax,1,2)}">0</td>
+        <td th:text="${#numbers.formatDecimal(r.locationTax,1,2)}">0</td>
+        <td><b th:text="${#numbers.formatDecimal(r.total,1,2)}">0</b></td>
+      </tr>
+      <tr th:if="${#lists.isEmpty(report.rows)}">
+        <td colspan="8" class="muted">No parcels for this period.</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>
+</body>
+</html>

@@ -10,6 +10,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -133,4 +134,20 @@ public interface ParcelRepository extends JpaRepository<Parcel, Long> {
         order by p.id desc
     """)
     List<Parcel> adminSearch(@Param("q") String q, @Param("hideDelivered") boolean hideDelivered);
+
+    @EntityGraph(attributePaths = {
+            "priceWeightTax",
+            "priceLocationTax",
+            "priceLocationTax.location"
+    })
+    List<Parcel> findAllBySentDateBetween(LocalDateTime from, LocalDateTime to);
+
+    @EntityGraph(attributePaths = {
+            "priceWeightTax",
+            "priceLocationTax",
+            "priceLocationTax.location"
+    })
+    List<Parcel> findAllBySentDateBetweenAndParcelStatusNot(
+            LocalDateTime from, LocalDateTime to, ParcelStatus status
+    );
 }

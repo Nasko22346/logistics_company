@@ -3,13 +3,17 @@ package org.informatics.logistics_company.service;
 import org.informatics.logistics_company.dto.parcel.ParcelAdminRow;
 import org.informatics.logistics_company.dto.parcel.ParcelRequest;
 import org.informatics.logistics_company.dto.parcel.ParcelResponse;
+import org.informatics.logistics_company.dto.reports.RevenueReport;
+import org.informatics.logistics_company.dto.reports.RevenueRow;
 import org.informatics.logistics_company.model.enums.ParcelStatus;
 import org.informatics.logistics_company.model.jpa.*;
 import org.informatics.logistics_company.repository.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.security.SecureRandom;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -355,6 +359,63 @@ public class ParcelService {
                 receiverName,
                 staffName
         );
+    }
+
+    public RevenueReport revenueReport(LocalDate from, LocalDate to, boolean excludeCancelled) {
+
+        // inclusive период: [from 00:00, to+1 00:00)
+        LocalDateTime fromDt = from.atStartOfDay();
+        LocalDateTime toDt = to.plusDays(1).atStartOfDay();
+
+        List<Parcel> parcels = excludeCancelled
+                ? parcelRepository.findAllBySentDateBetweenAndParcelStatusNot(fromDt, toDt, ParcelStatus.CANCELLED)
+                : parcelRepository.findAllBySentDateBetween(fromDt, toDt);
+
+        BigDecimal baseSum = BigDecimal.ZERO;
+        BigDecimal weightSum = BigDecimal.ZERO;
+        BigDecimal locationSum = BigDecimal.ZERO;
+
+        List<RevenueRow> rows = parcels.stream().map(p -> {
+            BigDecimal base = nz(p.getPrice());
+            BigDecimal wTax = (p.getPriceWeightTax() != null) ? nz(p.getPriceWeightTax().getWeightTax()) : BigDecimal.ZERO;
+            BigDecimal lTax = (p.getPriceLocationTax() != null) ? nz(p.getPriceLocationTax().getLocationTax()) : BigDecimal.ZERO;
+
+            BigDecimal total = base.add(wTax).add(lTax);
+
+            return new RevenueRow(
+                    p.getId(),
+                    p.getTrackingNumber(),
+                    p.getSentDate(),
+                    p.getParcelStatus() != null ? p.getParcelStatus().name() : null,
+                    base,
+                    wTax,
+                    lTax,
+                    total
+            );
+        }).toList();
+
+        for (RevenueRow r : rows) {
+            baseSum = baseSum.add(nz(r.basePrice()));
+            weightSum = weightSum.add(nz(r.weightTax()));
+            locationSum = locationSum.add(nz(r.locationTax()));
+        }
+
+        BigDecimal totalRevenue = baseSum.add(weightSum).add(locationSum);
+
+        return new RevenueReport(
+                from,
+                to,
+                rows.size(),
+                baseSum,
+                weightSum,
+                locationSum,
+                totalRevenue,
+                rows
+        );
+    }
+
+    private BigDecimal nz(BigDecimal v) {
+        return v == null ? BigDecimal.ZERO : v;
     }
 
 }
