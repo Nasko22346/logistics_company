@@ -361,15 +361,15 @@ public class ParcelService {
         );
     }
 
-    public RevenueReport revenueReport(LocalDate from, LocalDate to, boolean excludeCancelled) {
+    public RevenueReport revenueReport(LocalDate from, LocalDate to) {
 
         // inclusive период: [from 00:00, to+1 00:00)
         LocalDateTime fromDt = from.atStartOfDay();
         LocalDateTime toDt = to.plusDays(1).atStartOfDay();
 
-        List<Parcel> parcels = excludeCancelled
-                ? parcelRepository.findAllBySentDateBetweenAndParcelStatusNot(fromDt, toDt, ParcelStatus.CANCELLED)
-                : parcelRepository.findAllBySentDateBetween(fromDt, toDt);
+        List<Parcel> parcels = parcelRepository.findAllBySentDateBetweenAndParcelStatus(
+                fromDt, toDt, ParcelStatus.DELIVERED
+        );
 
         BigDecimal baseSum = BigDecimal.ZERO;
         BigDecimal weightSum = BigDecimal.ZERO;

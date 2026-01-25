@@ -23,15 +23,14 @@ public class ReportsPageController {
     public String revenue(
             @RequestParam(required = false) LocalDate from,
             @RequestParam(required = false) LocalDate to,
-            @RequestParam(defaultValue = "true") boolean excludeCancelled,
             Model model
     ) {
         LocalDate today = LocalDate.now();
         if (to == null) to = today;
         if (from == null) from = to.minusDays(30);
 
-        model.addAttribute("report", parcelService.revenueReport(from, to, excludeCancelled));
-        model.addAttribute("excludeCancelled", excludeCancelled);
+        model.addAttribute("report", parcelService.revenueReport(from, to));
+        model.addAttribute("excludeCancelled");
         return "revenue-report";
     }
 }

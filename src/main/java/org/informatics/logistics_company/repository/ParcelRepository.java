@@ -150,4 +150,13 @@ public interface ParcelRepository extends JpaRepository<Parcel, Long> {
     List<Parcel> findAllBySentDateBetweenAndParcelStatusNot(
             LocalDateTime from, LocalDateTime to, ParcelStatus status
     );
+
+    @EntityGraph(attributePaths = {
+            "priceWeightTax",
+            "priceLocationTax",
+            "priceLocationTax.location"
+    })
+    List<Parcel> findAllBySentDateBetweenAndParcelStatus(
+            LocalDateTime from, LocalDateTime to, ParcelStatus status
+    );
 }
