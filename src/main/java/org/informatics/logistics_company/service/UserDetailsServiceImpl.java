@@ -2,7 +2,6 @@ package org.informatics.logistics_company.service;
 
 import org.informatics.logistics_company.model.jpa.LoginDetails;
 import org.informatics.logistics_company.repository.LoginDetailsRepository;
-import org.informatics.logistics_company.repository.UserRepository;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

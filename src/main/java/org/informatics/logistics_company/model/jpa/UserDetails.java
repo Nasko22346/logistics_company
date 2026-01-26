@@ -25,9 +25,6 @@ public class UserDetails {
     @Column(name = "phone_number")
     private String phoneNumber;
 
-    //@OneToOne(optional = false)
-    //@JoinColumn(name = "login_id", referencedColumnName = "login_id", nullable = false) TBD
-
     @OneToOne
     @JoinColumn(name = "login_id", referencedColumnName = "login_id")
     private LoginDetails loginDetails;

@@ -6,7 +6,12 @@ import org.informatics.logistics_company.service.PriceWeightTaxService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequestMapping("/admin")
@@ -31,9 +36,7 @@ public class PriceWeightTaxPageController {
     }
 
     @PostMapping("/price-weight-taxes")
-    public String create(@Valid @ModelAttribute("form") PriceWeightTaxForm form,
-                         BindingResult bindingResult,
-                         Model model) {
+    public String create(@Valid @ModelAttribute("form") PriceWeightTaxForm form, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return "price-weight-tax-form";
         }
@@ -54,10 +57,7 @@ public class PriceWeightTaxPageController {
     }
 
     @PostMapping("/price-weight-taxes/{id}")
-    public String update(@PathVariable Long id,
-                         @Valid @ModelAttribute("form") PriceWeightTaxForm form,
-                         BindingResult bindingResult,
-                         Model model) {
+    public String update(@PathVariable Long id, @Valid @ModelAttribute("form") PriceWeightTaxForm form, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return "price-weight-tax-form";
         }

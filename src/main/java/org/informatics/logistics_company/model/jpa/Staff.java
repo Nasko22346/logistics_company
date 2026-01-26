@@ -22,9 +22,6 @@ public class Staff {
     @Column(name = "position")
     private Position position;
 
-    //@OneToOne(optional = false)
-    //@JoinColumn(name = "staff_data_id", nullable = false) // TBD
-
     @OneToOne
     @JoinColumn(name = "staff_data_id")
     private UserDetails staffUserDetails;

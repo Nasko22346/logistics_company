@@ -8,8 +8,8 @@ import org.springframework.web.servlet.ModelAndView;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(ResourceNotFoundException.class)
-    public ModelAndView handleResourceNotFound(ResourceNotFoundException ex) {
+    @ExceptionHandler(ParcelNotFoundException.class)
+    public ModelAndView handleResourceNotFound(ParcelNotFoundException ex) {
         ModelAndView mav = new ModelAndView("error/404");
         mav.addObject("message", ex.getMessage());
         mav.setStatus(HttpStatus.NOT_FOUND);

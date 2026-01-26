@@ -80,7 +80,6 @@ public class ParcelViewController {
         return "parcels";
     }
 
-    //TODO: Merge both endpoints below into one with a parameter indicating sender/receiver
     @GetMapping("/by-sender/{senderId}")
     public String getParcelsBySender(@PathVariable Long senderId, Model model) {
         model.addAttribute("parcels", parcelService.fetchParcelsBySender(senderId));

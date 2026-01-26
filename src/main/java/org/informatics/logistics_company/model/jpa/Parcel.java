@@ -1,7 +1,9 @@
 package org.informatics.logistics_company.model.jpa;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.informatics.logistics_company.model.enums.ParcelStatus;
 
 import java.math.BigDecimal;
@@ -10,6 +12,8 @@ import java.time.LocalDateTime;
 @Data
 @Table(name = "parcel")
 @Entity
+@AllArgsConstructor
+@NoArgsConstructor
 public class Parcel {
 
     @Id

@@ -1,6 +1,6 @@
 package org.informatics.logistics_company.controller;
 
-import org.informatics.logistics_company.model.jpa.Parcel;
+import org.informatics.logistics_company.dto.parcel.ParcelResponse;
 import org.informatics.logistics_company.service.ParcelService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class PublicTrackingController {
+
     private final ParcelService parcelService;
 
     public PublicTrackingController(ParcelService parcelService) {
@@ -19,7 +20,7 @@ public class PublicTrackingController {
     public String trackParcel(@RequestParam(required = false) String trackingNumber, Model model) {
         if (trackingNumber != null) {
             try {
-                Parcel parcel = parcelService.fetchParcelByTrackingNumber(trackingNumber);
+                ParcelResponse parcel = parcelService.fetchParcelByTrackingNumber(trackingNumber);
                 model.addAttribute("parcel", parcel);
                 model.addAttribute("trackingNumber", trackingNumber);
             } catch (RuntimeException e) {

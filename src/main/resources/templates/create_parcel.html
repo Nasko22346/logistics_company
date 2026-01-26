@@ -9,116 +9,181 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-    <!-- Navigation Bar -->
-    <!-- Navigation Bar -->
-    <div th:replace="~{fragments/admin-navbar :: navbar('home')}"></div>
+<!-- Navigation Bar -->
+<div th:replace="~{fragments/admin-navbar :: navbar('home')}"></div>
 
-    <!-- Main Content -->
-    <div class="container">
-        <div class="form-container">
-            <h1>Create New Parcel</h1>
+<!-- Main Content -->
+<div class="container">
+    <div class="form-container">
+        <h1>Create New Parcel</h1>
 
-            <!-- Global Error Message -->
-            <div th:if="${error}" class="error-alert">
-                <i class="fas fa-exclamation-circle"></i>
-                <span th:text="${error}"></span>
+        <!-- Global Error Message -->
+        <div th:if="${error}" class="error-alert">
+            <i class="fas fa-exclamation-circle"></i>
+            <span th:text="${error}"></span>
+        </div>
+
+        <!-- Parcel Creation Form -->
+        <form th:action="@{/parcels/create}" th:object="${parcelRequest}" method="post">
+
+            <!-- Weight Field -->
+            <div class="form-group" th:classappend="${#fields.hasErrors('weight') ? 'has-error' : ''}">
+                <label for="weight">Weight (kg) <span style="color: red;">*</span></label>
+                <input type="number"
+                       id="weight"
+                       th:field="*{weight}"
+                       placeholder="Enter weight in kilograms"
+                       step="0.01"
+                       min="0"
+                       required>
+                <div class="error-message" th:if="${#fields.hasErrors('weight')}" th:errors="*{weight}"></div>
             </div>
 
-            <!-- Parcel Creation Form -->
-            <form th:action="@{/parcels/create}" th:object="${parcelRequest}" method="post">
+            <!-- Sender Information Section -->
+            <!-- TODO: Add sender location: Dropdown with all offices-->
+            <h3>Sender Information</h3>
 
-                <!-- Weight Field -->
-                <div class="form-group" th:classappend="${#fields.hasErrors('weight') ? 'has-error' : ''}">
-                    <label for="weight">Weight (kg) <span style="color: red;">*</span></label>
-                    <input type="number"
-                           id="weight"
-                           th:field="*{weight}"
-                           placeholder="Enter weight in kilograms"
-                           step="0.01"
-                           min="0"
-                           required>
-                    <div class="error-message" th:if="${#fields.hasErrors('weight')}" th:errors="*{weight}"></div>
-                </div>
+            <div class="form-group" th:classappend="${#fields.hasErrors('senderFirstName') ? 'has-error' : ''}">
+                <label for="senderFirstName">First Name <span style="color: red;">*</span></label>
+                <input type="text"
+                       id="senderFirstName"
+                       th:field="*{senderFirstName}"
+                       placeholder="Enter sender's first name"
+                       required>
+                <div class="error-message" th:if="${#fields.hasErrors('senderFirstName')}" th:errors="*{senderFirstName}"></div>
+            </div>
 
-                <!-- Sender ID Field -->
-                <div class="form-group" th:classappend="${#fields.hasErrors('senderId') ? 'has-error' : ''}">
-                    <label for="senderId">Sender ID <span style="color: red;">*</span></label>
-                    <input type="number"
-                           id="senderId"
-                           th:field="*{senderId}"
-                           placeholder="Enter sender ID"
-                           min="1"
-                           required>
-                    <div class="error-message" th:if="${#fields.hasErrors('senderId')}" th:errors="*{senderId}"></div>
-                </div>
+            <div class="form-group" th:classappend="${#fields.hasErrors('senderLastName') ? 'has-error' : ''}">
+                <label for="senderLastName">Last Name <span style="color: red;">*</span></label>
+                <input type="text"
+                       id="senderLastName"
+                       th:field="*{senderLastName}"
+                       placeholder="Enter sender's last name"
+                       required>
+                <div class="error-message" th:if="${#fields.hasErrors('senderLastName')}" th:errors="*{senderLastName}"></div>
+            </div>
 
-                <!-- Receiver ID Field -->
-                <div class="form-group" th:classappend="${#fields.hasErrors('receiverId') ? 'has-error' : ''}">
-                    <label for="receiverId">Receiver ID <span style="color: red;">*</span></label>
-                    <input type="number"
-                           id="receiverId"
-                           th:field="*{receiverId}"
-                           placeholder="Enter receiver ID"
-                           min="1"
-                           required>
-                    <div class="error-message" th:if="${#fields.hasErrors('receiverId')}" th:errors="*{receiverId}"></div>
-                </div>
+            <div class="form-group" th:classappend="${#fields.hasErrors('senderEmail') ? 'has-error' : ''}">
+                <label for="senderEmail">Email <span style="color: red;">*</span></label>
+                <input type="email"
+                       id="senderEmail"
+                       th:field="*{senderEmail}"
+                       placeholder="Enter sender's email"
+                       required>
+                <div class="error-message" th:if="${#fields.hasErrors('senderEmail')}" th:errors="*{senderEmail}"></div>
+            </div>
 
-                <!-- Registered By Staff ID Field -->
-                <div class="form-group" th:classappend="${#fields.hasErrors('registeredByStaffId') ? 'has-error' : ''}">
-                    <label for="registeredByStaffId">Registered By Staff ID <span style="color: red;">*</span></label>
-                    <input type="number"
-                           id="registeredByStaffId"
-                           th:field="*{registeredByStaffId}"
-                           placeholder="Enter staff ID"
-                           min="1"
-                           required>
-                    <div class="error-message" th:if="${#fields.hasErrors('registeredByStaffId')}" th:errors="*{registeredByStaffId}"></div>
-                </div>
+            <div class="form-group" th:classappend="${#fields.hasErrors('senderPhone') ? 'has-error' : ''}">
+                <label for="senderPhone">Phone <span style="color: red;">*</span></label>
+                <input type="text"
+                       id="senderPhone"
+                       th:field="*{senderPhone}"
+                       placeholder="Enter sender's phone number"
+                       required>
+                <div class="error-message" th:if="${#fields.hasErrors('senderPhone')}" th:errors="*{senderPhone}"></div>
+            </div>
 
-                <!-- Sent Location ID Field -->
-                <div class="form-group" th:classappend="${#fields.hasErrors('sentLocationId') ? 'has-error' : ''}">
-                    <label for="sentLocationId">Sent Location ID <span style="color: red;">*</span></label>
-                    <input type="number"
-                           id="sentLocationId"
-                           th:field="*{sentLocationId}"
-                           placeholder="Enter sent location ID"
-                           min="1"
-                           required>
-                    <div class="error-message" th:if="${#fields.hasErrors('sentLocationId')}" th:errors="*{sentLocationId}"></div>
-                </div>
+            <!-- Recipient Information Section -->
+            <!-- TODO: Add receiver location:
+                    1. Add checkbox if it is office or not
+                    2. If office - show dropdown with offices
+                    3. If not office - add text fields (locationCountry, province, locationRegion, locationDescription)-->
+            <h3>Recipient Information</h3>
 
-                <!-- Received Location ID Field -->
-                <div class="form-group" th:classappend="${#fields.hasErrors('receivedLocationId') ? 'has-error' : ''}">
-                    <label for="receivedLocationId">Received Location ID <span style="color: red;">*</span></label>
-                    <input type="number"
-                           id="receivedLocationId"
-                           th:field="*{receivedLocationId}"
-                           placeholder="Enter received location ID"
-                           min="1"
-                           required>
-                    <div class="error-message" th:if="${#fields.hasErrors('receivedLocationId')}" th:errors="*{receivedLocationId}"></div>
-                </div>
+            <div class="form-group" th:classappend="${#fields.hasErrors('recipientFirstName') ? 'has-error' : ''}">
+                <label for="recipientFirstName">First Name <span style="color: red;">*</span></label>
+                <input type="text"
+                       id="recipientFirstName"
+                       th:field="*{recipientFirstName}"
+                       placeholder="Enter recipient's first name"
+                       required>
+                <div class="error-message" th:if="${#fields.hasErrors('recipientFirstName')}" th:errors="*{recipientFirstName}"></div>
+            </div>
 
-                <!-- Deliver to Address Checkbox -->
-                <div class="form-group checkbox">
-                    <input type="checkbox"
-                           id="deliverToAddress"
-                           th:field="*{deliverToAddress}">
-                    <label for="deliverToAddress">Deliver to Address</label>
-                </div>
+            <div class="form-group" th:classappend="${#fields.hasErrors('recipientLastName') ? 'has-error' : ''}">
+                <label for="recipientLastName">Last Name <span style="color: red;">*</span></label>
+                <input type="text"
+                       id="recipientLastName"
+                       th:field="*{recipientLastName}"
+                       placeholder="Enter recipient's last name"
+                       required>
+                <div class="error-message" th:if="${#fields.hasErrors('recipientLastName')}" th:errors="*{recipientLastName}"></div>
+            </div>
 
-                <!-- Form Buttons -->
-                <div class="form-buttons">
-                    <button type="submit" class="btn btn-primary">
-                        <i class="fas fa-check"></i> Create Parcel
-                    </button>
-                    <a href="/admin" class="btn btn-secondary">
-                        <i class="fas fa-times"></i> Cancel
-                    </a>
-                </div>
-            </form>
-        </div>
+            <div class="form-group" th:classappend="${#fields.hasErrors('recipientEmail') ? 'has-error' : ''}">
+                <label for="recipientEmail">Email <span style="color: red;">*</span></label>
+                <input type="email"
+                       id="recipientEmail"
+                       th:field="*{recipientEmail}"
+                       placeholder="Enter recipient's email"
+                       required>
+                <div class="error-message" th:if="${#fields.hasErrors('recipientEmail')}" th:errors="*{recipientEmail}"></div>
+            </div>
+
+            <div class="form-group" th:classappend="${#fields.hasErrors('recipientPhone') ? 'has-error' : ''}">
+                <label for="recipientPhone">Phone <span style="color: red;">*</span></label>
+                <input type="text"
+                       id="recipientPhone"
+                       th:field="*{recipientPhone}"
+                       placeholder="Enter recipient's phone number"
+                       required>
+                <div class="error-message" th:if="${#fields.hasErrors('recipientPhone')}" th:errors="*{recipientPhone}"></div>
+            </div>
+
+            <!-- Location Information Section -->
+            <h3>Delivery Location</h3>
+
+            <div class="form-group" th:classappend="${#fields.hasErrors('street') ? 'has-error' : ''}">
+                <label for="street">Street <span style="color: red;">*</span></label>
+                <input type="text"
+                       id="street"
+                       th:field="*{street}"
+                       placeholder="Enter street address"
+                       required>
+                <div class="error-message" th:if="${#fields.hasErrors('street')}" th:errors="*{street}"></div>
+            </div>
+
+            <div class="form-group" th:classappend="${#fields.hasErrors('city') ? 'has-error' : ''}">
+                <label for="city">City <span style="color: red;">*</span></label>
+                <input type="text"
+                       id="city"
+                       th:field="*{city}"
+                       placeholder="Enter city"
+                       required>
+                <div class="error-message" th:if="${#fields.hasErrors('city')}" th:errors="*{city}"></div>
+            </div>
+
+            <div class="form-group" th:classappend="${#fields.hasErrors('zip') ? 'has-error' : ''}">
+                <label for="zip">Zip Code <span style="color: red;">*</span></label>
+                <input type="text"
+                       id="zip"
+                       th:field="*{zip}"
+                       placeholder="Enter zip code"
+                       required>
+                <div class="error-message" th:if="${#fields.hasErrors('zip')}" th:errors="*{zip}"></div>
+            </div>
+
+            <div class="form-group" th:classappend="${#fields.hasErrors('country') ? 'has-error' : ''}">
+                <label for="country">Country <span style="color: red;">*</span></label>
+                <input type="text"
+                       id="country"
+                       th:field="*{country}"
+                       placeholder="Enter country"
+                       required>
+                <div class="error-message" th:if="${#fields.hasErrors('country')}" th:errors="*{country}"></div>
+            </div>
+
+            <!-- Form Buttons -->
+            <div class="form-buttons">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-check"></i> Create Parcel
+                </button>
+                <a href="/admin" class="btn btn-secondary">
+                    <i class="fas fa-times"></i> Cancel
+                </a>
+            </div>
+        </form>
     </div>
+</div>
 </body>
 </html>
