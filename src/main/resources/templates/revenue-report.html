@@ -65,6 +65,7 @@
         <th>ID</th>
         <th>Tracking</th>
         <th>Sent date</th>
+        <th>Received date</th>
         <th>Status</th>
         <th>Base</th>
         <th>Weight tax</th>
@@ -77,6 +78,7 @@
         <td th:text="${r.parcelId}">1</td>
         <td th:text="${r.trackingNumber}">ABC</td>
         <td th:text="${r.sentDate != null ? #temporals.format(r.sentDate, 'dd/MM/yyyy HH:mm') : 'N/A'}">N/A</td>
+        <td th:text="${r.receivedDate != null ? #temporals.format(r.receivedDate, 'dd/MM/yyyy HH:mm') : 'N/A'}">N/A</td>
         <td th:text="${r.status}">PENDING</td>
         <td th:text="${#numbers.formatDecimal(r.basePrice,1,2)}">0</td>
         <td th:text="${#numbers.formatDecimal(r.weightTax,1,2)}">0</td>

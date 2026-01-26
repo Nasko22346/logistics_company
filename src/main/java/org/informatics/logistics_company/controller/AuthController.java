@@ -1,5 +1,6 @@
 package org.informatics.logistics_company.controller;
 
+import org.informatics.logistics_company.exception.EmailAlreadyExistsException;
 import org.informatics.logistics_company.service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,6 +23,10 @@ public class AuthController {
 
     @PostMapping("/register")
     public String register(
+            @RequestParam String firstName,
+            @RequestParam String middleName,
+            @RequestParam String lastName,
+            @RequestParam String phoneNumber,
             @RequestParam String email,
             @RequestParam String password,
             @RequestParam String confirmPassword
@@ -31,9 +36,12 @@ public class AuthController {
         }
 
         try {
-            userService.register(email, password);
+            userService.register(firstName, middleName, lastName, phoneNumber, email, password);
             return "redirect:/login-page?registered";
+        } catch (EmailAlreadyExistsException e) {
+            return "redirect:/register?error=email_failed";
         } catch (Exception e) {
+            e.printStackTrace();
             return "redirect:/register?error=register_failed";
         }
     }
@@ -47,17 +55,4 @@ public class AuthController {
     public String registerPage() {
         return "register";
     }
-
-//    @PostMapping("/login")
-//    public String login(
-//            @RequestParam String email,
-//            @RequestParam String password
-//    ) {
-//        try {
-//            userService.login(email, password);
-//            return "redirect:/home";
-//        } catch (Exception e) {
-//            return "redirect:/?error=login_failed";
-//        }
-//    }
 }

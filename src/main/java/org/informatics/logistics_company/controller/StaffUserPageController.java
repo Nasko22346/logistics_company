@@ -15,7 +15,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @Controller
 @RequestMapping("/admin/users")
 public class StaffUserPageController {
-
     private final StaffUserAdminService staffUserAdminService;
     private final OfficeRepository officeRepository;
 

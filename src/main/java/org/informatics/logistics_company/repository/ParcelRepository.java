@@ -16,7 +16,6 @@ import java.util.Optional;
 
 @Repository
 public interface ParcelRepository extends JpaRepository<Parcel, Long> {
-
     boolean existsByTrackingNumber(String trackingNumber);
 
     @EntityGraph(attributePaths = {
@@ -42,7 +41,6 @@ public interface ParcelRepository extends JpaRepository<Parcel, Long> {
             "staff", "staff.staffUserDetails"
     })
     List<Parcel> findByTrackingNumberContainingIgnoreCaseOrderByIdDesc(String q);
-
 
     @EntityGraph(attributePaths = {
             "sendLocation", "receiverLocation",
@@ -89,10 +87,8 @@ public interface ParcelRepository extends JpaRepository<Parcel, Long> {
     })
     List<Parcel> findByReceivedDateIsNullOrderByIdDesc();
 
-    // 5d. Всички пратки, които са регистрирани от даден служител
     List<Parcel> findAllByStaffStaffId(Long staffId);
 
-    // 5e. Всички пратки, които са изпратени, но не да получени
     @Query("SELECT p FROM Parcel p WHERE p.parcelStatus != :status")
     @EntityGraph(attributePaths = {
             "sendLocation", "receiverLocation",
@@ -103,11 +99,8 @@ public interface ParcelRepository extends JpaRepository<Parcel, Long> {
     })
     List<Parcel> extractAllNotDeliveredParcels(ParcelStatus status);
 
-
-    // 5f. Всички пратки, които са изпратени от даден клиент
     List<Parcel> findAllBySenderUserId(Long senderId);
 
-    // 5g. Всички пратки, които са получени от даден клиент
     @Query("SELECT p FROM Parcel p WHERE p.receiverUser.id = :receiverId")
     List<Parcel> extractAllParcelsByReceiverID(Long receiverId);
 
@@ -156,7 +149,8 @@ public interface ParcelRepository extends JpaRepository<Parcel, Long> {
             "priceLocationTax",
             "priceLocationTax.location"
     })
-    List<Parcel> findAllBySentDateBetweenAndParcelStatus(
+
+    List<Parcel> findAllByReceivedDateBetweenAndParcelStatus(
             LocalDateTime from, LocalDateTime to, ParcelStatus status
     );
 }

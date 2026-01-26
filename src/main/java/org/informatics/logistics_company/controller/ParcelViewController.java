@@ -97,8 +97,6 @@ public class ParcelViewController {
         return "parcels";
     }
 
-    // Form submission handlers - redirect to path variable endpoints
-
     @GetMapping("/by-employee")
     public String filterByEmployeeForm(@RequestParam Long employeeId) {
         return "redirect:/parcels/by-employee/" + employeeId;

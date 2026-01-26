@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 @Controller
 @RequestMapping("/admin")
 public class OfficePageController {
-
     private final OfficeService officeService;
 
     public OfficePageController(OfficeService officeService) {

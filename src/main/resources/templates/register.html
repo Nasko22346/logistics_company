@@ -8,23 +8,37 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-    <!-- Navigation Bar -->
     <div th:replace="~{fragments/admin-navbar :: navbar('home')}"></div>
 
-    <!-- Register Form -->
     <div class="container">
         <div class="form-container">
             <h1>Register</h1>
 
-            <!-- Error Messages -->
             <div th:if="${param.error}" class="error-alert">
                 <i class="fas fa-exclamation-circle"></i>
                 <span th:if="${param.error == 'password_mismatch'}">Passwords do not match. Please try again.</span>
                 <span th:if="${param.error == 'register_failed'}">Registration failed. Please try again.</span>
-                <span th:if="${param.error != 'password_mismatch' && param.error != 'register_failed'}">An error occurred. Please try again.</span>
+                <span th:if="${param.error == 'email_failed'}">Email already exists. Use another email.</span>
+                <span th:if="${param.error != 'password_mismatch' && param.error != 'register_failed' && param.error != 'email_failed'}">An error occurred. Please try again.</span>
             </div>
 
             <form th:action="@{/register}" method="post">
+                <div class="form-group">
+                    <label for="firstName">First Name <span style="color: red;">*</span></label>
+                    <input type="text" id="firstName" name="firstName" placeholder="Enter your First name" required>
+                </div>
+                <div class="form-group">
+                    <label for="middleName">Middle Name <span style="color: red;">*</span></label>
+                    <input type="text" id="middleName" name="middleName" placeholder="Enter your Middle name" required>
+                </div>
+                <div class="form-group">
+                    <label for="lastName">Last Name <span style="color: red;">*</span></label>
+                    <input type="text" id="lastName" name="lastName" placeholder="Enter your Last name" required>
+                </div>
+                <div class="form-group">
+                    <label for="phoneNumber">Phone Number <span style="color: red;">*</span></label>
+                    <input type="text" id="phoneNumber" name="phoneNumber" placeholder="Enter your Phone number" required>
+                </div>
                 <div class="form-group">
                     <label for="email">Email <span style="color: red;">*</span></label>
                     <input type="email" id="email" name="email" placeholder="Enter your email" required>

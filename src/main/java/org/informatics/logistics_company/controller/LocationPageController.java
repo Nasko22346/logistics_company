@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 @Controller
 @RequestMapping("/admin")
 public class LocationPageController {
-
     private final LocationService locationService;
 
     public LocationPageController(LocationService locationService) {

@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 @Controller
 @RequestMapping("/admin")
 public class PriceLocationTaxPageController {
-
     private final PriceLocationTaxService service;
 
     public PriceLocationTaxPageController(PriceLocationTaxService service) {

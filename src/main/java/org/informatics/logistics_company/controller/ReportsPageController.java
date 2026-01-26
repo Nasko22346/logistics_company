@@ -12,7 +12,6 @@ import java.time.LocalDate;
 @Controller
 @RequestMapping("/admin/reports")
 public class ReportsPageController {
-
     private final ParcelService parcelService;
 
     public ReportsPageController(ParcelService parcelService) {

@@ -1,6 +1,5 @@
 package org.informatics.logistics_company.controller;
 
-import org.informatics.logistics_company.dto.parcel.ParcelResponse;
 import org.informatics.logistics_company.model.jpa.Parcel;
 import org.informatics.logistics_company.service.ParcelService;
 import org.springframework.stereotype.Controller;
@@ -10,7 +9,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class PublicTrackingController {
-
     private final ParcelService parcelService;
 
     public PublicTrackingController(ParcelService parcelService) {

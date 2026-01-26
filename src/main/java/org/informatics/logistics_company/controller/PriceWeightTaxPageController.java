@@ -1,4 +1,4 @@
-package org.informatics.logistics_company.controller.web;
+package org.informatics.logistics_company.controller;
 
 import jakarta.validation.Valid;
 import org.informatics.logistics_company.dto.price_weight_tax.PriceWeightTaxForm;
@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 @Controller
 @RequestMapping("/admin")
 public class PriceWeightTaxPageController {
-
     private final PriceWeightTaxService service;
 
     public PriceWeightTaxPageController(PriceWeightTaxService service) {

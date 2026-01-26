@@ -123,7 +123,6 @@ public class ParcelAdminPageController {
         model.addAttribute("weightTaxes", priceWeightTaxRepository.findAll());
         model.addAttribute("staffList", staffRepository.findAll());
         model.addAttribute("users", userDetailsRepository.findAll());
-        // ParcelStatus enum values:
         model.addAttribute("statuses", org.informatics.logistics_company.model.enums.ParcelStatus.values());
     }
 }

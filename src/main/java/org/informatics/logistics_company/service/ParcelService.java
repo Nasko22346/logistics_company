@@ -367,7 +367,7 @@ public class ParcelService {
         LocalDateTime fromDt = from.atStartOfDay();
         LocalDateTime toDt = to.plusDays(1).atStartOfDay();
 
-        List<Parcel> parcels = parcelRepository.findAllBySentDateBetweenAndParcelStatus(
+        List<Parcel> parcels = parcelRepository.findAllByReceivedDateBetweenAndParcelStatus(
                 fromDt, toDt, ParcelStatus.DELIVERED
         );
 
@@ -386,6 +386,7 @@ public class ParcelService {
                     p.getId(),
                     p.getTrackingNumber(),
                     p.getSentDate(),
+                    p.getReceivedDate(),
                     p.getParcelStatus() != null ? p.getParcelStatus().name() : null,
                     base,
                     wTax,
