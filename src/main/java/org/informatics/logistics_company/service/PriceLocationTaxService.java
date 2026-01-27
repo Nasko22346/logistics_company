@@ -9,6 +9,7 @@ import org.informatics.logistics_company.repository.PriceLocationTaxRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PriceLocationTaxService {
@@ -29,6 +30,13 @@ public class PriceLocationTaxService {
         Location location = locationRepo.findById(request.locationId())
                 .orElseThrow(() -> new RuntimeException("Location with id " + request.locationId() + " not found"));
 
+        // Check if location is already assigned to another price tax
+        Optional<PriceLocationTax> byLocationLocationId = repo.findByLocation_LocationId(request.locationId());
+
+        if (byLocationLocationId.isPresent()) {
+            return this.update(request.locationId(), request);
+        }
+
         PriceLocationTax entity = new PriceLocationTax();
         entity.setLocationTax(request.locationTax());
         entity.setLocation(location);
@@ -48,6 +56,13 @@ public class PriceLocationTaxService {
 
         Location location = locationRepo.findById(request.locationId())
                 .orElseThrow(() -> new RuntimeException("Location with id " + request.locationId() + " not found"));
+
+        // Check if location is already assigned to a different price tax
+        repo.findByLocation_LocationId(request.locationId()).ifPresent(existing -> {
+            if (!existing.getId().equals(id)) {
+                throw new RuntimeException("Location '" + formatLocationLabel(location) + "' is already assigned to another price tax entry.");
+            }
+        });
 
         entity.setLocationTax(request.locationTax());
         entity.setLocation(location);
