@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Parcel Created - Papa Express</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .confirmation-container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+
+        .confirmation-box {
+            background: white;
+            border-radius: 8px;
+            padding: 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .success-icon {
+            font-size: 64px;
+            color: #28a745;
+            margin-bottom: 20px;
+        }
+
+        .confirmation-box h2 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .confirmation-box p {
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        .tracking-number-box {
+            background: #f8f9fa;
+            border: 2px dashed #dee2e6;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .tracking-number-label {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        .tracking-number {
+            font-size: 28px;
+            font-weight: bold;
+            color: #333;
+            letter-spacing: 2px;
+            font-family: monospace;
+        }
+
+        .info-text {
+            color: #666;
+            font-size: 14px;
+            margin-top: 20px;
+            padding: 15px;
+            background: #e7f3ff;
+            border-radius: 4px;
+            border-left: 4px solid #007bff;
+        }
+
+        .action-buttons {
+            margin-top: 30px;
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-size: 16px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: #333;
+            color: white;
+            border: none;
+        }
+
+        .btn-primary:hover {
+            background: #555;
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #333;
+            border: 2px solid #333;
+        }
+
+        .btn-secondary:hover {
+            background: #f8f9fa;
+        }
+    </style>
+</head>
+
+<body>
+<!-- Navigation Bar -->
+<div th:replace="~{fragments/admin-navbar :: navbar('home')}"></div>
+
+<div class="confirmation-container">
+    <div class="confirmation-box">
+        <div class="success-icon">
+            <i class="fas fa-check-circle"></i>
+        </div>
+
+        <h2>Parcel Created Successfully!</h2>
+        <p>Your parcel has been registered in our system and is ready for processing.</p>
+
+        <div class="tracking-number-box">
+            <div class="tracking-number-label">Your Tracking Number</div>
+            <div class="tracking-number" th:text="${trackingNumber}">XXXXXXXXXXXX</div>
+        </div>
+
+        <div class="info-text">
+            <i class="fas fa-info-circle"></i>
+            Please save this tracking number. You can use it to track your parcel status at any time.
+        </div>
+
+        <div class="action-buttons">
+            <a th:href="@{/track-parcel(trackingNumber=${trackingNumber})}" class="btn btn-primary">
+                <i class="fas fa-search"></i> Track Parcel
+            </a>
+            <a th:href="@{/parcels/get-create-form}" class="btn btn-secondary">
+                <i class="fas fa-plus"></i> Create Another Parcel
+            </a>
+            <a th:href="@{/parcels/all}" class="btn btn-secondary">
+                <i class="fas fa-list"></i> View All Parcels
+            </a>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
