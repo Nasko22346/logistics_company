@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Create Parcel - Papa Express</title>
     <link rel="stylesheet" th:href="@{/css/app.css}">
-    <!--    <link rel="stylesheet" th:href="@{/css/style.css}">-->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
@@ -40,8 +39,22 @@
             </div>
 
             <!-- Sender Information Section -->
-            <!-- TODO: Add sender location: Dropdown with all offices-->
             <h3>Sender Information</h3>
+
+            <!-- Sender Office Dropdown -->
+            <div class="form-group" th:classappend="${#fields.hasErrors('sendLocation') ? 'has-error' : ''}">
+                <label for="sendLocation">Sender Office <span style="color: red;">*</span></label>
+                <select id="sendLocation"
+                        th:field="*{sendLocation}"
+                        required>
+                    <option value="">-- Select Office --</option>
+                    <option th:each="location : ${parcelResponseWithDefaults.sendLocation()}"
+                            th:value="${location}"
+                            th:text="${location}">
+                    </option>
+                </select>
+                <div class="error-message" th:if="${#fields.hasErrors('sendLocation')}" th:errors="*{sendLocation}"></div>
+            </div>
 
             <div class="form-group" th:classappend="${#fields.hasErrors('senderFirstName') ? 'has-error' : ''}">
                 <label for="senderFirstName">First Name <span style="color: red;">*</span></label>
@@ -63,16 +76,6 @@
                 <div class="error-message" th:if="${#fields.hasErrors('senderLastName')}" th:errors="*{senderLastName}"></div>
             </div>
 
-            <div class="form-group" th:classappend="${#fields.hasErrors('senderEmail') ? 'has-error' : ''}">
-                <label for="senderEmail">Email <span style="color: red;">*</span></label>
-                <input type="email"
-                       id="senderEmail"
-                       th:field="*{senderEmail}"
-                       placeholder="Enter sender's email"
-                       required>
-                <div class="error-message" th:if="${#fields.hasErrors('senderEmail')}" th:errors="*{senderEmail}"></div>
-            </div>
-
             <div class="form-group" th:classappend="${#fields.hasErrors('senderPhone') ? 'has-error' : ''}">
                 <label for="senderPhone">Phone <span style="color: red;">*</span></label>
                 <input type="text"
@@ -84,11 +87,68 @@
             </div>
 
             <!-- Recipient Information Section -->
-            <!-- TODO: Add receiver location:
-                    1. Add checkbox if it is office or not
-                    2. If office - show dropdown with offices
-                    3. If not office - add text fields (locationCountry, province, locationRegion, locationDescription)-->
             <h3>Recipient Information</h3>
+
+            <!-- Receiver Location Type Toggle -->
+            <div class="form-group">
+                <label>
+                    <input type="checkbox" id="deliverToOffice" onchange="toggleReceiverLocation()">
+                    Deliver to Office
+                </label>
+            </div>
+
+            <!-- Receiver Office Dropdown (shown when checkbox is checked) -->
+            <div id="officeDeliverySection" class="form-group" style="display: none;" th:classappend="${#fields.hasErrors('receiverLocation') ? 'has-error' : ''}">
+                <label for="receiverLocation">Receiver Office <span style="color: red;">*</span></label>
+                <select id="receiverLocation"
+                        th:field="*{receiverLocation}">
+                    <option value="">-- Select Office --</option>
+                    <option th:each="location : ${parcelResponseWithDefaults.receiverLocation()}"
+                            th:value="${location}"
+                            th:text="${location}">
+                    </option>
+                </select>
+                <div class="error-message" th:if="${#fields.hasErrors('receiverLocation')}" th:errors="*{receiverLocation}"></div>
+            </div>
+
+            <!-- Address Delivery Fields (shown when checkbox is unchecked) -->
+            <div id="addressDeliverySection">
+                <div class="form-group" th:classappend="${#fields.hasErrors('locationCountry') ? 'has-error' : ''}">
+                    <label for="locationCountry">Country <span style="color: red;">*</span></label>
+                    <input type="text"
+                           id="locationCountry"
+                           th:field="*{locationCountry}"
+                           placeholder="Enter country">
+                    <div class="error-message" th:if="${#fields.hasErrors('locationCountry')}" th:errors="*{locationCountry}"></div>
+                </div>
+
+                <div class="form-group" th:classappend="${#fields.hasErrors('province') ? 'has-error' : ''}">
+                    <label for="province">Province <span style="color: red;">*</span></label>
+                    <input type="text"
+                           id="province"
+                           th:field="*{province}"
+                           placeholder="Enter province">
+                    <div class="error-message" th:if="${#fields.hasErrors('province')}" th:errors="*{province}"></div>
+                </div>
+
+                <div class="form-group" th:classappend="${#fields.hasErrors('locationRegion') ? 'has-error' : ''}">
+                    <label for="locationRegion">Region/City <span style="color: red;">*</span></label>
+                    <input type="text"
+                           id="locationRegion"
+                           th:field="*{locationRegion}"
+                           placeholder="Enter region or city">
+                    <div class="error-message" th:if="${#fields.hasErrors('locationRegion')}" th:errors="*{locationRegion}"></div>
+                </div>
+
+                <div class="form-group" th:classappend="${#fields.hasErrors('locationDescription') ? 'has-error' : ''}">
+                    <label for="locationDescription">Address Description <span style="color: red;">*</span></label>
+                    <textarea id="locationDescription"
+                              th:field="*{locationDescription}"
+                              rows="3"
+                              placeholder="Enter detailed address (street, building, apartment, etc.)"></textarea>
+                    <div class="error-message" th:if="${#fields.hasErrors('locationDescription')}" th:errors="*{locationDescription}"></div>
+                </div>
+            </div>
 
             <div class="form-group" th:classappend="${#fields.hasErrors('recipientFirstName') ? 'has-error' : ''}">
                 <label for="recipientFirstName">First Name <span style="color: red;">*</span></label>
@@ -110,16 +170,6 @@
                 <div class="error-message" th:if="${#fields.hasErrors('recipientLastName')}" th:errors="*{recipientLastName}"></div>
             </div>
 
-            <div class="form-group" th:classappend="${#fields.hasErrors('recipientEmail') ? 'has-error' : ''}">
-                <label for="recipientEmail">Email <span style="color: red;">*</span></label>
-                <input type="email"
-                       id="recipientEmail"
-                       th:field="*{recipientEmail}"
-                       placeholder="Enter recipient's email"
-                       required>
-                <div class="error-message" th:if="${#fields.hasErrors('recipientEmail')}" th:errors="*{recipientEmail}"></div>
-            </div>
-
             <div class="form-group" th:classappend="${#fields.hasErrors('recipientPhone') ? 'has-error' : ''}">
                 <label for="recipientPhone">Phone <span style="color: red;">*</span></label>
                 <input type="text"
@@ -130,47 +180,19 @@
                 <div class="error-message" th:if="${#fields.hasErrors('recipientPhone')}" th:errors="*{recipientPhone}"></div>
             </div>
 
-            <!-- Location Information Section -->
-            <h3>Delivery Location</h3>
-
-            <div class="form-group" th:classappend="${#fields.hasErrors('street') ? 'has-error' : ''}">
-                <label for="street">Street <span style="color: red;">*</span></label>
-                <input type="text"
-                       id="street"
-                       th:field="*{street}"
-                       placeholder="Enter street address"
-                       required>
-                <div class="error-message" th:if="${#fields.hasErrors('street')}" th:errors="*{street}"></div>
-            </div>
-
-            <div class="form-group" th:classappend="${#fields.hasErrors('city') ? 'has-error' : ''}">
-                <label for="city">City <span style="color: red;">*</span></label>
-                <input type="text"
-                       id="city"
-                       th:field="*{city}"
-                       placeholder="Enter city"
-                       required>
-                <div class="error-message" th:if="${#fields.hasErrors('city')}" th:errors="*{city}"></div>
-            </div>
-
-            <div class="form-group" th:classappend="${#fields.hasErrors('zip') ? 'has-error' : ''}">
-                <label for="zip">Zip Code <span style="color: red;">*</span></label>
-                <input type="text"
-                       id="zip"
-                       th:field="*{zip}"
-                       placeholder="Enter zip code"
-                       required>
-                <div class="error-message" th:if="${#fields.hasErrors('zip')}" th:errors="*{zip}"></div>
-            </div>
-
-            <div class="form-group" th:classappend="${#fields.hasErrors('country') ? 'has-error' : ''}">
-                <label for="country">Country <span style="color: red;">*</span></label>
-                <input type="text"
-                       id="country"
-                       th:field="*{country}"
-                       placeholder="Enter country"
-                       required>
-                <div class="error-message" th:if="${#fields.hasErrors('country')}" th:errors="*{country}"></div>
+            <!-- Staff dropdown -->
+            <div class="form-group" th:classappend="${#fields.hasErrors('staffName') ? 'has-error' : ''}">
+                <label for="staffName">Staff <span style="color: red;">*</span></label>
+                <select id="staffName"
+                        th:field="*{staffName}"
+                        required>
+                    <option value="">-- Select Staff --</option>
+                    <option th:each="name : ${parcelResponseWithDefaults.staffName()}"
+                            th:value="${name}"
+                            th:text="${name}">
+                    </option>
+                </select>
+                <div class="error-message" th:if="${#fields.hasErrors('staffName')}" th:errors="*{staffName}"></div>
             </div>
 
             <!-- Form Buttons -->
@@ -185,5 +207,35 @@
         </form>
     </div>
 </div>
+<script>
+    function toggleReceiverLocation() {
+        const checkbox = document.getElementById('deliverToOffice');
+        const officeSection = document.getElementById('officeDeliverySection');
+        const addressSection = document.getElementById('addressDeliverySection');
+        const receiverLocationSelect = document.getElementById('receiverLocation');
+        const addressFields = addressSection.querySelectorAll('input, textarea');
+
+        if (checkbox.checked) {
+            officeSection.style.display = 'block';
+            addressSection.style.display = 'none';
+            receiverLocationSelect.required = true;
+            addressFields.forEach(function(field) {
+                field.required = false;
+            });
+        } else {
+            officeSection.style.display = 'none';
+            addressSection.style.display = 'block';
+            receiverLocationSelect.required = false;
+            addressFields.forEach(function(field) {
+                field.required = true;
+            });
+        }
+    }
+
+    // Initialize on page load
+    document.addEventListener('DOMContentLoaded', function() {
+        toggleReceiverLocation();
+    });
+</script>
 </body>
 </html>

@@ -39,27 +39,36 @@ public class ParcelViewController {
     @GetMapping("/get-create-form")
     public String showCreateParcelForm(Model model) {
         model.addAttribute("parcelRequest", new ParcelRequest());
+        model.addAttribute("parcelResponseWithDefaults", parcelService.getParcelFormWithDefaults());
         return "create_parcel";
     }
 
     @PostMapping("/create")
     public String createParcel(@Valid @ModelAttribute ParcelRequest parcelRequest, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
+            model.addAttribute("parcelResponseWithDefaults", parcelService.getParcelFormWithDefaults());
             return "create_parcel";
         }
 
         try {
-            parcelService.createParcel(parcelRequest);
-            return "redirect:/parcels/all";
+            String trackingNumber = parcelService.createParcel(parcelRequest);
+            return "redirect:/parcels/confirmation?trackingNumber=" + trackingNumber;
         } catch (Exception e) {
             model.addAttribute("error", "Error creating parcel: " + e.getMessage());
+            model.addAttribute("parcelResponseWithDefaults", parcelService.getParcelFormWithDefaults());
             return "create_parcel";
         }
     }
 
+    @GetMapping("/confirmation")
+    public String showConfirmation(@RequestParam String trackingNumber, Model model) {
+        model.addAttribute("trackingNumber", trackingNumber);
+        return "parcel_confirmation";
+    }
+
     @GetMapping("/{parcelId}")
     public String getParcelDetails(@PathVariable Long parcelId, Model model) {
-        model.addAttribute("parcel", parcelService.fetchParcelByID(parcelId));
+        model.addAttribute("parcelByID", parcelService.fetchParcelByID(parcelId));
         return "parcel_details";
     }
 

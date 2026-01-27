@@ -8,6 +8,9 @@ import org.informatics.logistics_company.repository.UserDetailsRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 public class DropdownService {
 
@@ -37,5 +40,17 @@ public class DropdownService {
         model.addAttribute("users", userDetailsRepository.findAll());
         // ParcelStatus enum values:
         model.addAttribute("statuses", ParcelStatus.values());
+    }
+
+    public List<String> createStaffDropdown() {
+        List<String> staffNames = new ArrayList<>();
+        this.staffRepository.findAll().forEach(staff -> staffNames.add(staff.getStaffUserDetails().getFirstName() + " " + staff.getStaffUserDetails().getLastName()));
+        return staffNames;
+    }
+
+    public List<String> cerateOfficeLocationDropdown() {
+        List<String> locationNames = new ArrayList<>();
+        this.locationRepository.findAll().forEach(location -> locationNames.add(location.getLocationRegion() + ", " + location.getLocationCountry()));
+        return locationNames;
     }
 }

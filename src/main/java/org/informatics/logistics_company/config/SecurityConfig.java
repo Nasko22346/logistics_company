@@ -34,6 +34,7 @@ public class SecurityConfig {
                                 "/track-parcel",
                                 "/parcels/create",
                                 "/parcels/get-create-form",
+                                "/parcels/confirmation",
                                 "/login-page"
                         ).permitAll()
                         .anyRequest().authenticated()

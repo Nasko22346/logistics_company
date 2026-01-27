@@ -9,9 +9,14 @@ import org.informatics.logistics_company.exception.ParcelNotFoundException;
 import org.informatics.logistics_company.model.enums.ParcelStatus;
 import org.informatics.logistics_company.model.jpa.Location;
 import org.informatics.logistics_company.model.jpa.Parcel;
+import org.informatics.logistics_company.model.jpa.PriceLocationTax;
+import org.informatics.logistics_company.model.jpa.PriceWeightTax;
+import org.informatics.logistics_company.model.jpa.Staff;
 import org.informatics.logistics_company.model.jpa.UserDetails;
 import org.informatics.logistics_company.repository.LocationRepository;
 import org.informatics.logistics_company.repository.ParcelRepository;
+import org.informatics.logistics_company.repository.PriceLocationTaxRepository;
+import org.informatics.logistics_company.repository.PriceWeightTaxRepository;
 import org.informatics.logistics_company.repository.StaffRepository;
 import org.informatics.logistics_company.repository.UserDetailsRepository;
 import org.springframework.stereotype.Service;
@@ -22,6 +27,7 @@ import java.security.SecureRandom;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import static org.informatics.logistics_company.exception.ExceptionMessages.PARCEL_NOT_FOUND;
@@ -30,9 +36,34 @@ import static org.informatics.logistics_company.exception.ExceptionMessages.PARC
 public class ParcelService {
 
     private final ParcelRepository parcelRepository;
+    private final DropdownService dropdownService;
+    private final UserDetailsRepository userDetailsRepository;
+    private final StaffRepository staffRepository;
+    private final LocationRepository locationRepository;
+    private final PriceWeightTaxRepository priceWeightTaxRepository;
+    private final PriceLocationTaxRepository priceLocationTaxRepository;
 
-    public ParcelService(ParcelRepository parcelRepository) {
+    public ParcelService(ParcelRepository parcelRepository, DropdownService dropdownService,
+                         UserDetailsRepository userDetailsRepository, StaffRepository staffRepository,
+                         LocationRepository locationRepository, PriceWeightTaxRepository priceWeightTaxRepository,
+                         PriceLocationTaxRepository priceLocationTaxRepository) {
         this.parcelRepository = parcelRepository;
+        this.dropdownService = dropdownService;
+        this.userDetailsRepository = userDetailsRepository;
+        this.staffRepository = staffRepository;
+        this.locationRepository = locationRepository;
+        this.priceWeightTaxRepository = priceWeightTaxRepository;
+        this.priceLocationTaxRepository = priceLocationTaxRepository;
+    }
+
+    private static List<ParcelResponse> getParcelResponses(List<Parcel> parcels) {
+        List<ParcelResponse> responses = new ArrayList<>();
+        parcels.forEach(parcel -> {
+            ParcelResponse parcelResponse = MapperService.mapToParcelResponse(parcel);
+            responses.add(parcelResponse);
+        });
+
+        return responses;
     }
 
     //TODO: Check if needed
@@ -97,15 +128,14 @@ public class ParcelService {
         );
     }
 
-    private String safe(String v) {
-        return v == null ? "-" : v;
-    }
-
-
 
     // --------------------------
     // Methods used by ParcelViewController
     // --------------------------
+
+    private String safe(String v) {
+        return v == null ? "-" : v;
+    }
 
     @Transactional(readOnly = true)
     public List<Parcel> fetchAllParcels() {
@@ -118,9 +148,12 @@ public class ParcelService {
     }
 
     @Transactional(readOnly = true)
-    public Parcel fetchParcelByID(Long parcelId) {
-        return parcelRepository.findWithAllById(parcelId)
-                .orElseThrow(() -> new RuntimeException("Parcel with id " + parcelId + " not found"));
+    public ParcelResponse fetchParcelByID(Long parcelId) {
+        Parcel parcel = parcelRepository.findWithAllById(parcelId)
+                .orElseThrow(() -> new ParcelNotFoundException(PARCEL_NOT_FOUND + parcelId));
+
+
+        return MapperService.mapToParcelResponse(parcel);
     }
 
     @Transactional(readOnly = true)
@@ -159,22 +192,158 @@ public class ParcelService {
         return getParcelResponses(parcels);
     }
 
-    private static List<ParcelResponse> getParcelResponses(List<Parcel> parcels) {
-        List<ParcelResponse> responses = new ArrayList<>();
-        parcels.forEach(parcel -> {
-            ParcelResponse parcelResponse = MapperService.mapToParcelResponse(parcel);
-            responses.add(parcelResponse);
-        });
+    @Transactional
+    public String createParcel(ParcelRequest request) {
+        String trackingNumber = this.generateTrackingNumber();
+        Parcel parcel = MapperService.mapToParcel(request, trackingNumber);
 
-        return responses;
+        // Set sender user
+        UserDetails senderUser = findOrCreateUser(
+                request.senderFirstName(),
+                request.senderLastName(),
+                request.senderPhone()
+        );
+        parcel.setSenderUser(senderUser);
+
+        // Set receiver user
+        UserDetails receiverUser = findOrCreateUser(
+                request.recipientFirstName(),
+                request.recipientLastName(),
+                request.recipientPhone()
+        );
+        parcel.setReceiverUser(receiverUser);
+
+        // Set staff
+        if (isNotEmpty(request.staffName())) {
+            Staff staff = findStaffByName(request.staffName());
+            parcel.setStaff(staff);
+        }
+
+        // Set send location (find existing by region/country)
+        if (parcel.getSendLocation() != null) {
+            Location sendLocation = findOrCreateLocation(parcel.getSendLocation());
+            parcel.setSendLocation(sendLocation);
+        }
+
+        // Set receiver location (find existing or create new)
+        if (parcel.getReceiverLocation() != null) {
+            Location receiverLocation = findOrCreateLocation(parcel.getReceiverLocation());
+            parcel.setReceiverLocation(receiverLocation);
+
+            // Set price location tax based on receiver location
+            PriceLocationTax locationTax = findPriceLocationTax(receiverLocation);
+            parcel.setPriceLocationTax(locationTax);
+        }
+
+        // Set price weight tax based on parcel weight
+        if (request.weight() != null) {
+            PriceWeightTax weightTax = findPriceWeightTax(request.weight());
+            parcel.setPriceWeightTax(weightTax);
+        }
+
+        // Calculate and set price
+        BigDecimal price = calculatePrice(parcel);
+        parcel.setPrice(price);
+
+        // Set sent date to now
+        parcel.setSentDate(LocalDateTime.now());
+
+        parcelRepository.save(parcel);
+        return trackingNumber;
     }
 
-    @Transactional
-    public ParcelResponse createParcel(ParcelRequest request) {
-        Parcel parcel = MapperService.mapToParcel(request, this.generateTrackingNumber());
+    private boolean isNotEmpty(String value) {
+        return value != null && !value.trim().isEmpty();
+    }
 
-        Parcel saved = parcelRepository.save(parcel);
-        return MapperService.mapToParcelResponse(saved);
+    private UserDetails findOrCreateUser(String firstName, String lastName, String phone) {
+        // Try to find existing user by phone number
+        List<UserDetails> allUsers = userDetailsRepository.findAll();
+        for (UserDetails user : allUsers) {
+            if (phone != null && phone.equals(user.getPhoneNumber())) {
+                return user;
+            }
+        }
+
+        // Create new user
+        UserDetails newUser = new UserDetails();
+        newUser.setFirstName(firstName);
+        newUser.setLastName(lastName);
+        newUser.setPhoneNumber(phone);
+        return userDetailsRepository.save(newUser);
+    }
+
+    private Staff findStaffByName(String staffName) {
+        String[] parts = staffName.split(" ", 2);
+        String firstName = parts.length > 0 ? parts[0].trim() : "";
+        String lastName = parts.length > 1 ? parts[1].trim() : "";
+
+        List<Staff> staffList = staffRepository.findAll();
+        for (Staff staff : staffList) {
+            UserDetails userDetails = staff.getStaffUserDetails();
+            if (userDetails != null) {
+                boolean firstNameMatch = firstName.equalsIgnoreCase(userDetails.getFirstName());
+                boolean lastNameMatch = lastName.equalsIgnoreCase(userDetails.getLastName());
+                if (firstNameMatch && lastNameMatch) {
+                    return staff;
+                }
+            }
+        }
+        return null;
+    }
+
+    private Location findOrCreateLocation(Location location) {
+        // Try to find existing location
+        List<Location> locations = locationRepository.findAll();
+        for (Location loc : locations) {
+            boolean regionMatch = (location.getLocationRegion() == null && loc.getLocationRegion() == null) ||
+                    (location.getLocationRegion() != null && location.getLocationRegion().equalsIgnoreCase(loc.getLocationRegion()));
+            boolean countryMatch = (location.getLocationCountry() == null && loc.getLocationCountry() == null) ||
+                    (location.getLocationCountry() != null && location.getLocationCountry().equalsIgnoreCase(loc.getLocationCountry()));
+
+            if (regionMatch && countryMatch) {
+                return loc;
+            }
+        }
+
+        // Save new location
+        return locationRepository.save(location);
+    }
+
+    private PriceWeightTax findPriceWeightTax(Double weight) {
+        List<PriceWeightTax> taxes = priceWeightTaxRepository.findAll();
+        // Find the tax where weight <= maxWeightAmount, sorted by maxWeightAmount ascending
+        return taxes.stream()
+                .filter(t -> t.getMaxWeightAmount() != null && weight <= t.getMaxWeightAmount())
+                .min(Comparator.comparing(PriceWeightTax::getMaxWeightAmount))
+                .orElse(taxes.stream()
+                        .max(Comparator.comparing(t -> t.getMaxWeightAmount() != null ? t.getMaxWeightAmount() : 0.0))
+                        .orElse(null));
+    }
+
+    private PriceLocationTax findPriceLocationTax(Location location) {
+        List<PriceLocationTax> taxes = priceLocationTaxRepository.findAll();
+        for (PriceLocationTax tax : taxes) {
+            if (tax.getLocation() != null && tax.getLocation().getLocationId().equals(location.getLocationId())) {
+                return tax;
+            }
+        }
+        return null;
+    }
+
+    private BigDecimal calculatePrice(Parcel parcel) {
+        BigDecimal weightTax = BigDecimal.ZERO;
+        BigDecimal locationTax = BigDecimal.ZERO;
+
+        if (parcel.getPriceWeightTax() != null && parcel.getPriceWeightTax().getWeightTax() != null) {
+            weightTax = parcel.getPriceWeightTax().getWeightTax();
+        }
+
+        if (parcel.getPriceLocationTax() != null && parcel.getPriceLocationTax().getLocationTax() != null) {
+            locationTax = parcel.getPriceLocationTax().getLocationTax();
+        }
+
+        return weightTax.add(locationTax);
     }
 
     @Transactional(readOnly = true)
@@ -294,4 +463,14 @@ public class ParcelService {
         return v == null ? BigDecimal.ZERO : v;
     }
 
+    public ParcelResponse getParcelFormWithDefaults() {
+
+        List<String> staffNames = this.dropdownService.createStaffDropdown();
+        List<String> officeLocations = this.dropdownService.cerateOfficeLocationDropdown();
+
+        return new ParcelResponse(null, null, null, null, null, null, null,
+                null, null, officeLocations, null, null, null, null,
+                null, null, officeLocations, null, null,
+                null, null, staffNames);
+    }
 }

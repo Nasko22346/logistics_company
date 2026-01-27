@@ -231,18 +231,14 @@
                 </tr>
                 <tr>
                     <th>Sender</th>
-                    <td th:text="${parcel.senderUser != null
-                        ? parcel.senderUser.firstName + ' ' +
-                          (parcel.senderUser.middleName != null ? parcel.senderUser.middleName + ' ' : '') +
-                          parcel.senderUser.lastName
+                    <td th:text="${parcel.senderFirstName != null
+                        ? parcel.senderFirstName + ' ' + (parcel.senderLastName != null ? parcel.senderLastName : '')
                         : 'N/A'}">John Doe</td>
                 </tr>
                 <tr>
                     <th>Receiver</th>
-                    <td th:text="${parcel.receiverUser != null
-                        ? parcel.receiverUser.firstName + ' ' +
-                          (parcel.receiverUser.middleName != null ? parcel.receiverUser.middleName + ' ' : '') +
-                          parcel.receiverUser.lastName
+                    <td th:text="${parcel.recipientFirstName != null
+                        ? parcel.recipientFirstName + ' ' + (parcel.recipientLastName != null ? parcel.recipientLastName : '')
                         : 'N/A'}">Jane Smith</td>
                 </tr>
             </tbody>

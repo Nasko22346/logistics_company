@@ -55,17 +55,4 @@ public class AuthController {
     public String registerPage() {
         return "register";
     }
-
-//    @PostMapping("/login")
-//    public String login(
-//            @RequestParam String email,
-//            @RequestParam String password
-//    ) {
-//        try {
-//            userService.login(email, password);
-//            return "redirect:/home";
-//        } catch (Exception e) {
-//            return "redirect:/?error=login_failed";
-//        }
-//    }
 }
