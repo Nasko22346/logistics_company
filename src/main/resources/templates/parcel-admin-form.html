@@ -26,6 +26,7 @@
       <div class="form-group" th:if="${form.id != null}">
         <label>Tracking Number</label>
         <input type="text" th:value="*{trackingNumber}" disabled>
+        <input type="hidden" name="trackingNumber" th:value="*{trackingNumber}">
         <div class="muted">Tracking number is auto-generated and cannot be edited.</div>
       </div>
 
@@ -33,28 +34,33 @@
       <div class="form-group">
         <label for="weight">Weight (kg)</label>
         <input id="weight" type="number" step="0.01" th:value="*{weight}" disabled>
+        <input type="hidden" name="weight" th:value="*{weight}">
       </div>
 
       <!-- Sender Information - not editable -->
       <div class="form-group">
         <label>Sender First Name</label>
         <input type="text" th:value="*{senderFirstName}" disabled>
+        <input type="hidden" name="senderFirstName" th:value="*{senderFirstName}">
       </div>
 
       <div class="form-group">
         <label>Sender Last Name</label>
         <input type="text" th:value="*{senderLastName}" disabled>
+        <input type="hidden" name="senderLastName" th:value="*{senderLastName}">
       </div>
 
       <div class="form-group">
         <label>Sender Phone</label>
         <input type="text" th:value="*{senderPhone}" disabled>
+        <input type="hidden" name="senderPhone" th:value="*{senderPhone}">
       </div>
 
       <!-- Sent Date - set at creation, not editable -->
       <div class="form-group">
         <label for="sentDate">Sent Date</label>
         <input id="sentDate" type="datetime-local" th:value="*{sentDate}" disabled>
+        <input type="hidden" name="sentDate" th:value="*{sentDate}">
       </div>
 
       <!-- ============== EDITABLE FIELDS ============== -->

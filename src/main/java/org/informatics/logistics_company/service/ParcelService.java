@@ -93,7 +93,61 @@ public class ParcelService {
     public ParcelResponse update(Long id, ParcelRequest request) {
         Parcel parcel = parcelRepository.findById(id).orElseThrow(() -> new ParcelNotFoundException(PARCEL_NOT_FOUND + id));
 
-        Parcel saved = parcelRepository.save(MapperService.updateParcel(parcel, request));
+        // Update price
+        if (request.calculatedPrice() != null) {
+            parcel.setPrice(request.calculatedPrice());
+        }
+
+        // Update parcel status
+        if (request.parcelStatus() != null && !request.parcelStatus().isEmpty()) {
+            ParcelStatus newStatus = ParcelStatus.valueOf(request.parcelStatus());
+            parcel.setParcelStatus(newStatus);
+
+            // Auto-set receivedDate to now if status is DELIVERED and receivedDate not provided
+            if (newStatus == ParcelStatus.DELIVERED && request.receivedDate() == null && parcel.getReceivedDate() == null) {
+                parcel.setReceivedDate(LocalDateTime.now());
+            }
+        }
+
+        // Update receivedDate if provided
+        if (request.receivedDate() != null) {
+            parcel.setReceivedDate(request.receivedDate());
+        }
+
+        // Update receiver user (recipient info)
+        if (isNotEmpty(request.recipientFirstName()) || isNotEmpty(request.recipientLastName()) || isNotEmpty(request.recipientPhone())) {
+            UserDetails receiverUser = findOrCreateUser(
+                    request.recipientFirstName(),
+                    request.recipientLastName(),
+                    request.recipientPhone()
+            );
+            parcel.setReceiverUser(receiverUser);
+        }
+
+        // Update staff
+        if (isNotEmpty(request.staffName())) {
+            Staff staff = findStaffByName(request.staffName());
+            parcel.setStaff(staff);
+        } else {
+            parcel.setStaff(null);
+        }
+
+        // Update receiver location (address delivery fields)
+        if (isNotEmpty(request.locationCountry()) || isNotEmpty(request.province()) ||
+                isNotEmpty(request.locationRegion()) || isNotEmpty(request.locationDescription())) {
+            Location receiverLocation = parcel.getReceiverLocation();
+            if (receiverLocation == null) {
+                receiverLocation = new Location();
+            }
+            receiverLocation.setLocationCountry(request.locationCountry());
+            receiverLocation.setProvince(request.province());
+            receiverLocation.setLocationRegion(request.locationRegion());
+            receiverLocation.setLocationDescription(request.locationDescription());
+            receiverLocation = locationRepository.save(receiverLocation);
+            parcel.setReceiverLocation(receiverLocation);
+        }
+
+        Parcel saved = parcelRepository.save(parcel);
         return MapperService.mapToParcelResponse(saved);
     }
 
