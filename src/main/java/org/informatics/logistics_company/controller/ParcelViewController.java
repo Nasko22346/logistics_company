@@ -2,6 +2,7 @@ package org.informatics.logistics_company.controller;
 
 import jakarta.validation.Valid;
 import org.informatics.logistics_company.dto.parcel.ParcelRequest;
+import org.informatics.logistics_company.dto.parcel.PriceCalculationResponse;
 import org.informatics.logistics_company.service.ParcelService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 @RequestMapping("/parcels")
@@ -64,6 +66,14 @@ public class ParcelViewController {
     public String showConfirmation(@RequestParam String trackingNumber, Model model) {
         model.addAttribute("trackingNumber", trackingNumber);
         return "parcel_confirmation";
+    }
+
+    @GetMapping("/calculate-price")
+    @ResponseBody
+    public PriceCalculationResponse calculatePrice(
+            @RequestParam(required = false) Double weight,
+            @RequestParam(required = false) String deliveryType) {
+        return parcelService.calculatePriceEstimate(weight, deliveryType);
     }
 
     @GetMapping("/{parcelId}")

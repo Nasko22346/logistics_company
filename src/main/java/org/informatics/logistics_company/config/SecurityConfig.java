@@ -35,6 +35,7 @@ public class SecurityConfig {
                                 "/parcels/create",
                                 "/parcels/get-create-form",
                                 "/parcels/confirmation",
+                                "/parcels/calculate-price",
                                 "/login-page"
                         ).permitAll()
                         .anyRequest().authenticated()

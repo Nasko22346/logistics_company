@@ -3,6 +3,7 @@ package org.informatics.logistics_company.service;
 import org.informatics.logistics_company.dto.parcel.ParcelAdminRow;
 import org.informatics.logistics_company.dto.parcel.ParcelRequest;
 import org.informatics.logistics_company.dto.parcel.ParcelResponse;
+import org.informatics.logistics_company.dto.parcel.PriceCalculationResponse;
 import org.informatics.logistics_company.dto.reports.RevenueReport;
 import org.informatics.logistics_company.dto.reports.RevenueRow;
 import org.informatics.logistics_company.exception.ParcelNotFoundException;
@@ -88,6 +89,7 @@ public class ParcelService {
         return MapperService.mapToParcelResponse(saved);
     }
 
+    @Transactional
     public ParcelResponse update(Long id, ParcelRequest request) {
         Parcel parcel = parcelRepository.findById(id).orElseThrow(() -> new ParcelNotFoundException(PARCEL_NOT_FOUND + id));
 
@@ -229,11 +231,13 @@ public class ParcelService {
         if (parcel.getReceiverLocation() != null) {
             Location receiverLocation = findOrCreateLocation(parcel.getReceiverLocation());
             parcel.setReceiverLocation(receiverLocation);
-
-            // Set price location tax based on receiver location
-            PriceLocationTax locationTax = findPriceLocationTax(receiverLocation);
-            parcel.setPriceLocationTax(locationTax);
         }
+
+        // Set price location tax based on delivery type (office vs address)
+        // If receiverLocation has a value, it's office delivery (ID 1), otherwise address (ID 2)
+        String deliveryType = isNotEmpty(request.receiverLocation()) ? "office" : "address";
+        PriceLocationTax locationTax = findPriceLocationTaxByDeliveryType(deliveryType);
+        parcel.setPriceLocationTax(locationTax);
 
         // Set price weight tax based on parcel weight
         if (request.weight() != null) {
@@ -329,6 +333,44 @@ public class ParcelService {
             }
         }
         return null;
+    }
+
+    /**
+     * Finds location tax by delivery type.
+     * Uses hardcoded IDs: 1 for office delivery, 2 for address delivery
+     */
+    public PriceLocationTax findPriceLocationTaxByDeliveryType(String deliveryType) {
+        Long taxId = "office".equalsIgnoreCase(deliveryType) ? 1L : 2L;
+        return priceLocationTaxRepository.findById(taxId).orElse(null);
+    }
+
+    /**
+     * Calculates price estimate for display without creating a parcel.
+     */
+    @Transactional(readOnly = true)
+    public PriceCalculationResponse calculatePriceEstimate(Double weight, String deliveryType) {
+        BigDecimal weightTaxAmount = BigDecimal.ZERO;
+        BigDecimal locationTaxAmount = BigDecimal.ZERO;
+
+        // Get weight tax
+        if (weight != null && weight > 0) {
+            PriceWeightTax weightTax = findPriceWeightTax(weight);
+            if (weightTax != null && weightTax.getWeightTax() != null) {
+                weightTaxAmount = weightTax.getWeightTax();
+            }
+        }
+
+        // Get location tax based on delivery type (ID 1 = office, ID 2 = address)
+        if (deliveryType != null && !deliveryType.isEmpty()) {
+            PriceLocationTax locationTax = findPriceLocationTaxByDeliveryType(deliveryType);
+            if (locationTax != null && locationTax.getLocationTax() != null) {
+                locationTaxAmount = locationTax.getLocationTax();
+            }
+        }
+
+        BigDecimal totalPrice = weightTaxAmount.add(locationTaxAmount);
+
+        return new PriceCalculationResponse(weightTaxAmount, locationTaxAmount, totalPrice);
     }
 
     private BigDecimal calculatePrice(Parcel parcel) {

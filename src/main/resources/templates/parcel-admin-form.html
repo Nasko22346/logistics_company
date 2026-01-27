@@ -29,7 +29,7 @@
 
       <div class="form-group">
         <label for="weight">Weight</label>
-        <input id="weight" type="number" step="0.01" th:field="*{weight}">
+        <input id="weight" type="number" step="0.01" th:field="*{weight}" disabled>
       </div>
 
       <div class="form-group">
@@ -39,7 +39,7 @@
 
       <div class="form-group">
         <label for="sentDate">Sent Date</label>
-        <input id="sentDate" type="datetime-local" th:field="*{sentDate}">
+        <input id="sentDate" type="datetime-local" th:field="*{sentDate}" disabled>
       </div>
 
       <div class="form-group">
@@ -47,83 +47,83 @@
         <input id="receivedDate" type="datetime-local" th:field="*{receivedDate}">
       </div>
 
-      <div class="form-group">
-        <label for="parcelStatus">Status</label>
-        <select id="parcelStatus" th:field="*{parcelStatus}">
-          <option value="">Select status</option>
-          <option th:each="s : ${statuses}" th:value="${s}" th:text="${s}"></option>
-        </select>
-      </div>
+<!--      <div class="form-group">-->
+<!--        <label for="parcelStatus">Status</label>-->
+<!--        <select id="parcelStatus" th:field="*{parcelStatus}">-->
+<!--          <option value="">Select status</option>-->
+<!--          <option th:each="s : ${statuses}" th:value="${s}" th:text="${s}"></option>-->
+<!--        </select>-->
+<!--      </div>-->
 
-      <div class="form-group">
-        <label for="sendLocationId">Send Location</label>
-        <select id="sendLocationId" th:field="*{sendLocationId}">
-          <option value="">(empty)</option>
-          <option th:each="l : ${locations}"
-                  th:value="${l.locationId}"
-                  th:text="${l.locationCountry + ', ' + l.locationRegion + ' (' + l.province + ')'}"></option>
-        </select>
-      </div>
+<!--      <div class="form-group">-->
+<!--        <label for="sendLocationId">Send Location</label>-->
+<!--        <select id="sendLocationId" th:field="*{sendLocationId}">-->
+<!--          <option value="">(empty)</option>-->
+<!--          <option th:each="l : ${locations}"-->
+<!--                  th:value="${l.locationId}"-->
+<!--                  th:text="${l.locationCountry + ', ' + l.locationRegion + ' (' + l.province + ')'}"></option>-->
+<!--        </select>-->
+<!--      </div>-->
 
-      <div class="form-group">
-        <label for="receiverLocationId">Receiver Location</label>
-        <select id="receiverLocationId" th:field="*{receiverLocationId}">
-          <option value="">(empty)</option>
-          <option th:each="l : ${locations}"
-                  th:value="${l.locationId}"
-                  th:text="${l.locationCountry + ', ' + l.locationRegion + ' (' + l.province + ')'}"></option>
-        </select>
-      </div>
+<!--      <div class="form-group">-->
+<!--        <label for="receiverLocationId">Receiver Location</label>-->
+<!--        <select id="receiverLocationId" th:field="*{receiverLocationId}">-->
+<!--          <option value="">(empty)</option>-->
+<!--          <option th:each="l : ${locations}"-->
+<!--                  th:value="${l.locationId}"-->
+<!--                  th:text="${l.locationCountry + ', ' + l.locationRegion + ' (' + l.province + ')'}"></option>-->
+<!--        </select>-->
+<!--      </div>-->
 
-      <div class="form-group">
-        <label for="senderUserId">Sender User</label>
-        <select id="senderUserId" th:field="*{senderUserId}">
-          <option value="">(empty)</option>
-          <option th:each="u : ${users}"
-                  th:value="${u.id}"
-                  th:text="${'User #' + u.id}"></option>
-        </select>
-      </div>
+<!--      <div class="form-group">-->
+<!--        <label for="senderUserId">Sender User</label>-->
+<!--        <select id="senderUserId" th:field="*{senderUserId}">-->
+<!--          <option value="">(empty)</option>-->
+<!--          <option th:each="u : ${users}"-->
+<!--                  th:value="${u.id}"-->
+<!--                  th:text="${'User #' + u.id}"></option>-->
+<!--        </select>-->
+<!--      </div>-->
 
-      <div class="form-group">
-        <label for="receiverUserId">Receiver User</label>
-        <select id="receiverUserId" th:field="*{receiverUserId}">
-          <option value="">(empty)</option>
-          <option th:each="u : ${users}"
-                  th:value="${u.id}"
-                  th:text="${'User #' + u.id}"></option>
-        </select>
-      </div>
+<!--      <div class="form-group">-->
+<!--        <label for="receiverUserId">Receiver User</label>-->
+<!--        <select id="receiverUserId" th:field="*{receiverUserId}">-->
+<!--          <option value="">(empty)</option>-->
+<!--          <option th:each="u : ${users}"-->
+<!--                  th:value="${u.id}"-->
+<!--                  th:text="${'User #' + u.id}"></option>-->
+<!--        </select>-->
+<!--      </div>-->
 
-      <div class="form-group">
-        <label for="priceLocationTaxId">Price Location Tax</label>
-        <select id="priceLocationTaxId" th:field="*{priceLocationTaxId}">
-          <option value="">(empty)</option>
-          <option th:each="t : ${locationTaxes}"
-                  th:value="${t.id}"
-                  th:text="${t.locationTax}"></option>
-        </select>
-      </div>
+<!--      <div class="form-group">-->
+<!--        <label for="priceLocationTaxId">Price Location Tax</label>-->
+<!--        <select id="priceLocationTaxId" th:field="*{priceLocationTaxId}">-->
+<!--          <option value="">(empty)</option>-->
+<!--          <option th:each="t : ${locationTaxes}"-->
+<!--                  th:value="${t.id}"-->
+<!--                  th:text="${t.locationTax}"></option>-->
+<!--        </select>-->
+<!--      </div>-->
 
-      <div class="form-group">
-        <label for="priceWeightTaxId">Price Weight Tax</label>
-        <select id="priceWeightTaxId" th:field="*{priceWeightTaxId}">
-          <option value="">(empty)</option>
-          <option th:each="t : ${weightTaxes}"
-                  th:value="${t.id}"
-                  th:text="${t.weightTax + ' (<= ' + t.maxWeightAmount + ')'}"></option>
-        </select>
-      </div>
+<!--      <div class="form-group">-->
+<!--        <label for="priceWeightTaxId">Price Weight Tax</label>-->
+<!--        <select id="priceWeightTaxId" th:field="*{priceWeightTaxId}">-->
+<!--          <option value="">(empty)</option>-->
+<!--          <option th:each="t : ${weightTaxes}"-->
+<!--                  th:value="${t.id}"-->
+<!--                  th:text="${t.weightTax + ' (<= ' + t.maxWeightAmount + ')'}"></option>-->
+<!--        </select>-->
+<!--      </div>-->
 
-      <div class="form-group">
-        <label for="staffId">Staff</label>
-        <select id="staffId" th:field="*{staffId}">
-          <option value="">(empty)</option>
-          <option th:each="s : ${staffList}"
-                  th:value="${s.staffId}"
-                  th:text="${'Staff #' + s.staffId + ' (' + s.position + ')'}"></option>
-        </select>
-      </div>
+<!--      <div class="form-group">-->
+<!--        <label for="staffId">Staff</label>-->
+<!--        <select id="staffId" th:field="*{staffId}">-->
+<!--          <option value="">(empty)</option>-->
+<!--          <option th:each="s : ${staffList}"-->
+<!--                  th:value="${s.staffId}"-->
+<!--                  th:text="${'Staff #' + s.staffId + ' (' + s.position + ')'}"></option>-->
+<!--        </select>-->
+<!--      </div>-->
 
       <div class="form-buttons">
         <button class="btn btn-primary" type="submit">Save</button>

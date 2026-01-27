@@ -38,6 +38,11 @@
                 <div class="error-message" th:if="${#fields.hasErrors('weight')}" th:errors="*{weight}"></div>
             </div>
 
+            <!-- Hidden fields for price values -->
+            <input type="hidden" id="weightTax" th:field="*{weightTax}">
+            <input type="hidden" id="locationTax" th:field="*{locationTax}">
+            <input type="hidden" id="calculatedPrice" th:field="*{calculatedPrice}">
+
             <!-- Sender Information Section -->
             <h3>Sender Information</h3>
 
@@ -180,19 +185,42 @@
                 <div class="error-message" th:if="${#fields.hasErrors('recipientPhone')}" th:errors="*{recipientPhone}"></div>
             </div>
 
-            <!-- Staff dropdown -->
-            <div class="form-group" th:classappend="${#fields.hasErrors('staffName') ? 'has-error' : ''}">
-                <label for="staffName">Staff <span style="color: red;">*</span></label>
-                <select id="staffName"
-                        th:field="*{staffName}"
-                        required>
-                    <option value="">-- Select Staff --</option>
-                    <option th:each="name : ${parcelResponseWithDefaults.staffName()}"
-                            th:value="${name}"
-                            th:text="${name}">
-                    </option>
-                </select>
-                <div class="error-message" th:if="${#fields.hasErrors('staffName')}" th:errors="*{staffName}"></div>
+<!--            &lt;!&ndash; Staff dropdown &ndash;&gt;-->
+<!--            <div class="form-group" th:classappend="${#fields.hasErrors('staffName') ? 'has-error' : ''}">-->
+<!--                <label for="staffName">Staff <span style="color: red;">*</span></label>-->
+<!--                <select id="staffName"-->
+<!--                        th:field="*{staffName}"-->
+<!--                        required>-->
+<!--                    <option value="">&#45;&#45; Select Staff &#45;&#45;</option>-->
+<!--                    <option th:each="name : ${parcelResponseWithDefaults.staffName()}"-->
+<!--                            th:value="${name}"-->
+<!--                            th:text="${name}">-->
+<!--                    </option>-->
+<!--                </select>-->
+<!--                <div class="error-message" th:if="${#fields.hasErrors('staffName')}" th:errors="*{staffName}"></div>-->
+<!--            </div>-->
+
+            <!-- Price Calculation Section -->
+            <div class="form-group" style="margin-top: 20px; padding: 15px; background-color: #f8f9fa; border-radius: 8px; border: 1px solid #dee2e6;">
+                <h3 style="margin-bottom: 15px;"><i class="fas fa-calculator"></i> Price Estimate</h3>
+                <div id="priceBreakdown">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                        <span>Weight Tax:</span>
+                        <span id="weightTaxDisplay">--</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                        <span>Location Tax (<span id="deliveryTypeDisplay">Address</span>):</span>
+                        <span id="locationTaxDisplay">--</span>
+                    </div>
+                    <hr style="margin: 10px 0;">
+                    <div style="display: flex; justify-content: space-between; font-weight: bold; font-size: 1.2em;">
+                        <span>Total Price:</span>
+                        <span id="totalPriceDisplay">--</span>
+                    </div>
+                </div>
+                <p id="priceMessage" style="color: #6c757d; font-size: 0.9em; margin-top: 10px;">
+                    Enter weight to see price estimate.
+                </p>
             </div>
 
             <!-- Form Buttons -->
@@ -208,6 +236,18 @@
     </div>
 </div>
 <script>
+    function debounce(func, wait) {
+        let timeout;
+        return function executedFunction(...args) {
+            const later = () => {
+                clearTimeout(timeout);
+                func(...args);
+            };
+            clearTimeout(timeout);
+            timeout = setTimeout(later, wait);
+        };
+    }
+
     function toggleReceiverLocation() {
         const checkbox = document.getElementById('deliverToOffice');
         const officeSection = document.getElementById('officeDeliverySection');
@@ -230,11 +270,77 @@
                 field.required = true;
             });
         }
+
+        // Recalculate price when delivery type changes
+        calculatePrice();
     }
 
-    // Initialize on page load
+    async function calculatePrice() {
+        const weightInput = document.getElementById('weight');
+        const deliverToOffice = document.getElementById('deliverToOffice');
+
+        const weight = parseFloat(weightInput.value);
+        const deliveryType = deliverToOffice.checked ? 'office' : 'address';
+
+        // Update delivery type display
+        document.getElementById('deliveryTypeDisplay').textContent =
+            deliverToOffice.checked ? 'Office' : 'Address';
+
+        // If no valid weight, show placeholder
+        if (!weight || weight <= 0) {
+            document.getElementById('weightTaxDisplay').textContent = '--';
+            document.getElementById('locationTaxDisplay').textContent = '--';
+            document.getElementById('totalPriceDisplay').textContent = '--';
+            document.getElementById('priceMessage').textContent = 'Enter weight to see price estimate.';
+            return;
+        }
+
+        try {
+            const response = await fetch(`/parcels/calculate-price?weight=${weight}&deliveryType=${deliveryType}`);
+
+            if (!response.ok) {
+                throw new Error('Failed to calculate price');
+            }
+
+            const data = await response.json();
+
+            // Update display (format with 2 decimal places and BGN currency)
+            document.getElementById('weightTaxDisplay').textContent = data.weightTax.toFixed(2) + ' BGN';
+            document.getElementById('locationTaxDisplay').textContent = data.locationTax.toFixed(2) + ' BGN';
+            document.getElementById('totalPriceDisplay').textContent = data.totalPrice.toFixed(2) + ' BGN';
+            document.getElementById('priceMessage').textContent = 'Price calculated based on weight and delivery type.';
+
+            // Update hidden form fields
+            document.getElementById('weightTax').value = data.weightTax;
+            document.getElementById('locationTax').value = data.locationTax;
+            document.getElementById('calculatedPrice').value = data.totalPrice;
+
+        } catch (error) {
+            console.error('Error calculating price:', error);
+            document.getElementById('priceMessage').textContent = 'Unable to calculate price. Please try again.';
+        }
+    }
+
+    const debouncedCalculatePrice = debounce(calculatePrice, 300);
+
     document.addEventListener('DOMContentLoaded', function() {
         toggleReceiverLocation();
+
+        // Add event listener for weight changes
+        const weightInput = document.getElementById('weight');
+        weightInput.addEventListener('input', debouncedCalculatePrice);
+        weightInput.addEventListener('change', calculatePrice);
+
+        // Add event listener for delivery type checkbox
+        const deliverToOffice = document.getElementById('deliverToOffice');
+        deliverToOffice.addEventListener('change', function() {
+            toggleReceiverLocation();
+        });
+
+        // Initial calculation if weight is pre-filled
+        if (weightInput.value) {
+            calculatePrice();
+        }
     });
 </script>
 </body>

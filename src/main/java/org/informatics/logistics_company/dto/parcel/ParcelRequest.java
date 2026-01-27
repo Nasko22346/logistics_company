@@ -11,6 +11,7 @@ public record ParcelRequest(
         String parcelStatus,
         BigDecimal weightTax,
         BigDecimal locationTax,
+        BigDecimal calculatedPrice,
         String trackingNumber,
 
         // Sender information
@@ -40,7 +41,7 @@ public record ParcelRequest(
 ) {
 
     public ParcelRequest() {
-        this(null, null, null, null, null, null,
+        this(null, null, null, null, null, null, null,
                 null, null, null, null, null,
                 null, null, null, null, null,
                 null, null, null, null);
