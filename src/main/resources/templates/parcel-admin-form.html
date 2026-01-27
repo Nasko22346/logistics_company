@@ -18,112 +18,119 @@
           th:object="${form}"
           method="post">
 
-      <!-- ВАЖНО: validation fragment трябва да е ВЪТРЕ в form/th:object контекст -->
       <div th:replace="fragments/validation :: validation"></div>
 
+      <!-- ============== DISABLED FIELDS (Read-only) ============== -->
+
+      <!-- Tracking Number - auto-generated, not editable -->
       <div class="form-group" th:if="${form.id != null}">
         <label>Tracking Number</label>
-        <input type="text" th:field="*{trackingNumber}" disabled>
-        <div class="muted">Tracking номерът се генерира автоматично и не се редактира.</div>
+        <input type="text" th:value="*{trackingNumber}" disabled>
+        <div class="muted">Tracking number is auto-generated and cannot be edited.</div>
+      </div>
+
+      <!-- Weight - set at creation, not editable -->
+      <div class="form-group">
+        <label for="weight">Weight (kg)</label>
+        <input id="weight" type="number" step="0.01" th:value="*{weight}" disabled>
+      </div>
+
+      <!-- Sender Information - not editable -->
+      <div class="form-group">
+        <label>Sender First Name</label>
+        <input type="text" th:value="*{senderFirstName}" disabled>
       </div>
 
       <div class="form-group">
-        <label for="weight">Weight</label>
-        <input id="weight" type="number" step="0.01" th:field="*{weight}" disabled>
+        <label>Sender Last Name</label>
+        <input type="text" th:value="*{senderLastName}" disabled>
       </div>
 
       <div class="form-group">
-        <label for="price">Price</label>
-        <input id="price" type="number" step="0.01" th:field="*{price}">
+        <label>Sender Phone</label>
+        <input type="text" th:value="*{senderPhone}" disabled>
       </div>
 
+      <!-- Sent Date - set at creation, not editable -->
       <div class="form-group">
         <label for="sentDate">Sent Date</label>
-        <input id="sentDate" type="datetime-local" th:field="*{sentDate}" disabled>
+        <input id="sentDate" type="datetime-local" th:value="*{sentDate}" disabled>
+      </div>
+
+      <!-- ============== EDITABLE FIELDS ============== -->
+
+      <!-- Price - admin can adjust -->
+      <div class="form-group">
+        <label for="calculatedPrice">Price</label>
+        <input id="calculatedPrice" type="number" step="0.01" name="calculatedPrice" th:value="*{price}">
+      </div>
+
+      <!-- Received Date - set when delivered -->
+      <div class="form-group">
+        <label for="receivedDate">Received Date</label>
+        <input id="receivedDate" type="datetime-local" name="receivedDate" th:value="*{receivedDate}">
+      </div>
+
+      <!-- Status - dropdown with ParcelStatus values -->
+      <div class="form-group">
+        <label for="parcelStatus">Status</label>
+        <select id="parcelStatus" name="parcelStatus">
+          <option value="">Select status</option>
+          <option th:each="s : ${statuses}"
+                  th:value="${s}"
+                  th:text="${s}"
+                  th:selected="${s.name() == form.parcelStatus}"></option>
+        </select>
+      </div>
+
+      <!-- Recipient Information - editable -->
+      <div class="form-group">
+        <label for="recipientFirstName">Recipient First Name</label>
+        <input id="recipientFirstName" type="text" name="recipientFirstName" th:value="*{recipientFirstName}">
       </div>
 
       <div class="form-group">
-        <label for="receivedDate">Received Date</label>
-        <input id="receivedDate" type="datetime-local" th:field="*{receivedDate}">
+        <label for="recipientLastName">Recipient Last Name</label>
+        <input id="recipientLastName" type="text" name="recipientLastName" th:value="*{recipientLastName}">
       </div>
 
-<!--      <div class="form-group">-->
-<!--        <label for="parcelStatus">Status</label>-->
-<!--        <select id="parcelStatus" th:field="*{parcelStatus}">-->
-<!--          <option value="">Select status</option>-->
-<!--          <option th:each="s : ${statuses}" th:value="${s}" th:text="${s}"></option>-->
-<!--        </select>-->
-<!--      </div>-->
+      <div class="form-group">
+        <label for="recipientPhone">Recipient Phone</label>
+        <input id="recipientPhone" type="text" name="recipientPhone" th:value="*{recipientPhone}">
+      </div>
 
-<!--      <div class="form-group">-->
-<!--        <label for="sendLocationId">Send Location</label>-->
-<!--        <select id="sendLocationId" th:field="*{sendLocationId}">-->
-<!--          <option value="">(empty)</option>-->
-<!--          <option th:each="l : ${locations}"-->
-<!--                  th:value="${l.locationId}"-->
-<!--                  th:text="${l.locationCountry + ', ' + l.locationRegion + ' (' + l.province + ')'}"></option>-->
-<!--        </select>-->
-<!--      </div>-->
+      <!-- Staff - dropdown selection -->
+      <div class="form-group">
+        <label for="staffName">Staff</label>
+        <select id="staffName" name="staffName">
+          <option value="">(none)</option>
+          <option th:each="s : ${staffList}"
+                  th:value="${s.staffUserDetails.firstName + ' ' + s.staffUserDetails.lastName}"
+                  th:text="${s.staffUserDetails.firstName + ' ' + s.staffUserDetails.lastName}"
+                  th:selected="${form.staffName != null and form.staffName.contains(s.staffUserDetails.firstName + ' ' + s.staffUserDetails.lastName)}"></option>
+        </select>
+      </div>
 
-<!--      <div class="form-group">-->
-<!--        <label for="receiverLocationId">Receiver Location</label>-->
-<!--        <select id="receiverLocationId" th:field="*{receiverLocationId}">-->
-<!--          <option value="">(empty)</option>-->
-<!--          <option th:each="l : ${locations}"-->
-<!--                  th:value="${l.locationId}"-->
-<!--                  th:text="${l.locationCountry + ', ' + l.locationRegion + ' (' + l.province + ')'}"></option>-->
-<!--        </select>-->
-<!--      </div>-->
+      <!-- Address Delivery Location Fields - editable -->
+      <div class="form-group">
+        <label for="locationCountry">Delivery Country</label>
+        <input id="locationCountry" type="text" name="locationCountry" th:value="*{locationCountry}">
+      </div>
 
-<!--      <div class="form-group">-->
-<!--        <label for="senderUserId">Sender User</label>-->
-<!--        <select id="senderUserId" th:field="*{senderUserId}">-->
-<!--          <option value="">(empty)</option>-->
-<!--          <option th:each="u : ${users}"-->
-<!--                  th:value="${u.id}"-->
-<!--                  th:text="${'User #' + u.id}"></option>-->
-<!--        </select>-->
-<!--      </div>-->
+      <div class="form-group">
+        <label for="province">Delivery Province</label>
+        <input id="province" type="text" name="province" th:value="*{province}">
+      </div>
 
-<!--      <div class="form-group">-->
-<!--        <label for="receiverUserId">Receiver User</label>-->
-<!--        <select id="receiverUserId" th:field="*{receiverUserId}">-->
-<!--          <option value="">(empty)</option>-->
-<!--          <option th:each="u : ${users}"-->
-<!--                  th:value="${u.id}"-->
-<!--                  th:text="${'User #' + u.id}"></option>-->
-<!--        </select>-->
-<!--      </div>-->
+      <div class="form-group">
+        <label for="locationRegion">Delivery Region</label>
+        <input id="locationRegion" type="text" name="locationRegion" th:value="*{locationRegion}">
+      </div>
 
-<!--      <div class="form-group">-->
-<!--        <label for="priceLocationTaxId">Price Location Tax</label>-->
-<!--        <select id="priceLocationTaxId" th:field="*{priceLocationTaxId}">-->
-<!--          <option value="">(empty)</option>-->
-<!--          <option th:each="t : ${locationTaxes}"-->
-<!--                  th:value="${t.id}"-->
-<!--                  th:text="${t.locationTax}"></option>-->
-<!--        </select>-->
-<!--      </div>-->
-
-<!--      <div class="form-group">-->
-<!--        <label for="priceWeightTaxId">Price Weight Tax</label>-->
-<!--        <select id="priceWeightTaxId" th:field="*{priceWeightTaxId}">-->
-<!--          <option value="">(empty)</option>-->
-<!--          <option th:each="t : ${weightTaxes}"-->
-<!--                  th:value="${t.id}"-->
-<!--                  th:text="${t.weightTax + ' (<= ' + t.maxWeightAmount + ')'}"></option>-->
-<!--        </select>-->
-<!--      </div>-->
-
-<!--      <div class="form-group">-->
-<!--        <label for="staffId">Staff</label>-->
-<!--        <select id="staffId" th:field="*{staffId}">-->
-<!--          <option value="">(empty)</option>-->
-<!--          <option th:each="s : ${staffList}"-->
-<!--                  th:value="${s.staffId}"-->
-<!--                  th:text="${'Staff #' + s.staffId + ' (' + s.position + ')'}"></option>-->
-<!--        </select>-->
-<!--      </div>-->
+      <div class="form-group">
+        <label for="locationDescription">Delivery Address Description</label>
+        <input id="locationDescription" type="text" name="locationDescription" th:value="*{locationDescription}">
+      </div>
 
       <div class="form-buttons">
         <button class="btn btn-primary" type="submit">Save</button>

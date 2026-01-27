@@ -62,7 +62,7 @@ public class ParcelAdminPageController {
     }
 
     @PostMapping("/parcels/{id}")
-    public String update(@PathVariable Long id, @ModelAttribute("request") ParcelRequest request) {
+    public String update(@PathVariable Long id, @ModelAttribute("form") ParcelRequest request) {
         parcelService.update(id, request);
 
         return "redirect:/admin/parcels";
