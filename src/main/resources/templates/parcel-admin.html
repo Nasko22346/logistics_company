@@ -51,18 +51,18 @@
       </thead>
       <tbody>
       <tr th:each="p : ${parcels}">
-        <td th:text="${p.id}">1</td>
-        <td th:text="${p.trackingNumber}">ABC123...</td>
-        <td th:text="${p.senderName ?: 'N/A'}">Sender</td>
-        <td th:text="${p.receiverName ?: 'N/A'}">Receiver</td>
-        <td th:text="${p.staffName ?: 'N/A'}">Staff</td>
-        <td th:text="${p.parcelStatus}">CREATED</td>
-        <td th:text="${p.weight}">2.5</td>
-        <td th:text="${p.price}">10.00</td>
-        <td th:text="${p.sentDate}">2026-...</td>
-        <td th:text="${p.receivedDate}">2026-...</td>
-        <td th:text="${p.sendLocationLabel}">BG...</td>
-        <td th:text="${p.receiverLocationLabel}">BG...</td>
+          <td th:text="${p.id}">1</td>
+          <td th:text="${p.trackingNumber}">ABC123...</td>
+          <td th:text="${p.senderName ?: 'N/A'}">Sender</td>
+          <td th:text="${p.receiverName ?: 'N/A'}">Receiver</td>
+          <td th:text="${p.staffName ?: 'N/A'}">Staff</td>
+          <td th:text="${p.parcelStatus}">CREATED</td>
+          <td th:text="${p.weight}">2.5</td>
+          <td th:text="${p.price}">10.00</td>
+          <td th:text="${p.sentDate != null ? #temporals.format(p.sentDate, 'dd.MM.yyyy HH:mm') : '-'}">2026-...</td>
+          <td th:text="${p.receivedDate != null ? #temporals.format(p.receivedDate, 'dd.MM.yyyy HH:mm') : '-'}">2026-...</td>
+          <td th:text="${p.sendLocationLabel}">BG...</td>
+          <td th:text="${p.receiverLocationLabel}">BG...</td>
         <td>
           <a class="btn btn-primary" th:href="@{/admin/parcels/{id}/edit(id=${p.id})}">Edit</a>
           <form th:action="@{/admin/parcels/{id}/delete(id=${p.id})}" method="post" style="display:inline;">
