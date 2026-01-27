@@ -64,7 +64,7 @@ public class PriceLocationTaxService {
 
     private PriceLocationTaxResponse toResponse(PriceLocationTax entity) {
         Long locationId = entity.getLocation() != null ? getLocationId(entity.getLocation()) : null;
-        String label = entity.getLocation() != null ? entity.getLocation().toString() : null;
+        String label = formatLocationLabel(entity.getLocation());
 
         return new PriceLocationTaxResponse(
                 entity.getId(),
@@ -72,6 +72,24 @@ public class PriceLocationTaxService {
                 locationId,
                 label
         );
+    }
+
+    private String formatLocationLabel(Location location) {
+        if (location == null) return null;
+
+        StringBuilder sb = new StringBuilder();
+        if (location.getLocationCountry() != null && !location.getLocationCountry().isBlank()) {
+            sb.append(location.getLocationCountry());
+        }
+        if (location.getProvince() != null && !location.getProvince().isBlank()) {
+            if (!sb.isEmpty()) sb.append(", ");
+            sb.append(location.getProvince());
+        }
+        if (location.getLocationRegion() != null && !location.getLocationRegion().isBlank()) {
+            if (!sb.isEmpty()) sb.append(", ");
+            sb.append(location.getLocationRegion());
+        }
+        return !sb.isEmpty() ? sb.toString() : "Location #" + location.getLocationId();
     }
 
     /**

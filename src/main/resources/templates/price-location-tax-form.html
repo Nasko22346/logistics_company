@@ -36,7 +36,7 @@
           <option value="">Select location</option>
           <option th:each="l : ${locations}"
                   th:value="${l.locationId}"
-          th:text="${l}">
+                  th:text="|${l.locationCountry}, ${l.province}, ${l.locationRegion}|">
           </option>
         </select>
       </div>
