@@ -85,7 +85,7 @@
           <option th:each="s : ${statuses}"
                   th:value="${s}"
                   th:text="${s}"
-                  th:selected="${s.name() == form.parcelStatus}"></option>
+                  th:selected="${s.value == form.parcelStatus}"></option>
         </select>
       </div>
 
@@ -113,7 +113,7 @@
           <option th:each="s : ${staffList}"
                   th:value="${s.staffUserDetails.firstName + ' ' + s.staffUserDetails.lastName}"
                   th:text="${s.staffUserDetails.firstName + ' ' + s.staffUserDetails.lastName}"
-                  th:selected="${form.staffName != null and form.staffName.contains(s.staffUserDetails.firstName + ' ' + s.staffUserDetails.lastName)}"></option>
+                  th:selected="${form.staffName != null and form.staffName.size() >= 2 and form.staffName[0] == s.staffUserDetails.firstName and form.staffName[1] == s.staffUserDetails.lastName}"></option>
         </select>
       </div>
 

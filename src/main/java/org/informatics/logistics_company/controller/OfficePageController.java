@@ -42,7 +42,6 @@ public class OfficePageController {
     public String createForm(Model model) {
         model.addAttribute("form", new OfficeForm());
         model.addAttribute("companies", officeService.getAllCompanies());
-        model.addAttribute("openTimes", officeService.getAllOpenTimes());
         model.addAttribute("locations", officeService.getAllLocations());
         return "office-form";
     }
@@ -51,7 +50,6 @@ public class OfficePageController {
     public String create(@Valid @ModelAttribute("form") OfficeForm form, BindingResult br, Model model) {
         if (br.hasErrors()) {
             model.addAttribute("companies", officeService.getAllCompanies());
-            model.addAttribute("openTimes", officeService.getAllOpenTimes());
             model.addAttribute("locations", officeService.getAllLocations());
             return "office-form";
         }
@@ -61,14 +59,12 @@ public class OfficePageController {
                     form.getOfficePhone(),
                     form.getOfficeEmail(),
                     form.getCompanyId(),
-                    form.getOpenTimeId(),
                     form.getLocationId()
             ));
             return "redirect:/admin/offices";
         } catch (OfficeValidationException ex) {
             model.addAttribute("errorMessage", ex.getMessage());
             model.addAttribute("companies", officeService.getAllCompanies());
-            model.addAttribute("openTimes", officeService.getAllOpenTimes());
             model.addAttribute("locations", officeService.getAllLocations());
             return "office-form";
         }
@@ -77,8 +73,6 @@ public class OfficePageController {
     @GetMapping("/offices/{id}/edit")
     public String editForm(@PathVariable Long id, Model model) {
         var office = officeService.getById(id);
-
-        Long openTimeId = office.openTime() != null ? office.openTime().getWorkTimeId() : null;
         Long locationId = office.location() != null ? office.location().getLocationId() : null;
 
         model.addAttribute("form", new OfficeForm(
@@ -86,12 +80,10 @@ public class OfficePageController {
                 office.officePhone(),
                 office.officeEmail(),
                 office.companyId(),
-                openTimeId,
                 locationId
         ));
 
         model.addAttribute("companies", officeService.getAllCompanies());
-        model.addAttribute("openTimes", officeService.getAllOpenTimes());
         model.addAttribute("locations", officeService.getAllLocations());
 
         return "office-form";
@@ -102,7 +94,6 @@ public class OfficePageController {
         if (br.hasErrors()) {
             form.setId(id);
             model.addAttribute("companies", officeService.getAllCompanies());
-            model.addAttribute("openTimes", officeService.getAllOpenTimes());
             model.addAttribute("locations", officeService.getAllLocations());
             return "office-form";
         }
@@ -112,14 +103,12 @@ public class OfficePageController {
                     form.getOfficePhone(),
                     form.getOfficeEmail(),
                     form.getCompanyId(),
-                    form.getOpenTimeId(),
                     form.getLocationId()
             ));
             return "redirect:/admin/offices";
         } catch (OfficeValidationException ex) {
             model.addAttribute("errorMessage", ex.getMessage());
             model.addAttribute("companies", officeService.getAllCompanies());
-            model.addAttribute("openTimes", officeService.getAllOpenTimes());
             model.addAttribute("locations", officeService.getAllLocations());
             return "office-form";
         }

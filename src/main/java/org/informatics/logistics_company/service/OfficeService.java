@@ -6,11 +6,9 @@ import org.informatics.logistics_company.exception.OfficeValidationException;
 import org.informatics.logistics_company.model.jpa.Company;
 import org.informatics.logistics_company.model.jpa.Location;
 import org.informatics.logistics_company.model.jpa.Office;
-import org.informatics.logistics_company.model.jpa.OpenTime;
+import org.informatics.logistics_company.repository.CompanyRepository;
 import org.informatics.logistics_company.repository.LocationRepository;
 import org.informatics.logistics_company.repository.OfficeRepository;
-import org.informatics.logistics_company.repository.CompanyRepository;
-import org.informatics.logistics_company.repository.OpenTimeRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,16 +20,13 @@ public class OfficeService {
 
     private final OfficeRepository officeRepository;
     private final CompanyRepository companyRepository;
-    private final OpenTimeRepository openTimeRepository;
     private final LocationRepository locationRepository;
 
     public OfficeService(OfficeRepository officeRepository,
                          CompanyRepository companyRepository,
-                         OpenTimeRepository openTimeRepository,
                          LocationRepository locationRepository) {
         this.officeRepository = officeRepository;
         this.companyRepository = companyRepository;
-        this.openTimeRepository = openTimeRepository;
         this.locationRepository = locationRepository;
     }
 
@@ -72,14 +67,6 @@ public class OfficeService {
                 .orElseThrow(() -> new RuntimeException("Company with id " + request.companyId() + " not found"));
         entity.setCompany(company);
 
-        if (request.openTimeId() != null) {
-            var ot = openTimeRepository.findById(request.openTimeId())
-                    .orElseThrow(() -> new RuntimeException("OpenTime with id " + request.openTimeId() + " not found"));
-            entity.setOpenTime(ot);
-        } else {
-            entity.setOpenTime(null);
-        }
-
         if (request.locationId() != null) {
             if (officeRepository.existsByLocation_LocationId(request.locationId())) {
                 throw new OfficeValidationException("Тази локация вече е заета от друг офис.");
@@ -111,14 +98,6 @@ public class OfficeService {
         Company company = companyRepository.findById(request.companyId())
                 .orElseThrow(() -> new RuntimeException("Company with id " + request.companyId() + " not found"));
         office.setCompany(company);
-
-        if (request.openTimeId() != null) {
-            var ot = openTimeRepository.findById(request.openTimeId())
-                    .orElseThrow(() -> new RuntimeException("OpenTime with id " + request.openTimeId() + " not found"));
-            office.setOpenTime(ot);
-        } else {
-            office.setOpenTime(null);
-        }
 
         if (request.locationId() != null) {
             if (officeRepository.existsByLocation_LocationIdAndOfficeIdNot(request.locationId(), id)) {
@@ -153,7 +132,6 @@ public class OfficeService {
                 office.getOfficeEmail(),
                 companyId,
                 companyName,
-                office.getOpenTime(),
                 office.getLocation()
         );
     }
@@ -168,7 +146,6 @@ public class OfficeService {
                 office.getOfficeEmail(),
                 companyId,
                 companyName,
-                office.getOpenTime(),
                 office.getLocation()
         );
     }
@@ -208,10 +185,6 @@ public class OfficeService {
 
     public List<Company> getAllCompanies() {
         return companyRepository.findAll();
-    }
-
-    public List<OpenTime> getAllOpenTimes() {
-        return openTimeRepository.findAll();
     }
 
     public List<Location> getAllLocations() {

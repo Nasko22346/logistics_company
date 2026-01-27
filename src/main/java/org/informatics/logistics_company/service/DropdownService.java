@@ -2,6 +2,7 @@ package org.informatics.logistics_company.service;
 
 import org.informatics.logistics_company.model.enums.ParcelStatus;
 import org.informatics.logistics_company.repository.LocationRepository;
+import org.informatics.logistics_company.repository.OfficeRepository;
 import org.informatics.logistics_company.repository.PriceLocationTaxRepository;
 import org.informatics.logistics_company.repository.StaffRepository;
 import org.informatics.logistics_company.repository.UserDetailsRepository;
@@ -21,14 +22,17 @@ public class DropdownService {
     private final StaffRepository staffRepository;
     private final UserDetailsRepository userDetailsRepository;
 
+    private final OfficeRepository officeRepository;
+
     public DropdownService(LocationRepository locationRepository, PriceLocationTaxRepository priceLocationTaxRepository,
                            PriceLocationTaxRepository priceWeightTaxRepository,
-                           StaffRepository staffRepository, UserDetailsRepository userDetailsRepository) {
+                           StaffRepository staffRepository, UserDetailsRepository userDetailsRepository, OfficeRepository officeRepository) {
         this.locationRepository = locationRepository;
         this.priceLocationTaxRepository = priceLocationTaxRepository;
         this.priceWeightTaxRepository = priceWeightTaxRepository;
         this.staffRepository = staffRepository;
         this.userDetailsRepository = userDetailsRepository;
+        this.officeRepository = officeRepository;
     }
 
 
@@ -49,8 +53,8 @@ public class DropdownService {
     }
 
     public List<String> cerateOfficeLocationDropdown() {
-        List<String> locationNames = new ArrayList<>();
-        this.locationRepository.findAll().forEach(location -> locationNames.add(location.getLocationRegion() + ", " + location.getLocationCountry()));
-        return locationNames;
+        List<String> offices = new ArrayList<>();
+        this.officeRepository.findAll().forEach(office -> offices.add(office.getLocation().getLocationCountry() + ", " + office.getLocation().getLocationRegion() + ", " + office.getLocation().getProvince() + ", " + office.getLocation().getLocationDescription()));
+        return offices;
     }
 }

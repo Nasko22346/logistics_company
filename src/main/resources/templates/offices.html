@@ -56,7 +56,6 @@
         <th>Phone</th>
         <th>Email</th>
         <th>Company</th>
-        <th>Open Time</th>
         <th>Location</th>
         <th>Actions</th>
       </tr>
@@ -69,12 +68,6 @@
         <td>
           <span th:if="${o.companyId != null}" th:text="${o.companyName ?: 'No company'}">Company</span>
           <span class="muted" th:if="${o.companyId == null}">No company</span>
-        </td>
-        <!-- OpenTime -->
-        <td>
-          <span th:if="${o.openTime != null}"
-            th:text="${'ID: ' + o.openTime.workTimeId}">ID: 1</span>
-          <span class="muted" th:if="${o.openTime == null}">None</span>
         </td>
 
         <!-- Location -->

@@ -99,18 +99,6 @@ public class MapperService {
         return location;
     }
 
-    public Parcel updateParcel(Parcel parcel, ParcelRequest request) {
-        setIfNotNull(request.weight(), parcel::setWeight);
-        setIfNotNull(request.sentDate(), parcel::setSentDate);
-        setIfNotNull(request.receivedDate(), parcel::setReceivedDate);
-        setIfNotNull(request.trackingNumber(), parcel::setTrackingNumber);
-        if (request.parcelStatus() != null) {
-            parcel.setParcelStatus(ParcelStatus.valueOf(request.parcelStatus()));
-        }
-
-        return parcel;
-    }
-
     private List<String> buildLocationList(Location location) {
         if (location == null) {
             return null;

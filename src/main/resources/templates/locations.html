@@ -57,12 +57,12 @@
         <td th:text="${l.locationDescription ?: '-'}">...</td>
         <td>
           <a class="btn btn-primary" th:href="@{/admin/locations/{id}/edit(id=${l.locationId})}">Edit</a>
-          <form th:action="@{/admin/locations/{id}/delete(id=${l.locationId})}" method="post" style="display:inline;">
-            <button type="submit" class="btn btn-primary"
-                    onclick="return confirm('Delete this location?')">
-              Delete
-            </button>
-          </form>
+<!--          <form th:action="@{/admin/locations/{id}/delete(id=${l.locationId})}" method="post" style="display:inline;">-->
+<!--            <button type="submit" class="btn btn-primary"-->
+<!--                    onclick="return confirm('Delete this location?')">-->
+<!--              Delete-->
+<!--            </button>-->
+<!--          </form>-->
         </td>
       </tr>
       </tbody>

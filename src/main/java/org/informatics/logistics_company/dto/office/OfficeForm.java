@@ -29,20 +29,15 @@ public class OfficeForm {
 
     @Getter
     @Setter
-    private Long openTimeId;
-
-    @Getter
-    @Setter
     private Long locationId;
 
     public OfficeForm() {}
 
-    public OfficeForm(Long id, String officePhone, String officeEmail, Long companyId, Long openTimeId, Long locationId) {
+    public OfficeForm(Long id, String officePhone, String officeEmail, Long companyId, Long locationId) {
         this.id = id;
         this.officePhone = officePhone;
         this.officeEmail = officeEmail;
         this.companyId = companyId;
-        this.openTimeId = openTimeId;
         this.locationId = locationId;
     }
 

@@ -14,6 +14,5 @@ public record OfficeRequest (
         String officeEmail,
 
         Long companyId,
-        Long openTimeId,
         Long locationId
 ) implements ObjectRequest { }
