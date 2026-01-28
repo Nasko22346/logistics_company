@@ -520,7 +520,8 @@ public class ParcelService {
             BigDecimal wTax = (p.getPriceWeightTax() != null) ? nz(p.getPriceWeightTax().getWeightTax()) : BigDecimal.ZERO;
             BigDecimal lTax = (p.getPriceLocationTax() != null) ? nz(p.getPriceLocationTax().getLocationTax()) : BigDecimal.ZERO;
 
-            BigDecimal total = base.add(wTax).add(lTax);
+            //BigDecimal total = base.add(wTax).add(lTax);
+            BigDecimal total = base;
 
             return new RevenueRow(
                     p.getId(),
