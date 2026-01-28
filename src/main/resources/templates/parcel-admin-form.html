@@ -59,8 +59,8 @@
       <!-- Sent Date - set at creation, not editable -->
       <div class="form-group">
         <label for="sentDate">Sent Date</label>
-        <input id="sentDate" type="datetime-local" th:value="*{sentDate}" disabled>
-        <input type="hidden" name="sentDate" th:value="*{sentDate}">
+          <input id="sentDate" type="datetime-local" th:value="${form.sentDate != null ? #temporals.format(form.sentDate, 'yyyy-MM-dd''T''HH:mm') : ''}" disabled>
+          <input type="hidden" name="sentDate" th:value="${form.sentDate != null ? #temporals.format(form.sentDate, 'yyyy-MM-dd''T''HH:mm') : ''}">
       </div>
 
       <!-- ============== EDITABLE FIELDS ============== -->
@@ -74,7 +74,7 @@
       <!-- Received Date - set when delivered -->
       <div class="form-group">
         <label for="receivedDate">Received Date</label>
-        <input id="receivedDate" type="datetime-local" name="receivedDate" th:value="*{receivedDate}">
+          <input id="receivedDate" type="datetime-local" name="receivedDate" th:value="${form.receivedDate != null ? #temporals.format(form.receivedDate, 'yyyy-MM-dd''T''HH:mm') : ''}">
       </div>
 
       <!-- Status - dropdown with ParcelStatus values -->
